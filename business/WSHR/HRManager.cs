@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace business.WorkSpaceHR
+namespace business.WSHR
 {
-    class HRCache
+    class HRManager
     {
+
     }
 }
