@@ -34,6 +34,21 @@ namespace models
 
         public int CourseId { get; set; }
         public Course Course { get; set; }
+
+        public enum Fields
+        {
+            Id,
+            FName, 
+            SName, 
+            DateBirthday, 
+            DateRegistration, 
+            Numder, 
+            EMail, 
+            AccessStatus, 
+            GroupId, 
+            StatusId, 
+            CourseId
+        }
        
     }
 }
