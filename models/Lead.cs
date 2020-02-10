@@ -25,8 +25,8 @@ namespace models
         public string EMail { get; set; }
 
         public bool AccessStatus { get; set; }
-
         public int GroupId { get; set; }
+        [ForeignKey ("GroupId")]
         public Group Group { get; set; }
 
         public int StatusId { get; set; }

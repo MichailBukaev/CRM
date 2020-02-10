@@ -39,18 +39,13 @@ namespace data.Migrations
 
             modelBuilder.Entity("models.Group", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("NameGroup")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<string>("Log")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameGroup")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StartDate")
@@ -59,7 +54,7 @@ namespace data.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("NameGroup");
 
                     b.HasIndex("CourseId");
 
@@ -110,10 +105,13 @@ namespace data.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
+                    b.Property<string>("GroupNameGroup")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("HistoryText")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("GroupNameGroup");
 
                     b.ToTable("HistoryGroups");
                 });
@@ -144,8 +142,8 @@ namespace data.Migrations
                     b.Property<string>("FName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
+                    b.Property<string>("NameGroup")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Numder")
                         .HasColumnType("int");
@@ -160,7 +158,7 @@ namespace data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("NameGroup");
 
                     b.HasIndex("StatusId");
 
@@ -280,9 +278,7 @@ namespace data.Migrations
                 {
                     b.HasOne("models.Group", "Group")
                         .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupNameGroup");
                 });
 
             modelBuilder.Entity("models.Lead", b =>
@@ -295,9 +291,7 @@ namespace data.Migrations
 
                     b.HasOne("models.Group", "Group")
                         .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("NameGroup");
 
                     b.HasOne("models.Status", "Status")
                         .WithMany()

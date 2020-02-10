@@ -28,7 +28,7 @@ namespace data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-23D7O9F\SQLEXPRESS;Initial Catalog=Employee;User ID=admin;Password=123456");
+            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-2G0E3HF\SQLEXPRESS;Initial Catalog=Employee;Integrated Security=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
