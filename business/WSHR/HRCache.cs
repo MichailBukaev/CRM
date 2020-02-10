@@ -16,6 +16,22 @@ namespace business.WSHR
         List<HistoryGroup> HistoryGroups { get; set; }
         List<Status> Statuses { get; set; }
         List<SkillsLead> SkillsLeads { get; set; }
-        List<SkillsLead> SkillsLeads { get; set; }
+        
+        public bool FlagActual { get; set; }
+
+        public HRCache()
+        {
+            FlagActual = true;
+            PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
+            publisher.Event += this.ReadChange;
+        }
+
+        public void ReadChange(IEntity entity)
+        {
+            FlagActual = false;
+        }
+
+
+
     }
 }
