@@ -45,7 +45,6 @@ namespace models
             AccessStatus, 
             GroupId, 
             StatusId, 
-            CourseId
         }
        
     }

@@ -8,7 +8,7 @@ namespace data.Storage
     public class Storage
     {
         public StubICommand crudCommand;
-        public IEnumerable<IEntity> GetAll<T>(string Tkey, string TValue) where T: IEntity, new()
+        public IEnumerable<IEntity> GetAll<T>(string Tkey, string TValue) where T : IEntity, new()
         {
             crudCommand = new Read();
             T obj = new T();
@@ -21,6 +21,27 @@ namespace data.Storage
             T obj = new T();
             IReader reader = modelsReader[obj.GetType().ToString()];
             return reader.Read(null, null, (Read)crudCommand);
+        }
+        public bool Update(IEntity obj)
+        {
+            crudCommand = new Update();
+            Update commande = (Update)crudCommand;
+            commande.Execute(obj);
+            return true;
+        }
+        public bool Add(IEntity obj)
+        {
+            crudCommand = new Create();
+            Create commande = (Create)crudCommand;
+            commande.Execute(obj);
+            return true;
+        }
+        public bool Delete(IEntity obj)
+        {
+            crudCommand = new Delete();
+            Delete commande = (Delete)crudCommand;
+            commande.Execute(obj);
+            return true;
         }
 
         private Dictionary<string, IReader> modelsReader = new Dictionary<string, IReader>()
@@ -38,4 +59,5 @@ namespace data.Storage
             {new Teacher().GetType().ToString(), new ReaderTeacher() },
         };
     }
-}
+
+}   
