@@ -26,14 +26,12 @@ namespace models
 
         public bool AccessStatus { get; set; }
 
-        public int GroupId { get; set; }
+        public int? GroupId { get; set; }
         public Group Group { get; set; }
 
         public int StatusId { get; set; }
         public Status Status { get; set; }
 
-        public int CourseId { get; set; }
-        public Course Course { get; set; }
 
         public enum Fields
         {
