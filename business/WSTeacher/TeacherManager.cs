@@ -38,46 +38,49 @@ namespace business.WSTeacher
             }
         }
 
-        public IEnumerable<Lead> GetLeads(string Tkey, string TValue)
+        #region GetAll
+        public IEnumerable<IEntity> GetLeads(string Tkey, string TValue)
         {
-            storage.GetAll<Lead>(Tkey, TValue);
-            return _cache.Leads;
+            return storage.GetAll<Lead>(Tkey, TValue);
+            
         }
 
-        public IEnumerable<Group> GetGroups(string Tkey, string TValue)
+        public IEnumerable<IEntity> GetGroups(string Tkey, string TValue)
         {
             return _cache.Groups;
         }
 
-        public IEnumerable<History> GetHistory(string Tkey, string TValue)
+        public IEnumerable<IEntity> GetHistory(string Tkey, string TValue)
         {
             return _cache.Histories;
         }
 
-        public IEnumerable<HistoryGroup> GetHistoryGroups(string Tkey, string TValue)
+        public IEnumerable<IEntity> GetHistoryGroups(string Tkey, string TValue)
         {
             return _cache.HistoryGroups;
         }
 
-        public IEnumerable<Log> GetLog(string Tkey, string TValue)
+        public IEnumerable<IEntity> GetLog(string Tkey, string TValue)
         {
             return _cache.Logs;
         }
 
-        public IEnumerable<Skills> GetSkills(string Tkey, string TValue)
+        public IEnumerable<IEntity> GetSkills(string Tkey, string TValue)
         {
             return _cache.Skills;
         }
 
-        public IEnumerable<SkillsLead> GetSkillsLead(string Tkey, string TValue)
+        public IEnumerable<IEntity> GetSkillsLead(string Tkey, string TValue)
         {
             return _cache.SkillsLeads;
         }
 
-        public IEnumerable<Course> GetCourses(string Tkey, string TValue)
+        public IEnumerable<IEntity> GetCourses(string Tkey, string TValue)
         {
             return _cache.Courses;
         }
+
+        #endregion
 
         #region Create
         public bool CreatLead(Dictionary<string, string> _models)
@@ -102,6 +105,49 @@ namespace business.WSTeacher
             if (okey)
                 _publisher.Notify(lead);
             return okey;
+        }
+
+        public bool CreateGroup(Dictionary<string, string> _models)
+        {
+            Group group = new Group()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                NameGroup = _models["Name"],
+                CourseId = Convert.ToInt32(_models["CourseId"]),
+                StartDate = _models["StartDate"],
+                TeacherId = Convert.ToInt32(_models["TeacherId"]),
+                Log = _models["Log"]
+            };
+            return storage.Add(group);
+        }
+        public bool CreateCourse(Dictionary<string, string> _models)
+        {
+            Course course = new Course()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                Name = _models["Name"],
+                CourseInfo = _models["CourseInfo"]
+            };
+            return storage.Add(course);
+        }
+        public bool CreateHistory(Dictionary<string, string> _models)
+        {
+            History history = new History()
+            {
+                LeadId = Convert.ToInt32(_models["Id"]),
+                HistoryText = _models["HistoryText"]
+            };
+            return storage.Add(history);
+        }
+
+        public bool CreateHistoryGroup(Dictionary<string, string> _models)
+        {
+            HistoryGroup historygroup = new HistoryGroup()
+            {
+                GroupId = Convert.ToInt32(_models["Id"]),
+                HistoryText = _models["HistoryText"]
+            };
+            return storage.Add(historygroup);
         }
 
         public bool CreateLog(Dictionary<string, string> _models)
@@ -132,6 +178,12 @@ namespace business.WSTeacher
 
         public bool CreateSkillsLead(Dictionary<string, string> _models)
         {
+            foreach(SkillsLead item in _cache.SkillsLeads)
+            {
+                if (Convert.ToInt32(_models["LeadId"]) == item.LeadId &&
+                   Convert.ToInt32(_models["SkillsId"]) == item.SkillsId)
+                    return false;
+            }
             SkillsLead skillsLead = new SkillsLead()
             {
                 LeadId = Convert.ToInt32(_models["LeadId"]),
@@ -156,7 +208,7 @@ namespace business.WSTeacher
             return okey;
         }
 
-        public bool CreateTeacher(Dictionary<string, string> _models)
+       /* public bool CreateTeacher(Dictionary<string, string> _models)
         {
             Teacher teacher = new Teacher()
             {
@@ -171,9 +223,255 @@ namespace business.WSTeacher
             if (okey)
                 _publisher.Notify(teacher);
             return okey;
-        }
+        }*/
         #endregion
 
+        #region Update
+        public bool UpdateLead(int id, Dictionary<string, string> _models)
+        {
+            Lead lead = new Lead()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                FName = _models["Name"],
+                SName = _models["SName"],
+                DateBirthday = _models["DateBirthday"],
+                Numder = Convert.ToInt32(_models["Numder"]),
+                EMail = _models["EMail"],
+                AccessStatus = Convert.ToBoolean(_models["AccessStatus"]),
+                DateRegistration = _models["IdDateRegistration"],
+                GroupId = Convert.ToInt32(_models["GroupId"]),
+                StatusId = Convert.ToInt32(_models["StatusId"]),
+                CourseId = Convert.ToInt32(_models["CourseId"])
 
+            };
+
+            bool okey = storage.Update(lead);
+            if (okey)
+                _publisher.Notify(lead);
+            return okey;
+        }
+
+        public bool UpdateGroup(Dictionary<string, string> _models)
+        {
+            Group group = new Group()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                NameGroup = _models["Name"],
+                CourseId = Convert.ToInt32(_models["CourseId"]),
+                StartDate = _models["StartDate"],
+                TeacherId = Convert.ToInt32(_models["TeacherId"]),
+                Log = _models["Log"]
+            };
+            bool okey = storage.Update(group);
+            if (okey)
+                _publisher.Notify(group);
+            return okey;
+        }
+        public bool UpdateCourse(Dictionary<string, string> _models)
+        {
+            Course course = new Course()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                Name = _models["Name"],
+                CourseInfo = _models["CourseInfo"]
+            };
+            bool okey = storage.Update(course);
+            if (okey)
+                _publisher.Notify(course);
+            return okey;
+        }
+        public bool UpdateHistory(Dictionary<string, string> _models)
+        {
+            History history = new History()
+            {
+                LeadId = Convert.ToInt32(_models["Id"]),
+                HistoryText = _models["HistoryText"]
+            };
+            bool okey = storage.Update(history);
+            if (okey)
+                _publisher.Notify(history);
+            return okey;
+        }
+
+        public bool UpdateHistoryGroup(Dictionary<string, string> _models)
+        {
+            HistoryGroup historygroup = new HistoryGroup()
+            {
+                GroupId = Convert.ToInt32(_models["Id"]),
+                HistoryText = _models["HistoryText"]
+            };
+            bool okey = storage.Update(historygroup);
+            if (okey)
+                _publisher.Notify(historygroup);
+            return okey;
+        }
+
+        #endregion
+
+        #region Delete
+        public bool DeleteLead(int id)
+        {
+            Lead _obj = null;
+            foreach (Lead item in _cache.Leads)
+            { 
+                if(item.Id == id)
+                {
+                    _obj = item;
+                    break;
+                }
+            }
+            if(_obj != null )
+            {
+                bool okey = storage.Delete(_obj);
+                if (okey)
+                    _publisher.Notify(_obj);
+                return okey;
+            }
+            return false;
+        }
+
+        public bool DeleteGroup(int id)
+        {
+            Group _obj = null;
+            foreach (Group item in _cache.Groups)
+            {
+                if (item.Id == id)
+                {
+                    _obj = item;
+                    break;
+                }
+            }
+            if (_obj != null)
+            {
+                bool okey = storage.Delete(_obj);
+                if (okey)
+                    _publisher.Notify(_obj);
+                return okey;
+            }
+            return false;
+        }
+
+        public bool DeleteLog(DateTime dateTime, int leadId) /////
+        { 
+            bool okey = false;
+            foreach (Log item in _cache.Logs)
+            {
+                if (item.Date == dateTime && item.LeadId == leadId)
+                {
+                    okey = storage.Delete(item);
+                    if (okey)
+                        _publisher.Notify(item);
+                    else
+                        return okey;
+
+                }
+                
+            }
+            return okey;
+        }
+
+        public bool DeleteCourse(int id)
+        {
+            Course _obj = null;
+            foreach (Course item in _cache.Courses)
+            {
+                if (item.Id == id)
+                {
+                    _obj = item;
+                    break;
+                }
+            }
+            if (_obj != null)
+            {
+                bool okey = storage.Delete(_obj);
+                if (okey)
+                    _publisher.Notify(_obj);
+                return okey;
+            }
+            return false;
+        }
+
+        public bool DeleteHistory(int idLead, string historyText)
+        { 
+            bool okey = false;
+            foreach (History item in _cache.Histories)
+            {
+                if (item.LeadId == idLead && item.HistoryText == historyText)
+                {
+                    okey = storage.Delete(item);
+                    if (okey)
+                        _publisher.Notify(item);
+                    else
+                        return okey;
+
+                }
+
+            }
+            return okey;
+        }
+        public bool DeleteHistoryGroup(int idGroup, string historyText) /////
+        {
+            bool okey = false;
+            foreach (HistoryGroup item in _cache.HistoryGroups)
+            {
+                if (item.GroupId == idGroup && item.HistoryText == historyText)
+                {
+                    okey = storage.Delete(item);
+                    if (okey)
+                        _publisher.Notify(item);
+                    else
+                        return okey;
+
+                }
+
+            }
+            return okey;
+        }
+
+        public bool DeleteSkill(int id)
+        {
+            Skills _obj = null;
+            foreach (Skills item in _cache.Skills)
+            {
+                if (item.Id == id)
+                {
+                    _obj = item;
+                    break;
+                }
+            }
+            if (_obj != null)
+            {
+                bool okey = storage.Delete(_obj);
+                if (okey)
+                    _publisher.Notify(_obj);
+                return okey;
+            }
+            return false;
+        }
+
+        public bool DeleteSkillsLead(int idLead, int idSkill)
+        {
+            SkillsLead _obj = null;
+            foreach (SkillsLead item in _cache.SkillsLeads)
+            {
+                if (item.LeadId == idLead && item.SkillsId == idSkill)
+                {
+                    _obj = item;
+                    break;
+                }
+            }
+            if (_obj != null)
+            {
+                bool okey = storage.Delete(_obj);
+                if (okey)
+                    _publisher.Notify(_obj);
+                return okey;
+            }
+            return false;
+        }
+
+
+
+        #endregion
     }
 }

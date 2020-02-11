@@ -18,6 +18,8 @@ namespace business.WSTeacher
         public TeacherCache()
         {
             FlagActual = false;
+            PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
+            publisher.Event += this.ReadChange;
         }
 
         public void ReadChange(IEntity entity)
