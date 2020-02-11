@@ -9,126 +9,58 @@ namespace data.CRUD
     {
         public ApplicationContext db { get; set; }
 
-        public void Execute(Lead obj) 
-        {
-            using (ApplicationContext db = new ApplicationContext()) 
-            {                
-                if (obj != null)
-                {
-                    db.Leads.Remove(obj);
-                    db.SaveChanges();
-                }
-            } 
-        }
-        public void Execute(Course obj)
+        public void Execute(IEntity obj)
         {
             using (ApplicationContext db = new ApplicationContext())
             {
                 if (obj != null)
                 {
-                    db.Courses.Remove(obj);
+                    switch (obj.GetType().Name)
+                    {
+                        case "Lead":
+                            db.Leads.Remove((Lead)obj);
+                            break;
+                        case "Course":
+                            db.Courses.Remove((Course)obj);
+                            break;
+                        case "History":
+                            db.Historys.Remove((History)obj);
+                            break;
+                        case "HistoryGroup":
+                            db.HistoryGroups.Remove((HistoryGroup)obj);
+                            break;
+                        case "HR":
+                            db.HRs.Remove((HR)obj);
+                            break;
+                        case "Log":
+                            db.Logs.Remove((Log)obj);
+                            break;
+                        case "Skills":
+                            db.Skills.Remove((Skills)obj);
+                            break;
+                        case "Status":
+                            db.Statuss.Remove((Status)obj);
+                            break;
+                        case "SkillsLead":
+                            db.SkillsLeads.Remove((SkillsLead)obj);
+                            break;
+                        case "Teacher":
+                            db.Teacherss.Remove((Teacher)obj);
+                            break;
+                        case "Group":
+                            db.Groups.Remove((Group)obj);
+                            break;
+                        default:
+                            break;
+                    }
                     db.SaveChanges();
-                }
-            }
+                }                    
+            }            
         }
-        public void Execute(History obj)
+
+        public IEnumerable<IEntity> Execute<T>() where T : IEntity, new()
         {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (obj != null)
-                {
-                    db.Historys.Remove(obj);
-                    db.SaveChanges();
-                }
-            }
+            return null;
         }
-        public void Execute(HistoryGroup obj)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (obj != null)
-                {
-                    db.HistoryGroups.Remove(obj);
-                    db.SaveChanges();
-                }
-            }
-        }
-        public void Execute(HR obj)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (obj != null)
-                {
-                    db.HRs.Remove(obj);
-                    db.SaveChanges();
-                }
-            }
-        }
-        public void Execute(Log obj)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (obj != null)
-                {
-                    db.Logs.Remove(obj);
-                    db.SaveChanges();
-                }
-            }
-        }
-        public void Execute(Skills obj)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (obj != null)
-                {
-                    db.Skills.Remove(obj);
-                    db.SaveChanges();
-                }
-            }
-        }
-        public void Execute(Status obj)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (obj != null)
-                {
-                    db.Statuss.Remove(obj);
-                    db.SaveChanges();
-                }
-            }
-        }
-        public void Execute(SkillsLead obj)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (obj != null)
-                {
-                    db.SkillsLeads.Remove(obj);
-                    db.SaveChanges();
-                }
-            }
-        }
-        public void Execute(Teacher obj)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (obj != null)
-                {
-                    db.Teacherss.Remove(obj);
-                    db.SaveChanges();
-                }
-            }
-        }
-        public void Execute(Group obj)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (obj != null)
-                {
-                    db.Groups.Remove(obj);
-                    db.SaveChanges();
-                }
-            }
-        }        
     }
 }

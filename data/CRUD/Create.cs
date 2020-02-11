@@ -8,142 +8,59 @@ namespace data.CRUD
     public class Create : ICommand
     {
         public ApplicationContext db { get; set; }
-        public void Execute(Lead newObject)
+
+        public void Execute(IEntity obj)
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                if (newObject != null)
+                if (obj != null)
                 {
-                    db.Leads.Add(newObject);
+                    switch (obj.GetType().Name)
+                    {
+                        case "Lead":
+                            db.Leads.Add((Lead)obj);
+                            break;
+                        case "Course":
+                            db.Courses.Add((Course)obj);
+                            break;
+                        case "History":
+                            db.Historys.Add((History)obj);
+                            break;
+                        case "HistoryGroup":
+                            db.HistoryGroups.Add((HistoryGroup)obj);
+                            break;
+                        case "HR":
+                            db.HRs.Add((HR)obj);
+                            break;
+                        case "Log":
+                            db.Logs.Add((Log)obj);
+                            break;
+                        case "Skills":
+                            db.Skills.Add((Skills)obj);
+                            break;
+                        case "Status":
+                            db.Statuss.Add((Status)obj);
+                            break;
+                        case "SkillsLead":
+                            db.SkillsLeads.Add((SkillsLead)obj);
+                            break;
+                        case "Teacher":
+                            db.Teacherss.Add((Teacher)obj);
+                            break;
+                        case "Group":
+                            db.Groups.Add((Group)obj);
+                            break;
+                        default:
+                            break;
+                    }
                     db.SaveChanges();
                 }
             }
-            
         }
 
-        public void Execute(Course newObject)
+        public IEnumerable<IEntity> Execute<T>() where T : IEntity, new()
         {
-            using (ApplicationContext db = new ApplicationContext())
-            {                
-                if (newObject != null)
-                {
-                    db.Courses.Add(newObject);
-                    db.SaveChanges();
-                }
-            }
-
+            return null;
         }
-        public void Execute(History newObject)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (newObject != null)
-                {
-                    db.Historys.Add(newObject);
-                    db.SaveChanges();
-                }
-            }
-        }
-
-        public void Execute(HistoryGroup newObject)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (newObject != null)
-                {
-                    db.HistoryGroups.Add(newObject);
-                    db.SaveChanges();
-                }
-            }
-
-        }
-        public void Execute(HR newObject)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (newObject != null)
-                {
-                    db.HRs.Add(newObject);
-                    db.SaveChanges();
-                }
-            }
-        }
-
-        public void Execute(Log newObject)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (newObject != null)
-                {
-                    db.Logs.Add(newObject);
-                    db.SaveChanges();
-                }
-            }
-
-        }
-        public void Execute(Skills newObject)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (newObject != null)
-                {
-                    db.Skills.Add(newObject);
-                    db.SaveChanges();
-                }
-            }
-        }
-
-        public void Execute(Status newObject)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (newObject != null)
-                {
-                    db.Statuss.Add(newObject);
-                    db.SaveChanges();
-                }
-            }
-
-        }
-        public void Execute(SkillsLead newObject)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (newObject != null)
-                {
-                    db.SkillsLeads.Add(newObject);
-                    db.SaveChanges();
-                }
-            }
-        }
-
-        public void Execute(Teacher newObject)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (newObject != null)
-                {
-                    db.Teacherss.Add(newObject);
-                    db.SaveChanges();
-                }
-            }
-
-        }
-        public void Execute(Group newObject)
-        {
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                if (newObject != null)
-                {
-                    db.Groups.Add(newObject);
-                    db.SaveChanges();
-                }
-            }
-
-        }
-
-
-
-
     }
 }

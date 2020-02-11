@@ -80,7 +80,7 @@ namespace TestCRUD
             Read read = new Read();
             Delete delete = new Delete();
             MockLead mock = new MockLead();
-            List<Lead> leads = (List<Lead>) mock.Leads;
+            List<IEntity> leads = (List<IEntity>) mock.Leads;
             foreach (Lead item in leads)
             {
                 create.Execute(item);
