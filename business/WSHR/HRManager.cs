@@ -7,7 +7,7 @@ namespace business.WSHR
 {
     public class HRManager
     {
-     
+        HR hR;
         HRCache _cache;
         StabStorage storage;
         PublisherChangesInBD _publisher;
@@ -70,11 +70,16 @@ namespace business.WSHR
         {
             return _cache.SkillsLeads;
         }
-        public IEnumerable<IEntity> GetSkillsLeads(string TKey, string TValue)
+        public IEnumerable<IEntity> GetLeads(string TKey, string TValue)
         {
-            return _cache.SkillsLeads;
+            List<Lead> leads = _cache.Leads;
+            foreach (var item in leads)
+            {
+                
+            }
+            return storage.GetAll<Lead>(TKey, TValue);
         }
-
+        #region Create
         public bool CreateLead(Dictionary<string, string> _models)
         {
             Lead lead = new Lead()
@@ -92,7 +97,10 @@ namespace business.WSHR
                 CourseId = Convert.ToInt32(_models["CourseId"])
             };
 
-            return storage.Add(lead);
+            bool okey = storage.Add(lead);
+            if (okey)
+                _publisher.Notify(lead);
+            return okey;
         }
         public bool CreateGroup(Dictionary<string, string> _models)
         {
@@ -105,7 +113,10 @@ namespace business.WSHR
                 TeacherId = Convert.ToInt32(_models["TeacherId"]),
                 Log = _models["Log"]
             };
-            return storage.Add(group);
+            bool okey = storage.Add(group);
+            if (okey)
+                _publisher.Notify(group);
+            return okey;
         }
         public bool CreateCourse(Dictionary<string, string> _models)
         {
@@ -115,7 +126,10 @@ namespace business.WSHR
                 Name = _models["Name"],      
                 CourseInfo = _models["CourseInfo"]
             };
-            return storage.Add(course);
+            bool okey = storage.Add(course);
+            if (okey)
+                _publisher.Notify(course);
+            return okey;
         }
         public bool CreateHistory(Dictionary<string, string> _models)
         {
@@ -124,7 +138,10 @@ namespace business.WSHR
                 LeadId = Convert.ToInt32(_models["Id"]),
                 HistoryText = _models["HistoryText"]
             };
-            return storage.Add(history);
+            bool okey = storage.Add(history);
+            if (okey)
+                _publisher.Notify(history);
+            return okey;
         }
 
         public bool CreateHistoryGroup(Dictionary<string, string> _models)
@@ -134,7 +151,10 @@ namespace business.WSHR
                 GroupId = Convert.ToInt32(_models["Id"]),
                 HistoryText = _models["HistoryText"]
             };
-            return storage.Add(historygroup);
+            bool okey = storage.Add(historygroup);
+            if (okey)
+                _publisher.Notify(historygroup);
+            return okey;
         }
         public bool CreateHR(Dictionary<string, string> _models)
         {
@@ -146,12 +166,84 @@ namespace business.WSHR
                 Login = _models["Login"],
                 Password = _models["Password"]
             };
-            return storage.Add(hr);
+            bool okey = storage.Add(hr);
+            if (okey)
+                _publisher.Notify(hr);
+            return okey;
+        }
+        public bool CreateLog(Dictionary<string, string> _models)
+        {
+            Log log = new Log()
+            {
+                Date = Convert.ToDateTime(_models["Date"]),
+                LeadId = Convert.ToInt32(_models["LeadId"])
+            };
+            bool okey = storage.Add(log);
+            if (okey)
+                _publisher.Notify(log);
+            return okey;
         }
 
+        public bool CreateSkills(Dictionary<string, string> _models)
+        {
+            Skills skill = new Skills()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                NameSkills = _models["NameSkils"]
+            };
+            bool okey = storage.Add(skill);
+            if (okey)
+                _publisher.Notify(skill);
+            return okey;
+        }
+
+        public bool CreateSkillsLead(Dictionary<string, string> _models)
+        {
+            SkillsLead skillsLead = new SkillsLead()
+            {
+                LeadId = Convert.ToInt32(_models["LeadId"]),
+                SkillsId = Convert.ToInt32(_models["SkillsId"])
+            };
+            bool okey = storage.Add(skillsLead);
+            if (okey)
+                _publisher.Notify(skillsLead);
+            return okey;
+        }
+
+        public bool CreateStatus(Dictionary<string, string> _models)
+        {
+            Status status = new Status()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                Name = _models["Name"]
+            };
+            bool okey = storage.Add(status);
+            if (okey)
+                _publisher.Notify(status);
+            return okey;
+        }
+
+        public bool CreateTeacher(Dictionary<string, string> _models)
+        {
+            Teacher teacher = new Teacher()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                FName = _models["FName"],
+                SName = _models["SName"],
+                PhoneNumber = Convert.ToInt32(_models["PhoneNumber"]),
+                Login = _models["Login"],
+                Password = _models["Pasword"]
+            };
+            bool okey = storage.Add(teacher);
+            if (okey)
+                _publisher.Notify(teacher);
+            return okey;
+        }
+
+        #endregion
         public bool UpdateLead(int id, Dictionary<string, string> _model)
         {
-
+         
         }
 
     }
