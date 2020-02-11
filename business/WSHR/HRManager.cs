@@ -7,7 +7,7 @@ namespace business.WSHR
 {
     public class HRManager
     {
-     
+        HR hR;
         HRCache _cache;
         StabStorage storage;
         PublisherChangesInBD _publisher;

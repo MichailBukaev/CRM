@@ -10,6 +10,7 @@ namespace business.WSTeacher
         Teacher _teacher;
         TeacherCache _cache;
         StabStorage storage;
+        PublisherChangesInBD _publisher; 
 
         public TeacherManager(Teacher teacher)
         {
@@ -37,46 +38,48 @@ namespace business.WSTeacher
             }
         }
 
-        public IEnumerable<Lead> GetLeads()
+        public IEnumerable<Lead> GetLeads(string Tkey, string TValue)
         {
+            storage.GetAll<Lead>(Tkey, TValue);
             return _cache.Leads;
         }
 
-        public IEnumerable<Group> GetGroups()
+        public IEnumerable<Group> GetGroups(string Tkey, string TValue)
         {
             return _cache.Groups;
         }
 
-        public IEnumerable<History> GetHistory()
+        public IEnumerable<History> GetHistory(string Tkey, string TValue)
         {
             return _cache.Histories;
         }
 
-        public IEnumerable<HistoryGroup> GetHistoryGroups()
+        public IEnumerable<HistoryGroup> GetHistoryGroups(string Tkey, string TValue)
         {
             return _cache.HistoryGroups;
         }
 
-        public IEnumerable<Log> GetLog()
+        public IEnumerable<Log> GetLog(string Tkey, string TValue)
         {
             return _cache.Logs;
         }
 
-        public IEnumerable<Skills> GetSkills()
+        public IEnumerable<Skills> GetSkills(string Tkey, string TValue)
         {
             return _cache.Skills;
         }
 
-        public IEnumerable<SkillsLead> GetSkillsLead()
+        public IEnumerable<SkillsLead> GetSkillsLead(string Tkey, string TValue)
         {
             return _cache.SkillsLeads;
         }
 
-        public IEnumerable<Course> GetCourses()
+        public IEnumerable<Course> GetCourses(string Tkey, string TValue)
         {
             return _cache.Courses;
         }
 
+        #region Create
         public bool CreatLead(Dictionary<string, string> _models)
         {
             Lead lead = new Lead()
@@ -95,7 +98,10 @@ namespace business.WSTeacher
 
             };
 
-            return storage.Add(lead);
+            bool okey = storage.Add(lead);
+            if (okey)
+                _publisher.Notify(lead);
+            return okey;
         }
 
         public bool CreateLog(Dictionary<string, string> _models)
@@ -105,7 +111,10 @@ namespace business.WSTeacher
                 Date = Convert.ToDateTime(_models["Date"]),
                 LeadId = Convert.ToInt32(_models["LeadId"])
             };
-            return storage.Add(log);
+            bool okey = storage.Add(log);
+            if (okey)
+                _publisher.Notify(log);
+            return okey;
         }
 
         public bool CreateSkills(Dictionary<string, string> _models)
@@ -115,7 +124,10 @@ namespace business.WSTeacher
                 Id = Convert.ToInt32(_models["Id"]),
                 NameSkills = _models["NameSkils"]
             };
-            return storage.Add(skill);
+            bool okey = storage.Add(skill);
+            if (okey)
+                _publisher.Notify(skill);
+            return okey;
         }
 
         public bool CreateSkillsLead(Dictionary<string, string> _models)
@@ -125,7 +137,10 @@ namespace business.WSTeacher
                 LeadId = Convert.ToInt32(_models["LeadId"]),
                 SkillsId = Convert.ToInt32(_models["SkillsId"])
             };
-            return storage.Add(skillsLead);
+            bool okey = storage.Add(skillsLead);
+            if (okey)
+                _publisher.Notify(skillsLead);
+            return okey;
         }
 
         public bool CreateStatus(Dictionary<string, string> _models)
@@ -135,7 +150,10 @@ namespace business.WSTeacher
                 Id = Convert.ToInt32(_models["Id"]),
                 Name = _models["Name"]
             };
-            return storage.Add(status);
+            bool okey = storage.Add(status);
+            if (okey)
+                _publisher.Notify(status);
+            return okey;
         }
 
         public bool CreateTeacher(Dictionary<string, string> _models)
@@ -149,9 +167,13 @@ namespace business.WSTeacher
                 Login = _models["Login"],
                 Password = _models["Pasword"]
             };
-            return storage.Add(teacher);
+            bool okey = storage.Add(teacher);
+            if (okey)
+                _publisher.Notify(teacher);
+            return okey;
         }
+        #endregion
 
-       
+
     }
 }
