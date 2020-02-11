@@ -12,8 +12,8 @@ namespace data.Storage
         {
             List<Lead> primariLeads = (List<Lead>)crudCommand.Execute<Lead>();
             List<Lead> leads;
-            if (Lead.Fields.Id.ToString() == TKey){ leads = primariLeads.Where(p => p.Id == Convert.ToInt32(TValue)).ToList();}
-            else if(Lead.Fields.FName.ToString() == TKey) { leads = primariLeads.Where(p => p.FName ==TValue).ToList(); }
+            if (Lead.Fields.Id.ToString() == TKey) { leads = primariLeads.Where(p => p.Id == Convert.ToInt32(TValue)).ToList(); }
+            else if (Lead.Fields.FName.ToString() == TKey) { leads = primariLeads.Where(p => p.FName == TValue).ToList(); }
             else if (Lead.Fields.SName.ToString() == TKey) { leads = primariLeads.Where(p => p.SName == TValue).ToList(); }
             else if (Lead.Fields.DateBirthday.ToString() == TKey) { leads = primariLeads.Where(p => p.DateBirthday == TValue).ToList(); }
             else if (Lead.Fields.DateRegistration.ToString() == TKey) { leads = primariLeads.Where(p => p.DateRegistration == TValue).ToList(); }
@@ -26,5 +26,6 @@ namespace data.Storage
             else { leads = primariLeads; }
             return leads;
         }
+
     }
 }

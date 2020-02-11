@@ -10,6 +10,12 @@ namespace models
         public int GroupId { get; set; }
         public Group Group { get; set; }
         public string HistoryText { get; set; }
-        
+
+        public enum Fields 
+        {
+            GroupId,
+            HistoryText
+        }
+
     }
 }

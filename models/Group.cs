@@ -14,5 +14,15 @@ namespace models
         public int TeacherId { get; set; }
         public Teacher Teacher { get; set; }
         public string Log { get; set; }
+
+        public enum Fields
+        { 
+          Id, 
+          NameGroup, 
+          CourseId,
+          StartDate, 
+          TeacherId, 
+          Log 
+        }
     }
 }
