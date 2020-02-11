@@ -7,21 +7,21 @@ namespace business.WSHR
 {
     class HRCache
     {
-        List<Teacher> Teachers { get; set; }
-        List<Lead> Leads { get; set; }
-        List<Group> Groups { get; set; }
-        List<Course> Courses { get; set; }
-        List<Skills> Skills { get; set; }
-        List<History> Historys { get; set; }
-        List<HistoryGroup> HistoryGroups { get; set; }
-        List<Status> Statuses { get; set; }
-        List<SkillsLead> SkillsLeads { get; set; }
+        public List<Lead> Leads { get; set; }
+        public List<Teacher> Teachers { get; set; }
+        public List<Group> Groups { get; set; }
+        public List<Course> Courses { get; set; }
+        public List<Skills> Skills { get; set; }
+        public List<History> Historys { get; set; }
+        public List<HistoryGroup> HistoryGroups { get; set; }
+        public List<Status> Statuses { get; set; }
+        public List<SkillsLead> SkillsLeads { get; set; }
         
         public bool FlagActual { get; set; }
 
         public HRCache()
         {
-            FlagActual = true;
+            FlagActual = false;
             PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
             publisher.Event += this.ReadChange;
         }

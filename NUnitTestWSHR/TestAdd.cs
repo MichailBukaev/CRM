@@ -6,101 +6,50 @@ using System.Linq;
 
 namespace NUnitTestWSHR
 {
-    [TestFixture(0)]
-    [TestFixture(1)]
-    [TestFixture(2)]
-    [TestFixture(3)]
-    [TestFixture(4)]
-    [TestFixture(5)]
-    [TestFixture(6)]
-    [TestFixture(7)]
-    [TestFixture(8)]
+  
     public class TestAdd
     {
         HRManager manager;
         IEnumerable<IEntity> entitys;
-        IEntity model;
-        int a;
-        public TestAdd(int a)
-        {
-            this.a = a;
-            manager = new HRManager();
-        }
+        HR hr;
+       
+      
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
-            if (a == 0)
-            {
-                model = new Lead();
-                entitys = new List<IEntity>{ new Lead() { GroupId = 1, Group = new Group() { TeacherId = 1 } } };
-            }
-            else if (a == 1)
-            {
-                model = new Teacher();
-                entitys = new List<IEntity>
-                {
-                    new Teacher()  { Id = 1, SName = "Teacher Second Name", FName = "Teacher Name"  },
-                    new Teacher()  { Id = 2, SName = "Teacher2 Second Name", FName = "Teacher2 Name"  },
-                };
-            } else if(a == 2)
-            {
-                model = new History();
-                entitys = new List<IEntity> { new History { LeadId = 1 } };
-            } else if(a == 3)
-            {
-                model = new HistoryGroup();
-                entitys = new List<IEntity> { new HistoryGroup { GroupId = 1 } };
-            } else if(a == 4)
-            {
-                model = new Group();
-                entitys = new List<IEntity> { new Group() { TeacherId = 1, Id = 1, NameGroup = "BASE_C#_KMN¹1" } };
-            } else if(a == 5)
-            {
-                model = new Status();
-                entitys = new List<IEntity> { new Status() { Id = 1, Name = "Â ðàáîòå" } };
-            }
-            else if (a == 6)
-            {
-                model = new SkillsLead();
-                entitys = new List<IEntity> { new SkillsLead { LeadId = 1 } };
-            }
-            else if (a == 7)
-            {
-                model = new Skills();
-                entitys = new List<IEntity> { new Skills() };
-            }
-            else if (a == 8)
-            {
-                model = new Course();
-                entitys = new List<IEntity>
-                {
-                    new Course()  { Id = 1, Name = "C#", CourseInfo = "C# Information" },
-                    new Course()  { Id = 2, Name = "Web", CourseInfo = "Web Information" },
-                    new Course()  { Id = 3, Name = "QA", CourseInfo = "QA Information" },
-                };
-            }
+            hr = new HR();
+            manager = new HRManager(hr);
+           
         }
-
-        #region GetTest
-        
-        
+        #region GetCache
         [Test]
-        public void TGetEntity()
+        public void TestGetLeads()
         {
-            bool flag = true;
-            IEnumerable <IEntity> result = manager.SetCache(model);
-            for (int i = 0; i < entitys.Count(); i++)
+            Lead test = new Lead() { GroupId = 1, Group = new Group() { TeacherId = 1 } };
+            entitys = manager.GetLeads();
+            foreach (Lead item in entitys)
             {
-                if (!(entitys.ElementAt(i).Equals(result.ElementAt(i))))
-                {
-                    flag = false;
-                    break;
-                }
+                Assert.AreEqual(test.GroupId, item.GroupId);
+                Assert.AreEqual(test.Group.TeacherId, item.Group.TeacherId);
+
             }
            
-            Assert.IsTrue(flag); 
         }
-       
+        [Test]
+        public void TestGetGroups()
+        {
+            Group test = new Group() { TeacherId = 1, Id = 1, NameGroup = "BASE_C#_KMN¹1" };
+            entitys = manager.GetGroup();
+            foreach (Group item in entitys)
+            {
+                Assert.AreEqual(test.TeacherId, item.TeacherId);
+                Assert.AreEqual(test.Id, item.Id);
+                Assert.AreEqual(test.NameGroup, item.NameGroup);
+
+            }
+
+        }
+
         #endregion
 
 
