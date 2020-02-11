@@ -76,5 +76,82 @@ namespace business.WSTeacher
         {
             return _cache.Courses;
         }
+
+        public bool CreatLead(Dictionary<string, string> _models)
+        {
+            Lead lead = new Lead()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                FName = _models["Name"],
+                SName = _models["SName"],
+                DateBirthday = _models["DateBirthday"],
+                Numder = Convert.ToInt32(_models["Numder"]),
+                EMail = _models["EMail"],
+                AccessStatus = Convert.ToBoolean(_models["AccessStatus"]),
+                DateRegistration = _models["IdDateRegistration"],
+                GroupId = Convert.ToInt32(_models["GroupId"]),
+                StatusId = Convert.ToInt32(_models["StatusId"]),
+                CourseId = Convert.ToInt32(_models["CourseId"])
+
+            };
+
+            return storage.Add(lead);
+        }
+
+        public bool CreateLog(Dictionary<string, string> _models)
+        {
+            Log log = new Log()
+            {
+                Date = Convert.ToDateTime(_models["Date"]),
+                LeadId = Convert.ToInt32(_models["LeadId"])
+            };
+            return storage.Add(log);
+        }
+
+        public bool CreateSkills(Dictionary<string, string> _models)
+        {
+            Skills skill = new Skills()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                NameSkills = _models["NameSkils"]
+            };
+            return storage.Add(skill);
+        }
+
+        public bool CreateSkillsLead(Dictionary<string, string> _models)
+        {
+            SkillsLead skillsLead = new SkillsLead()
+            {
+                LeadId = Convert.ToInt32(_models["LeadId"]),
+                SkillsId = Convert.ToInt32(_models["SkillsId"])
+            };
+            return storage.Add(skillsLead);
+        }
+
+        public bool CreateStatus(Dictionary<string, string> _models)
+        {
+            Status status = new Status()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                Name = _models["Name"]
+            };
+            return storage.Add(status);
+        }
+
+        public bool CreateTeacher(Dictionary<string, string> _models)
+        {
+            Teacher teacher = new Teacher()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                FName = _models["FName"],
+                SName = _models["SName"],
+                PhoneNumber = Convert.ToInt32(_models["PhoneNumber"]),
+                Login = _models["Login"],
+                Password = _models["Pasword"]
+            };
+            return storage.Add(teacher);
+        }
+
+       
     }
 }
