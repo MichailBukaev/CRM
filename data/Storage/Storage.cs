@@ -26,6 +26,16 @@ namespace data.Storage
         private Dictionary<string, IReader> modelsReader = new Dictionary<string, IReader>()
         {
             {new Lead().GetType().ToString(), new ReaderLead() },
+            {new Course().GetType().ToString(), new ReaderCourse() },
+            {new Group().GetType().ToString(), new ReaderGroup() },
+            {new History().GetType().ToString(), new ReaderHistory() },
+            {new HistoryGroup().GetType().ToString(), new ReaderHistoryGroup() },
+            {new HR().GetType().ToString(), new ReaderHR() },
+            {new Log().GetType().ToString(), new ReaderLog() },
+            {new Skills().GetType().ToString(), new ReaderSkills() },
+            {new SkillsLead().GetType().ToString(), new ReaderSkillsLead() },
+            {new Status().GetType().ToString(), new ReaderStatus() },
+            {new Teacher().GetType().ToString(), new ReaderTeacher() },
         };
     }
 }

@@ -31,5 +31,26 @@ namespace NUnitTestStorage
             for (int i = 0; i < list.Count; i++) { arrresult[i] = list[i].Id; }
             return arrresult;
         }
+
+
+        [TestCase(Course.Fields.Id, "1", ExpectedResult = new int[] { 1 })]
+        [TestCase(Course.Fields.Name, "1", ExpectedResult = new int[] { 1, 2 })]
+
+        public int[] TestGetAllCourse(Course.Fields fields, string TValue)
+        {
+            List<Course> list = (List<Course>)_storage.GetAll<Course>(fields.ToString(), TValue);
+            int[] arrresult = new int[list.Count];
+            for(int i=0; i<list.Count; i++) { arrresult[i] = list[i].Id; }
+            return arrresult;
+        }
+        
+        [TestCase(ExpectedResult = new int[] { 1, 2, 3 })]
+        public int[] TestGetAllCourse()
+        {
+            List<Course> list = (List<Course>)_storage.GetAll<Course>();
+            int[] arrresult = new int[list.Count];
+            for (int i=0; i<list.Count; i++) { arrresult[i] = list[i].Id; }
+            return arrresult;
+        }
     }
 }
