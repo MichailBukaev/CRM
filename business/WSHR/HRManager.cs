@@ -7,15 +7,15 @@ namespace business.WSHR
 {
     public class HRManager
     {
-        HR hR;
+     
         HRCache _cache;
         StabStorage storage;
         PublisherChangesInBD _publisher;
         public HRManager(HR hR)
         {
-            hR = new HR();
+            this.hR = hR;
             _cache = new HRCache();
-            storage = new StabStorage(this);
+            storage = new StabStorage(hR);
             _publisher = PublisherChangesInBD.GetPublisher();
             SetCache();
         }
@@ -70,7 +70,89 @@ namespace business.WSHR
         {
             return _cache.SkillsLeads;
         }
+        public IEnumerable<IEntity> GetSkillsLeads(string TKey, string TValue)
+        {
+            return _cache.SkillsLeads;
+        }
 
+        public bool CreateLead(Dictionary<string, string> _models)
+        {
+            Lead lead = new Lead()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                FName = _models["Name"],
+                SName = _models["SName"],
+                DateBirthday = _models["DateBirthday"],
+                Numder = Convert.ToInt32(_models["Numder"]),
+                EMail = _models["EMail"],
+                AccessStatus = Convert.ToBoolean(_models["AccessStatus"]),
+                DateRegistration = Convert.ToString(DateTime.UtcNow),
+                GroupId = Convert.ToInt32(_models["GroupId"]),
+                StatusId = Convert.ToInt32(_models["StatusId"]),
+                CourseId = Convert.ToInt32(_models["CourseId"])
+            };
+
+            return storage.Add(lead);
+        }
+        public bool CreateGroup(Dictionary<string, string> _models)
+        {
+            Group group = new Group()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                NameGroup = _models["Name"],
+                CourseId = Convert.ToInt32(_models["CourseId"]),
+                StartDate = _models["StartDate"],
+                TeacherId = Convert.ToInt32(_models["TeacherId"]),
+                Log = _models["Log"]
+            };
+            return storage.Add(group);
+        }
+        public bool CreateCourse(Dictionary<string, string> _models)
+        {
+            Course course = new Course()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                Name = _models["Name"],      
+                CourseInfo = _models["CourseInfo"]
+            };
+            return storage.Add(course);
+        }
+        public bool CreateHistory(Dictionary<string, string> _models)
+        {
+            History history = new History()
+            {
+                LeadId = Convert.ToInt32(_models["Id"]),
+                HistoryText = _models["HistoryText"]
+            };
+            return storage.Add(history);
+        }
+
+        public bool CreateHistoryGroup(Dictionary<string, string> _models)
+        {
+            HistoryGroup historygroup = new HistoryGroup()
+            {
+                GroupId = Convert.ToInt32(_models["Id"]),
+                HistoryText = _models["HistoryText"]
+            };
+            return storage.Add(historygroup);
+        }
+        public bool CreateHR(Dictionary<string, string> _models)
+        {
+            HR hr = new HR()
+            {
+                Id = Convert.ToInt32(_models["Id"]),
+                FName = _models["FName"],
+                SName = _models["SName"],
+                Login = _models["Login"],
+                Password = _models["Password"]
+            };
+            return storage.Add(hr);
+        }
+
+        public bool UpdateLead(int id, Dictionary<string, string> _model)
+        {
+
+        }
 
     }
 }

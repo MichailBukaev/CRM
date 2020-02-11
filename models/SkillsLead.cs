@@ -9,5 +9,11 @@ namespace models
         public Lead Lead { get; set; }
         public int SkillsId { get; set; }
         public Skills Skill { get; set; }
+
+        public enum Field
+        {
+            LeadId,
+            SkillsId
+        }
     }
 }
