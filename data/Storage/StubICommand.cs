@@ -18,6 +18,8 @@ namespace data.Storage
                 return new List<Lead>() { new Lead { Id=1, GroupId = 1 }, new Lead { Id=2, GroupId = 1}, new Lead { Id = 3, GroupId = 2 } };
             }
             else { return null; }
+
+            //добавить для др сущностей
         }
     }
 }

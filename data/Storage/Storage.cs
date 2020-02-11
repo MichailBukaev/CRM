@@ -23,7 +23,6 @@ namespace data.Storage
             return reader.Read(null, null, (Read)crudCommand);
         }
 
-
         private Dictionary<string, IReader> modelsReader = new Dictionary<string, IReader>()
         {
             {new Lead().GetType().ToString(), new ReaderLead() },
