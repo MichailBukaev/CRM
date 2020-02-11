@@ -18,7 +18,6 @@ namespace business.WSTeacher
         public TeacherCache()
         {
             FlagActual = false;
-
         }
 
         public void ReadChange(IEntity entity)
@@ -27,5 +26,6 @@ namespace business.WSTeacher
 
         }
 
+        
     }
 }
