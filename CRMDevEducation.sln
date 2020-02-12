@@ -11,7 +11,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "data", "data\data.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "business", "business\business.csproj", "{D70CC131-FD99-46C9-B977-059B9F7E6805}"
 EndProject
+<<<<<<< HEAD
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTestStorage", "NUnitTestStorage\NUnitTestStorage.csproj", "{48ED59D0-19E1-4A45-9E67-7CCD47533B80}"
+=======
+<<<<<<< HEAD
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTestWSHR", "NUnitTestWSHR\NUnitTestWSHR.csproj", "{1BC45BD0-A915-427F-999A-2455EAF95D7F}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTestWSTeacher", "NUnitTestWSTeacher\NUnitTestWSTeacher.csproj", "{36CCD4CE-0F78-4DFA-9307-E76904AED546}"
+>>>>>>> ManagerTeacher_Cache
+>>>>>>> debug
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +43,24 @@ Global
 		{D70CC131-FD99-46C9-B977-059B9F7E6805}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D70CC131-FD99-46C9-B977-059B9F7E6805}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D70CC131-FD99-46C9-B977-059B9F7E6805}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{48ED59D0-19E1-4A45-9E67-7CCD47533B80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{48ED59D0-19E1-4A45-9E67-7CCD47533B80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48ED59D0-19E1-4A45-9E67-7CCD47533B80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48ED59D0-19E1-4A45-9E67-7CCD47533B80}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+<<<<<<< HEAD
+		{1BC45BD0-A915-427F-999A-2455EAF95D7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC45BD0-A915-427F-999A-2455EAF95D7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC45BD0-A915-427F-999A-2455EAF95D7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC45BD0-A915-427F-999A-2455EAF95D7F}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{36CCD4CE-0F78-4DFA-9307-E76904AED546}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36CCD4CE-0F78-4DFA-9307-E76904AED546}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36CCD4CE-0F78-4DFA-9307-E76904AED546}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36CCD4CE-0F78-4DFA-9307-E76904AED546}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> ManagerTeacher_Cache
+>>>>>>> debug
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
