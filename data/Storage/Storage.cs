@@ -7,7 +7,7 @@ namespace data.Storage
 {
     public class Storage
     {
-        private ICommand crudCommand;
+        private StubICommand crudCommand;
        
         public IEnumerable<IEntity> GetAll<T>(string Tkey, string TValue) where T : IEntity, new()
         {
