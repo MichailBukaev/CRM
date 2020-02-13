@@ -9,12 +9,11 @@ namespace models
         public Lead Lead { get; set; }
         public int SkillsId { get; set; }
         public Skills Skill { get; set; }
-<<<<<<< HEAD
-        public enum Fields
-=======
 
-        public enum Field
->>>>>>> debug
+
+
+        public enum Fields
+
         {
             LeadId,
             SkillsId

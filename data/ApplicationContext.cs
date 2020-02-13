@@ -28,13 +28,9 @@ namespace data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-<<<<<<< HEAD
-            optionsBuilder.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = CRM; Trusted_Connection = True; ");
-=======
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TestMigrations;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
->>>>>>> debug
-        }
 
+            optionsBuilder.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = CRM; Trusted_Connection = True; ");
+        }   
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<HistoryGroup>().HasNoKey();

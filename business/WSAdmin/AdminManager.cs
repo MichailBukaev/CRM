@@ -9,12 +9,12 @@ namespace business.WSAdmin
 {
     public class AdminManager
     {
-        Storage storage;
+        Storage _storage;
         AdminCache _cache;
         PublisherChangesInBD _publisher;
         public AdminManager()
         {
-            storage = new Storage();
+            _storage = new Storage();
             _cache = new AdminCache();
             _publisher = PublisherChangesInBD.GetPublisher();
             SetCache();
@@ -24,23 +24,84 @@ namespace business.WSAdmin
         {
             if (_cache.FlagActual == false)
             {
-                _cache.Teachers = (List<Teacher>)storage.GetAll<Teacher>();
-                _cache.Hrs = (List<HR>)storage.GetAll<HR>();
-                _cache.FlagActual = true;
+                //_//storage = new StorageTeacher();
+                //_cache.Teachers = (List<Teacher>)_storage.GetAll();
+                ////_storage = new StorageHR();
+                //_cache.Hrs = (List<HR>)_storage.GetAll();
+                //_cache.FlagActual = true;
+                _cache.Teachers = new List<Teacher>()
+                {
+                    new Teacher()
+                    {
+                        Id = 1,
+                        FName = "Teacher",
+                        SName = "test",
+                        PhoneNumber = 123
+                        
+                    },
+                    new Teacher()
+                    {
+                        Id = 2,
+                        FName = "Teacher2",
+                        SName = "test",
+                        PhoneNumber = 123
+                    }
+                };
+                _cache.Hrs = new List<HR>()
+                {
+                    new HR()
+                    {
+                        Id = 1,
+                        FName = "HR",
+                        SName = "test"
+
+                    },
+                    new HR()
+                    {
+                        Id = 2,
+                        FName = "HR2",
+                        SName = "test"
+                    }
+                };
+
             }
         }
-        public IEnumerable<IEntity> GetHR()
+        public IEnumerable<IModelsBusiness> GetHR()
         {
-            return _cache.Hrs;
+            List<HR> hrs = _cache.Hrs;
+            List<HRBusinessModel> hrsBusiness = new List<HRBusinessModel>();
+            foreach(HR item in hrs)
+            {
+                hrsBusiness.Add(new HRBusinessModel
+                {
+                    Id = item.Id,
+                    FName = item.FName,
+                    SName = item.SName
+                });
+            };
+            return hrsBusiness;
         }
 
-        public IEnumerable<IEntity> GetTeacher()
+        public IEnumerable<IModelsBusiness> GetTeacher()
         {
-            return _cache.Teachers;
+            List<Teacher> teachers = _cache.Teachers;
+            List<TeacherBusinessModel> teachersBusiness = new List<TeacherBusinessModel>();
+            foreach (Teacher item in teachers)
+            {
+                teachersBusiness.Add(new TeacherBusinessModel
+                {
+                    Id = item.Id,
+                    FName = item.FName,
+                    SName = item.SName,
+                    PhoneNumber = item.PhoneNumber
+                });
+            };
+            return teachersBusiness;
         }
 
-        public bool CreateHR(HRBusinessModelAdmin _hr)
+        public bool CreateHR(HRBusinessModel _hr)
         {
+            //_storage = new StorageHR();
             HR hR = new HR
             {
                 Id = _hr.Id,
@@ -49,14 +110,15 @@ namespace business.WSAdmin
                 Login = _hr.Login,
                 Password = _hr.Password
             };
-            bool success = storage.Add(hR);
+            bool success = _storage.Add(hR);
             if (success)
                 _publisher.Notify(hR);
             return success;
         }
 
-        public bool CreateTeacher(TeacherBusinessModelAdmin _teacher)
+        public bool CreateTeacher(TeacherBusinessModel _teacher)
         {
+           // _storage = new StorageTeacher();
             Teacher teacher = new Teacher
             {
                 Id = _teacher.Id,
@@ -66,7 +128,7 @@ namespace business.WSAdmin
                 Login = _teacher.Login,
                 Password = _teacher.Password
             };
-            bool success = storage.Add(teacher);
+            bool success = _storage.Add(teacher);
             if (success)
                 _publisher.Notify(teacher);
             return success;

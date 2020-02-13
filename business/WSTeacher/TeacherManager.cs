@@ -90,8 +90,7 @@ namespace business.WSTeacher
                 AccessStatus = Convert.ToBoolean(_models["AccessStatus"]),
                 DateRegistration = _models["IdDateRegistration"],
                 GroupId = Convert.ToInt32(_models["GroupId"]),
-                StatusId = Convert.ToInt32(_models["StatusId"]),
-                CourseId = Convert.ToInt32(_models["CourseId"])
+                StatusId = Convert.ToInt32(_models["StatusId"])
 
             };
 

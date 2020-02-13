@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace business.Models
+namespace CRMDevEducation.Models.Input
 {
-    public class HRBusinessModel
+    public class InputHRModel : IModelInput
     {
         public int Id { get; set; }
         public string FName { get; set; }
