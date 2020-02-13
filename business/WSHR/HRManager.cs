@@ -93,8 +93,7 @@ namespace business.WSHR
                 AccessStatus = Convert.ToBoolean(_models["AccessStatus"]),
                 DateRegistration = Convert.ToString(DateTime.UtcNow),
                 GroupId = Convert.ToInt32(_models["GroupId"]),
-                StatusId = Convert.ToInt32(_models["StatusId"]),
-                CourseId = Convert.ToInt32(_models["CourseId"])
+                StatusId = Convert.ToInt32(_models["StatusId"])
             };
 
             bool okey = storage.Add(lead);
@@ -241,10 +240,10 @@ namespace business.WSHR
         }
 
         #endregion
-        public bool UpdateLead(int id, Dictionary<string, string> _model)
-        {
+        //public bool UpdateLead(int id, Dictionary<string, string> _model)
+        //{
          
-        }
+        //}
 
     }
 }

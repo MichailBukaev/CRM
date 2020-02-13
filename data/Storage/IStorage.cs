@@ -5,7 +5,7 @@ using System.Text;
 
 namespace data.Storage
 {
-    interface IStorage
+    public interface IStorage
     {
         IEnumerable<IEntity> GetAll(string Tkey, string TValue);
         IEnumerable<IEntity> GetAll();
