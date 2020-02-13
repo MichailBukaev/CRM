@@ -89,7 +89,7 @@ namespace data.Migrations
                     NameGroup = table.Column<string>(nullable: true),
                     CourseId = table.Column<int>(nullable: false),
                     StartDate = table.Column<string>(nullable: true),
-                    TeacherId = table.Column<int>(nullable: false),
+                    TeacherId = table.Column<int>(nullable: true),
                     Log = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -106,7 +106,7 @@ namespace data.Migrations
                         column: x => x.TeacherId,
                         principalTable: "Teacherss",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -139,25 +139,18 @@ namespace data.Migrations
                     Numder = table.Column<int>(nullable: false),
                     EMail = table.Column<string>(nullable: false),
                     AccessStatus = table.Column<bool>(nullable: false),
-                    GroupId = table.Column<int>(nullable: false),
-                    StatusId = table.Column<int>(nullable: false),
-                    CourseId = table.Column<int>(nullable: false)
+                    GroupId = table.Column<int>(nullable: true),
+                    StatusId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Leads", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Leads_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Leads_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Leads_Statuss_StatusId",
                         column: x => x.StatusId,
@@ -242,11 +235,6 @@ namespace data.Migrations
                 name: "IX_Historys_LeadId",
                 table: "Historys",
                 column: "LeadId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Leads_CourseId",
-                table: "Leads",
-                column: "CourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Leads_GroupId",

@@ -1,5 +1,6 @@
 ﻿using business.Models;
 using data.Storage;
+using data.StorageEntity;
 using models;
 using System;
 using System.Collections.Generic;
@@ -9,12 +10,12 @@ namespace business.WSAdmin
 {
     public class AdminManager
     {
-        Storage _storage;
+        IStorage _storage;
         AdminCache _cache;
         PublisherChangesInBD _publisher;
         public AdminManager()
         {
-            _storage = new Storage();
+           
             _cache = new AdminCache();
             _publisher = PublisherChangesInBD.GetPublisher();
             SetCache();
@@ -24,45 +25,12 @@ namespace business.WSAdmin
         {
             if (_cache.FlagActual == false)
             {
-                //_//storage = new StorageTeacher();
-                //_cache.Teachers = (List<Teacher>)_storage.GetAll();
-                ////_storage = new StorageHR();
-                //_cache.Hrs = (List<HR>)_storage.GetAll();
-                //_cache.FlagActual = true;
-                _cache.Teachers = new List<Teacher>()
-                {
-                    new Teacher()
-                    {
-                        Id = 1,
-                        FName = "Teacher",
-                        SName = "test",
-                        PhoneNumber = 123
-                        
-                    },
-                    new Teacher()
-                    {
-                        Id = 2,
-                        FName = "Teacher2",
-                        SName = "test",
-                        PhoneNumber = 123
-                    }
-                };
-                _cache.Hrs = new List<HR>()
-                {
-                    new HR()
-                    {
-                        Id = 1,
-                        FName = "HR",
-                        SName = "test"
-
-                    },
-                    new HR()
-                    {
-                        Id = 2,
-                        FName = "HR2",
-                        SName = "test"
-                    }
-                };
+                _storage = new StorageTeacher();
+                _cache.Teachers = (List<Teacher>)_storage.GetAll();
+                _storage = new StorageHR();
+                _cache.Hrs = (List<HR>)_storage.GetAll();
+                _cache.FlagActual = true;
+                
 
             }
         }
@@ -101,7 +69,7 @@ namespace business.WSAdmin
 
         public bool CreateHR(HRBusinessModel _hr)
         {
-            //_storage = new StorageHR();
+            _storage = new StorageHR();
             HR hR = new HR
             {
                 Id = _hr.Id,
@@ -118,7 +86,7 @@ namespace business.WSAdmin
 
         public bool CreateTeacher(TeacherBusinessModel _teacher)
         {
-           // _storage = new StorageTeacher();
+            _storage = new StorageTeacher();
             Teacher teacher = new Teacher
             {
                 Id = _teacher.Id,

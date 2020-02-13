@@ -56,7 +56,7 @@ namespace data.Migrations
                     b.Property<string>("StartDate")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TeacherId")
+                    b.Property<int?>("TeacherId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -128,9 +128,6 @@ namespace data.Migrations
                     b.Property<bool>("AccessStatus")
                         .HasColumnType("bit");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
                     b.Property<string>("DateBirthday")
                         .HasColumnType("nvarchar(max)");
 
@@ -144,7 +141,7 @@ namespace data.Migrations
                     b.Property<string>("FName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<int>("Numder")
@@ -157,8 +154,6 @@ namespace data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
 
                     b.HasIndex("GroupId");
 
@@ -262,9 +257,7 @@ namespace data.Migrations
 
                     b.HasOne("models.Teacher", "Teacher")
                         .WithMany()
-                        .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TeacherId");
                 });
 
             modelBuilder.Entity("models.History", b =>
@@ -287,17 +280,9 @@ namespace data.Migrations
 
             modelBuilder.Entity("models.Lead", b =>
                 {
-                    b.HasOne("models.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("models.Group", "Group")
                         .WithMany()
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupId");
 
                     b.HasOne("models.Status", "Status")
                         .WithMany()

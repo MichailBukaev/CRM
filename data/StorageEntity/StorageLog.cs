@@ -10,7 +10,7 @@ namespace data.StorageEntity
     public class StorageLog : IStorage
     {
         IReader _reader;
-        public StorageLod()
+        public StorageLog()
         {
             _reader = new ReaderLog();
         }

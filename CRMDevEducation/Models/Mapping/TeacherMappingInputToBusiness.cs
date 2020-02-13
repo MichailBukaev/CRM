@@ -13,7 +13,7 @@ namespace CRMDevEducation.Models.Mapping
         {
             return new TeacherBusinessModel()
             {
-                Id = model.Id,
+           
                 SName = model.SName,
                 FName = model.FName,
                 PhoneNumber = model.PhoneNumber,
