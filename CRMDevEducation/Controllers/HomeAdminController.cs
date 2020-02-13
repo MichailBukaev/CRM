@@ -11,10 +11,12 @@ using CRMDevEducation.Models.Output;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using models;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CRMDevEducation.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class HomeAdminController : ControllerBase
     {
@@ -23,23 +25,31 @@ namespace CRMDevEducation.Controllers
         {
             manager = new AdminManager();
         }
-
+        [Authorize]
         [HttpGet]
         public string Get()
         {
-            string json = "";
-            foreach (HRBusinessModel model in manager.GetHR())
+            if (User.Identity.Name == "admin")
             {
-                json += JsonSerializer.Serialize<OutputHRModel>(HRMappingBusinessToOutput.Map(model));
+                string json = "";
+                foreach (HRBusinessModel model in manager.GetHR())
+                {
+                    json += JsonSerializer.Serialize<OutputHRModel>(HRMappingBusinessToOutput.Map(model));
+                }
+                foreach (TeacherBusinessModel model in manager.GetTeacher())
+                {
+                    json += JsonSerializer.Serialize<OutputTeacherModel>(TeacherMappingBusinessToOutput.Map(model));
+                }
+                return json;
             }
-            foreach (TeacherBusinessModel model in manager.GetTeacher())
+            else 
             {
-                json += JsonSerializer.Serialize<OutputTeacherModel>(TeacherMappingBusinessToOutput.Map(model));
+                return "Are u dont horoshiy chelovecheks";
             }
-            return json;
+            
         }
 
-
+        
         [HttpPost]
         [Route("CreateHR")]
         public string CreateHr([FromBody] InputHRModel model)

@@ -15,7 +15,6 @@ namespace business.WSAdmin
         PublisherChangesInBD _publisher;
         public AdminManager()
         {
-           
             _cache = new AdminCache();
             _publisher = PublisherChangesInBD.GetPublisher();
             SetCache();
@@ -30,8 +29,6 @@ namespace business.WSAdmin
                 _storage = new StorageHR();
                 _cache.Hrs = (List<HR>)_storage.GetAll();
                 _cache.FlagActual = true;
-                
-
             }
         }
         public IEnumerable<IModelsBusiness> GetHR()
