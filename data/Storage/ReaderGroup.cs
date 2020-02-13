@@ -8,9 +8,9 @@ namespace data.Storage
 {
     public class ReaderGroup : IReader
     {
-        public IEnumerable<IEntity> Read(string TKey, string TValue, Read crudCommand)
+        public IEnumerable<IEntity> Read(string TKey, string TValue, IEnumerable<IEntity> entities)
         {
-            List<Group> primariGroups = (List<Group>)crudCommand.Execute<Group>();
+            List<Group> primariGroups = (List<Group>)entities;
             List<Group> groups;
             if (Group.Fields.Id.ToString() == TKey) { groups = primariGroups.Where(p => p.Id == Convert.ToInt32(TValue)).ToList(); }
             else if (Group.Fields.NameGroup.ToString() == TKey) { groups = primariGroups.Where(p => p.NameGroup == TValue).ToList(); }

@@ -7,7 +7,7 @@ namespace data.Storage
 {
     public interface IReader
     {
-        public IEnumerable<IEntity> Read(string TKey, string TValue, Read crudCommand);
+        public IEnumerable<IEntity> Read(string TKey, string TValue, IEnumerable<IEntity> entities);
 
     }
 

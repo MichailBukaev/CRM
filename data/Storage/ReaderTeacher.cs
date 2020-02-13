@@ -8,9 +8,9 @@ namespace data.Storage
 {
     public class ReaderTeacher : IReader
     {
-        public IEnumerable<IEntity> Read(string TKey, string TValue, Read crudCommand)
+        public IEnumerable<IEntity> Read(string TKey, string TValue, IEnumerable<IEntity> entities)
         {
-            List<Teacher> primariTeacher = (List<Teacher>)crudCommand.Execute<Teacher>();
+            List<Teacher> primariTeacher = (List<Teacher>)entities;
             List<Teacher> teachers;
             if (Teacher.Fields.Id.ToString() == TKey) { teachers = primariTeacher.Where(p => p.Id == Convert.ToInt32(TValue)).ToList(); }
             else if (Teacher.Fields.FName.ToString() == TKey) { teachers = primariTeacher.Where(p => p.FName == TValue).ToList(); }
