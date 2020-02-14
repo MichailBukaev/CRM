@@ -140,7 +140,9 @@ namespace data.Migrations
                     EMail = table.Column<string>(nullable: false),
                     AccessStatus = table.Column<bool>(nullable: false),
                     GroupId = table.Column<int>(nullable: true),
-                    StatusId = table.Column<int>(nullable: false)
+                    StatusId = table.Column<int>(nullable: false),
+                    Login = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -181,7 +183,8 @@ namespace data.Migrations
                 columns: table => new
                 {
                     Date = table.Column<DateTime>(nullable: false),
-                    LeadId = table.Column<int>(nullable: false)
+                    LeadId = table.Column<int>(nullable: false),
+                    Visit = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

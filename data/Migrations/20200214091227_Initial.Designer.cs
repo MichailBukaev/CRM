@@ -10,7 +10,7 @@ using data;
 namespace data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20200213204341_Initial")]
+    [Migration("20200214091227_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -146,8 +146,14 @@ namespace data.Migrations
                     b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Login")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Numder")
                         .HasColumnType("int");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SName")
                         .HasColumnType("nvarchar(max)");
@@ -171,6 +177,9 @@ namespace data.Migrations
 
                     b.Property<int>("LeadId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Visit")
+                        .HasColumnType("bit");
 
                     b.HasIndex("LeadId");
 

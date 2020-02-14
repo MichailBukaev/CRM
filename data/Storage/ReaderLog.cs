@@ -14,7 +14,7 @@ namespace data.Storage
             List<Log> logs;
             if (Log.Fields.LeadId.ToString() == TKey) { logs = primariLogs.Where(p => p.LeadId == Convert.ToInt32(TValue)).ToList(); }
             else if (Log.Fields.Date.ToString() == TKey) { logs = primariLogs.Where(p => p.Date == DateTime.Parse(TValue)).ToList(); }
-            else if (Log.Fields.Visit.ToString() == TKey) { logs = primariLogs.Where(p = > p.Visit == Convert.ToBoolean(TValue)).ToList(); }
+            else if (Log.Fields.Visit.ToString() == TKey) { logs = primariLogs.Where(p => p.Visit == Convert.ToBoolean(TValue)).ToList(); }
             else { logs = primariLogs; }
             return logs;
         }
