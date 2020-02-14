@@ -5,13 +5,33 @@ using System.Text;
 
 namespace business
 {
-    public class StorageToken
+    public class Node
     {
-        List<JwtSecurityToken> tokens { get; }
+        public JwtSecurityToken Value;
 
-        public void Add(JwtSecurityToken _token)
+        public Node Next;
+
+        public Node(JwtSecurityToken value)
         {
-            tokens.Add(_token);
+            this.Value = value;
+            Next = null;
+        }
+    }
+
+    public static class StorageToken
+    {
+        public static Node Root;
+ 
+        public static void Add(JwtSecurityToken _token)
+        {
+            if (Root == null)
+            {
+                Root = new Node(_token);
+            }
+            else
+            {
+                Root.Next = new Node(_token);
+            }
         }
 
     }

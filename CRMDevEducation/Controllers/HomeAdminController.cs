@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CRMDevEducation.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class HomeAdminController : ControllerBase
@@ -25,12 +26,11 @@ namespace CRMDevEducation.Controllers
         {
             manager = new AdminManager();
         }
-        [Authorize]
+        
         [HttpGet]
         public string Get()
         {
-            if (User.Identity.Name == "admin")
-            {
+            
                 string json = "";
                 foreach (HRBusinessModel model in manager.GetHR())
                 {
@@ -41,15 +41,11 @@ namespace CRMDevEducation.Controllers
                     json += JsonSerializer.Serialize<OutputTeacherModel>(TeacherMappingBusinessToOutput.Map(model));
                 }
                 return json;
-            }
-            else 
-            {
-                return "Are u dont horoshiy chelovecheks";
-            }
+            
             
         }
 
-        
+       
         [HttpPost]
         [Route("CreateHR")]
         public string CreateHr([FromBody] InputHRModel model)
@@ -63,7 +59,7 @@ namespace CRMDevEducation.Controllers
             }
            
         }
-
+       
         [HttpPost]
         [Route("CreateTeacher")]
         public string CreatTeacher([FromBody] InputTeacherModel model)
