@@ -9,11 +9,13 @@ namespace models
         public DateTime Date { get; set; }
         public int LeadId { get; set; }
         public Lead Lead { get; set; }
+        public bool Visit { get; set; }
 
         public enum Fields
         {
             Date, 
-            LeadId
+            LeadId,
+            Visit
         }
     }
 }
