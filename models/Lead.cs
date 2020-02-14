@@ -32,6 +32,9 @@ namespace models
         public int StatusId { get; set; }
         public Status Status { get; set; }
 
+        public string Login { get; set; }
+        public string Password { get; set; }
+
 
         public enum Fields
         {
@@ -45,6 +48,8 @@ namespace models
             AccessStatus, 
             GroupId, 
             StatusId, 
+            Login,
+            Password
         }
        
     }
