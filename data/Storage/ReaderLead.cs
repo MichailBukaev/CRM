@@ -22,8 +22,8 @@ namespace data.Storage
             else if (Lead.Fields.AccessStatus.ToString() == TKey) { leads = primariLeads.Where(p => p.AccessStatus == Convert.ToBoolean(TValue)).ToList(); }
             else if (Lead.Fields.GroupId.ToString() == TKey) { leads = primariLeads.Where(p => p.GroupId == Convert.ToInt32(TValue)).ToList(); }
             else if (Lead.Fields.StatusId.ToString() == TKey) { leads = primariLeads.Where(p => p.StatusId == Convert.ToInt32(TValue)).ToList(); }
-            else if (Lead.Fields.Login.ToString() == TKey) { leads = primariLeads.Where(p => p.Login == TValue.ToList()); }
-            else if (Lead.Fields.Password.ToString() == TKey) { leads = primariLeads.Where(p => p.Password == TValue.ToList()); }
+            else if (Lead.Fields.Login.ToString() == TKey) { leads = primariLeads.Where(p => p.Login == TValue).ToList(); }
+            else if (Lead.Fields.Password.ToString() == TKey) { leads = primariLeads.Where(p => p.Password == TValue).ToList(); }
             else { leads = primariLeads; }
             return leads;
         }

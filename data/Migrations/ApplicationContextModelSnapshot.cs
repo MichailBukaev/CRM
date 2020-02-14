@@ -144,8 +144,14 @@ namespace data.Migrations
                     b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Login")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Numder")
                         .HasColumnType("int");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SName")
                         .HasColumnType("nvarchar(max)");
@@ -169,6 +175,9 @@ namespace data.Migrations
 
                     b.Property<int>("LeadId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Visit")
+                        .HasColumnType("bit");
 
                     b.HasIndex("LeadId");
 
