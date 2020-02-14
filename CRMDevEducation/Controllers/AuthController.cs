@@ -19,6 +19,7 @@ namespace CRMDevEducation.Controllers
         [HttpPost("token")]
         public IActionResult Token(string login, string password)
         {
+            StorageToken storage = new StorageToken();
             var identity = GetIndentity(login, password);
             if (identity == null)
             {
@@ -36,6 +37,7 @@ namespace CRMDevEducation.Controllers
                     SecurityAlgorithms.HmacSha256)
                 );
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+            storage.Add(jwt);
             var respose = new { accass_token = encodedJwt, role = identity.Name };
             return Json(respose);
         }
