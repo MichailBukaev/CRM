@@ -17,7 +17,8 @@ namespace CRMDevEducation.Models.Mapping
                 SName = model.SName,
                 FName = model.FName,
                 Login = model.Login,
-                Password = model.Password
+                Password = model.Password,
+                Head = model.Head
             };
         }
 

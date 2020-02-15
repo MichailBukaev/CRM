@@ -15,7 +15,8 @@ namespace CRMDevEducation.Models.Mapping
             {
                 Id = model.Id,
                 FName = model.FName,
-                SName = model.SName
+                SName = model.SName,
+                Head = model.Head
             };
         }
     }

@@ -16,7 +16,8 @@ namespace CRMDevEducation.Models.Mapping
                 Id = model.Id,
                 FName = model.FName,
                 SName = model.SName,
-                PhoneNumber = model.PhoneNumber
+                PhoneNumber = model.PhoneNumber,
+                Head = model.Head
             };
         }
     }
