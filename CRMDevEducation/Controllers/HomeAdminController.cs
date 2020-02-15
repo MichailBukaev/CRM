@@ -30,19 +30,16 @@ namespace CRMDevEducation.Controllers
         [HttpGet]
         public string Get()
         {
-            
-                string json = "";
-                foreach (HRBusinessModel model in manager.GetHR())
-                {
-                    json += JsonSerializer.Serialize<OutputHRModel>(HRMappingBusinessToOutput.Map(model));
-                }
-                foreach (TeacherBusinessModel model in manager.GetTeacher())
-                {
-                    json += JsonSerializer.Serialize<OutputTeacherModel>(TeacherMappingBusinessToOutput.Map(model));
-                }
-                return json;
-            
-            
+            string json = "";
+            foreach (HRBusinessModel model in manager.GetHR())
+            {
+                json += JsonSerializer.Serialize<OutputHRModel>(HRMappingBusinessToOutput.Map(model));
+            }
+            foreach (TeacherBusinessModel model in manager.GetTeacher())
+            {
+                json += JsonSerializer.Serialize<OutputTeacherModel>(TeacherMappingBusinessToOutput.Map(model));
+            }
+            return json;
         }
 
        

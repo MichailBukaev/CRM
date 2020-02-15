@@ -1,0 +1,240 @@
+﻿using business.Models;
+using data.Storage;
+using data.StorageEntity;
+using models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace business.WSHR
+{
+    public class HeadHR : HeadHRDecorator
+    {
+        IStorage _storage;
+        PublisherChangesInBD _publisher;
+        HeadHRCache _cache;
+
+        public HeadHR(DefaultHR hr)
+        {
+            this.defaultHR = hr;
+            _publisher = PublisherChangesInBD.GetPublisher();
+            SetCache();
+        }
+        public override void SetCache()
+        {
+            if (_cache.FlagActual == false)
+            {
+                _storage = new StorageLead();
+                _cache.Leads = (List<Lead>)_storage.GetAll();
+                _storage = new StorageTeacher();
+                _cache.Teachers = (List<Teacher>)_storage.GetAll();
+                _storage = new StorageGroup();
+                _cache.Groups = (List<Group>)_storage.GetAll();
+                _cache.FlagActual = true;
+            }
+        }
+        public override bool CreateGroup(GroupBusinessModel _model)
+        {
+            _storage = new StorageGroup();
+            Group group = new Group()
+            {
+                NameGroup = _model.Name,
+                CourseId = _model.CourseId,
+                Course = GetCourse(_model.CourseId),
+                TeacherId = _model.TeacherId,
+                Teacher = GetTeacher(_model.TeacherId),
+                StartDate = _model.StartDate
+            };
+            bool success = _storage.Add(group);
+            if (success)
+                _publisher.Notify(group);
+            return success;
+        }
+
+        Course GetCourse(int id)
+        {
+            _storage = new StorageCourse();
+            List<Course> courses = (List<Course>)_storage.GetAll();
+            Course course = courses.FirstOrDefault(x => x.Id == id);
+            return course;
+        }
+        Teacher GetTeacher(int id)
+        {
+            _storage = new StorageTeacher();
+            List<Teacher> teachers = (List<Teacher>)_storage.GetAll();
+            Teacher teacher = teachers.FirstOrDefault(x => x.Id == id);
+            return teacher;
+        }
+        Status GetStatus(string name)
+        {
+            _storage = new StorageStatus();
+            List<Status> statuses = (List<Status>)_storage.GetAll();
+            Status st = statuses.FirstOrDefault(x => x.Name == name);
+            return st;
+        }
+        public override bool DeleteGroup(GroupBusinessModel _model)
+        {
+            _storage = new StorageGroup();
+            Group group = new Group()
+            {
+                NameGroup = _model.Name,
+                CourseId = _model.CourseId,
+                Course = GetCourse(_model.CourseId),
+                StartDate = _model.StartDate,
+                TeacherId = _model.TeacherId,
+                Teacher = GetTeacher(_model.TeacherId)
+            };
+            bool success = _storage.Add(group);
+            if (success)
+                _publisher.Notify(group);
+            return success;
+        }
+
+        public override bool DeleteLead(LeadBusinessModel _model)
+        {
+            _storage = new StorageLead();
+            Lead lead = new Lead()
+            {
+                FName = _model.FName,
+                SName = _model.SName,
+                DateBirthday = _model.DateBirthday,
+                Numder = _model.Numder,
+                EMail = _model.EMail,
+                StatusId = GetStatus(_model.Status).Id,
+                Status = GetStatus(_model.Status),
+                Login = _model.Login,
+                Password = _model.Password
+
+            };
+            bool success = _storage.Add(lead);
+            if (success)
+                _publisher.Notify(lead);
+            return success;
+        }
+        
+        public override IEnumerable<IModelsBusiness> GetLead()
+        {
+            List<Lead> leads = _cache.Leads;
+            List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
+            foreach (Lead item in leads)
+            {
+                leadBusinesses.Add(new LeadBusinessModel
+                {
+                    FName = item.FName,
+                    SName = item.SName,
+                    Numder = item.Numder,
+                    DateBirthday = item.DateBirthday,
+                    Status = item.Status.Name,
+                    EMail = item.EMail,
+                    Login = item.Login,
+                    Password = item.Password
+                });
+            }
+            return leadBusinesses;
+        }
+      
+
+        public override IEnumerable<IModelsBusiness> GetTeacher()
+        {
+            List<Teacher> teachers = _cache.Teachers;
+            List<TeacherBusinessModel> teachersBusiness = new List<TeacherBusinessModel>();
+            foreach (Teacher item in teachers)
+            {
+                teachersBusiness.Add(new TeacherBusinessModel
+                {
+                    Id = item.Id,
+                    FName = item.FName,
+                    SName = item.SName,
+                    PhoneNumber = item.PhoneNumber
+                });
+            };
+            return teachersBusiness;
+        }
+
+        public override bool CreateLead(LeadBusinessModel _model)
+        {
+            return defaultHR.CreateLead(_model);
+        }
+
+        public override bool UpdateLead(LeadBusinessModel _model)
+        {
+            return defaultHR.UpdateLead(_model);
+        }
+
+        public override IEnumerable<IModelsBusiness> GetGroups()
+        {
+            List<Group> groups = _cache.Groups;
+            List<GroupBusinessModel> groupBusinesses = new List<GroupBusinessModel>();
+            foreach (Group item in groups)
+            {
+                groupBusinesses.Add(new GroupBusinessModel
+                {
+                    Name = item.NameGroup,
+                    CourseId = item.CourseId,
+                    CourseName = item.Course.Name,
+                    TeacherId = GetTeacher(item),
+                    Leads = GetLeads(item),
+                    StartDate = item.StartDate,
+                    LogOfGroup = GetLog(item)
+                });
+            }
+            return groupBusinesses;
+        }
+
+        LogBusinessModel GetLog(Group group)
+        {
+            _storage = new StorageLead();
+            List<Lead> leads = (List<Lead>)_storage.GetAll();
+            LogBusinessModel logBus = null;
+            Log log = null;
+            Dictionary<int, bool> leadVisit = null;
+            foreach (Lead item in leads)
+            {
+                if (item.GroupId == group.Id)
+                {
+                    _storage = new StorageLog();
+                    List<Log> logs = (List<Log>)_storage.GetAll();
+                    log = logs.FirstOrDefault(x => x.LeadId == item.Id);
+                    leadVisit.Add(log.LeadId, log.Visit);
+                }
+            }
+            logBus = new LogBusinessModel()
+            {
+                Date = log.Date,
+                LeadsVisit = leadVisit
+            };
+            return logBus;
+        }
+
+        List<LeadsInGroupBusinessModel> GetLeads(Group group)
+        {
+            _storage = new StorageLead();
+            List<LeadsInGroupBusinessModel> leadsInGroupBusiness = new List<LeadsInGroupBusinessModel>();
+            List<Lead> leads = (List<Lead>)_storage.GetAll();
+            foreach (Lead item in leads)
+            {
+                if (item.Group.Id != group.Id)
+                {
+                    leads.Remove(item);
+                }
+                leadsInGroupBusiness.Add(new LeadsInGroupBusinessModel(){
+                    Id = item.Id,
+                    FName = item.FName,
+                    SName = item.SName
+                });
+            }
+            return leadsInGroupBusiness;
+        }
+        int GetTeacher(Group group)
+        {
+            if (group.TeacherId != null)
+            {
+                return Convert.ToInt32(group.TeacherId);
+            } else
+            {
+                return 0;
+            }
+        }
+    }
+}
