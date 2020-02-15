@@ -59,7 +59,7 @@ namespace business.WSHR
             _storage = new StorageStatus();
             List<Status> statuses = (List<Status>)_storage.GetAll();
             Status st = statuses.FirstOrDefault(x => x.Id == id);
-            return st.Name;
+            return st;
         }
         public override bool CreateLead(LeadBusinessModel _model)
         {
