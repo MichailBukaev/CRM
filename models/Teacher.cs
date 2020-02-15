@@ -10,6 +10,7 @@ namespace models
         public int PhoneNumber { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public bool Head { get; set; }
 
         public enum Fields
         {
@@ -18,9 +19,10 @@ namespace models
             SName,
             PhoneNumber,
             Login,
-            Password
+            Password,
+            Head
         }
     }
 
-    
+
 }

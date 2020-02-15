@@ -79,6 +79,7 @@ namespace business.WSHR
                 DateRegistration = Convert.ToString(DateTime.UtcNow),
                 Login = _model.Login,
                 Password = _model.Password
+
             };
             bool success = _storage.Add(lead);
             if (success)
@@ -97,7 +98,8 @@ namespace business.WSHR
                     Id = item.Id,
                     FName = item.FName,
                     SName = item.SName,
-                    PhoneNumber = item.PhoneNumber
+                    PhoneNumber = item.PhoneNumber,
+                    Head = item.Head
                 });
             };
             return teachersBusiness;

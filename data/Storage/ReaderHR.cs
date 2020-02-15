@@ -17,7 +17,7 @@ namespace data.Storage
             else if (HR.Fields.SName.ToString() == TKey) { HRs = primariHRs.Where(p => p.SName == TValue).ToList(); }
             else if (HR.Fields.Login.ToString() == TKey) { HRs = primariHRs.Where(p => p.Login == TValue).ToList(); }
             else if (HR.Fields.Password.ToString() == TKey) { HRs = primariHRs.Where(p => p.Password == TValue).ToList(); }
-            
+            else if (HR.Fields.Head.ToString() == TKey) { HRs = primariHRs.Where(p => p.Head == Convert.ToBoolean(TValue)).ToList();}
             else { HRs = primariHRs; }
             return HRs;
         }      

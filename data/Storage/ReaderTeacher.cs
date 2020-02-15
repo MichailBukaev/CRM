@@ -18,6 +18,7 @@ namespace data.Storage
             else if (Teacher.Fields.PhoneNumber.ToString() == TKey) { teachers = primariTeacher.Where(p => p.PhoneNumber == Convert.ToInt32(TValue)).ToList(); }
             else if (Teacher.Fields.Login.ToString() == TKey) { teachers = primariTeacher.Where(p => p.Login == TValue).ToList(); }
             else if (Teacher.Fields.Password.ToString() == TKey) { teachers = primariTeacher.Where(p => p.Password == TValue).ToList(); }
+            else if (Teacher.Fields.Head.ToString() == TKey) { teachers = primariTeacher.Where(p => p.Head == Convert.ToBoolean(TValue)).ToList(); }
 
             else { teachers = primariTeacher; }
             return teachers;

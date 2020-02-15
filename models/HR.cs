@@ -10,6 +10,7 @@ namespace models
         public string SName { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public bool Head { get; set; }
 
         public enum Fields
         {
@@ -17,7 +18,8 @@ namespace models
             FName,
             SName,
             Login,
-            Password
+            Password,
+            Head
         }
     }
 }
