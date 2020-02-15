@@ -6,7 +6,8 @@ namespace business.Models
 {
     public class LogBusinessModel : IModelsBusiness
     {
-        public DateTime Date { get; set; }
-        public Dictionary<int, bool> LeadsVisit { get; set; }
+        public int GroupId { get; set; }
+        public string GroupName { get; set; }
+        public List<DayInLogBusinessModel> Days { get; set; }
     }
 }

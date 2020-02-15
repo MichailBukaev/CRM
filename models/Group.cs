@@ -13,7 +13,6 @@ namespace models
         public string StartDate { get; set; }
         public int? TeacherId { get; set; }
         public Teacher Teacher { get; set; }
-        public string Log { get; set; }
 
         public enum Fields
         { 
@@ -22,7 +21,6 @@ namespace models
           CourseId,
           StartDate, 
           TeacherId, 
-          Log 
         }
     }
 }

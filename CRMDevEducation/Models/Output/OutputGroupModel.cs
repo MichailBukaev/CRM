@@ -11,7 +11,6 @@ namespace CRMDevEducation.Models.Output
         public int CourseId { get; set; }
         public string CourseName { get; set; }
         public int TeacherId { get; set; }
-        public List<OutputLeadsInGroupModel> LeadsInGroup { get; set; }
-        public OutputLogModel LogOfGroup { get; set; }
+        public List<OutputLeadModel> LeadsInGroup { get; set; }
     }
 }

@@ -11,14 +11,18 @@ namespace CRMDevEducation.Models.Mapping
     {
         public static OutputGroupModel Map(GroupBusinessModel model)
         {
+            List<OutputLeadModel> leads = new List<OutputLeadModel>();
+            foreach(LeadBusinessModel item in model.Leads)
+            {
+                leads.Add(LeadMappingBusinessToOutput.Map(item));
+            }
             return new OutputGroupModel()
             {
                 NameGroup = model.Name,
                 CourseId = model.CourseId,
                 TeacherId = model.TeacherId,
                 CourseName = model.CourseName,
-                LeadsInGroup = LeadsInGroupBusinessToOutput.Map(model.Leads),
-                LogOfGroup = LogMappingBusinessToOutput.Map(model.LogOfGroup)
+                LeadsInGroup = leads
             };            
         }
         

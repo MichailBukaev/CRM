@@ -13,8 +13,9 @@ namespace CRMDevEducation.Models.Mapping
         {
             return new OutputLogModel()
             {
-                Date = model.Date,
-                LeadsVisit = model.LeadsVisit
+                GroupId = model.GroupId,
+                GroupName = model.GroupName,
+                Days = DayInLogMappingBusinessToOutput.Map(model.Days)
             };          
         }
     }

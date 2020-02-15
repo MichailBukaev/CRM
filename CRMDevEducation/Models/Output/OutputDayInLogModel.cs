@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CRMDevEducation.Models.Input
+namespace CRMDevEducation.Models.Output
 {
-    public class InputLogModel : IModelInput
+    public class OutputDayInLogModel: IModelOutput
     {
         public DateTime Date { get; set; }
-        public Dictionary<int, bool> LeadsVisit { get; set; }
+        public List<OutputStudentInLog> StudentsInLog { get; set; }
     }
 }

@@ -17,8 +17,6 @@ namespace data.Storage
             else if (Group.Fields.CourseId.ToString() == TKey) { groups = primariGroups.Where(p => p.CourseId == Convert.ToInt32(TValue)).ToList(); }
             else if (Group.Fields.StartDate.ToString() == TKey) { groups = primariGroups.Where(p => p.StartDate == TValue).ToList(); }
             else if (Group.Fields.TeacherId.ToString() == TKey) { groups = primariGroups.Where(p => p.TeacherId == Convert.ToInt32(TValue)).ToList(); }
-            else if (Group.Fields.Log.ToString() == TKey) { groups = primariGroups.Where(p => p.Log == TValue).ToList(); }
-
             else { groups = primariGroups; }
             return groups;
         }
