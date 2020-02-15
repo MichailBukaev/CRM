@@ -19,7 +19,6 @@ namespace CRMDevEducation.Controllers
         [HttpPost("token")]
         public IActionResult Token(string login, string password)
         {
-            
             var identity = GetIndentity(login, password);
             if (identity == null)
             {

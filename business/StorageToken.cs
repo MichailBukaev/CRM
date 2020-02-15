@@ -33,6 +33,5 @@ namespace business
                 Root.Next = new Node(_token);
             }
         }
-
     }
 }

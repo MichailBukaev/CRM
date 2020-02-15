@@ -5,10 +5,10 @@ using System.Text;
 
 namespace business.WSHR
 {
-    public abstract class HeadHRDecorator : HRManager
+    public abstract class HeadHRDecorator : DefaultHR
     {
-        HRManager defaultHR;
-        public void SetHR(HRManager defaultHR) 
+        protected DefaultHR defaultHR;
+        public void SetHR(DefaultHR defaultHR) 
         {
             this.defaultHR = defaultHR;
         }
