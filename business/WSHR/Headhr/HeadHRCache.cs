@@ -10,6 +10,7 @@ namespace business.WSHR
         public List<Lead> Leads { get; set; }
         public List<Teacher> Teachers { get; set; }
         public List<Group> Groups { get; set; }
+        public List<HR> Hrs { get; set; }
       
 
         public bool FlagActual { get; set; }

@@ -46,7 +46,7 @@ namespace business.WSHR
                     SName = item.SName,
                     Numder = item.Numder,
                     DateBirthday = item.DateBirthday,
-                    Status = GetStatus(item.StatusId),
+                    Status = GetStatus(item.StatusId).Name,
                     EMail = item.EMail,
                     Login = item.Login,
                     Password = item.Password
@@ -54,7 +54,7 @@ namespace business.WSHR
             }
             return leadBusinesses;
         }
-        string GetStatus(int id)
+        Status GetStatus(int id)
         {
             _storage = new StorageStatus();
             List<Status> statuses = (List<Status>)_storage.GetAll();

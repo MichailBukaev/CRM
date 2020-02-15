@@ -7,6 +7,7 @@ namespace CRMDevEducation.Models.Input
 {
     public class InputStatusModel : IModelInput
     {
+        public int Id { get; set; }
         public string Name { get; set; }
     }
 }
