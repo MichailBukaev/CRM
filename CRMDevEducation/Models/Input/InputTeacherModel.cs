@@ -13,5 +13,6 @@ namespace CRMDevEducation.Models.Input
         public int PhoneNumber { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public bool Head { get; set; }
     }
 }

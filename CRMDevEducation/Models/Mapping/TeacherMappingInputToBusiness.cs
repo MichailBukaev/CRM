@@ -18,7 +18,8 @@ namespace CRMDevEducation.Models.Mapping
                 FName = model.FName,
                 PhoneNumber = model.PhoneNumber,
                 Login = model.Login,
-                Password = model.Password
+                Password = model.Password,
+                Head = model.Head
             };
         }
     }

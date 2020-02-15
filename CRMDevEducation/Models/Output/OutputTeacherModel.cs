@@ -11,5 +11,6 @@ namespace CRMDevEducation.Models.Output
         public string FName { get; set; }
         public string SName { get; set; }
         public int PhoneNumber { get; set; }
+        public bool Head { get; set; }
     }
 }

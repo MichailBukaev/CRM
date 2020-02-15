@@ -41,7 +41,9 @@ namespace business.WSAdmin
                 {
                     Id = item.Id,
                     FName = item.FName,
-                    SName = item.SName
+                    SName = item.SName,
+                    Head = item.Head
+                    
                 });
             };
             return hrsBusiness;
@@ -58,7 +60,8 @@ namespace business.WSAdmin
                     Id = item.Id,
                     FName = item.FName,
                     SName = item.SName,
-                    PhoneNumber = item.PhoneNumber
+                    PhoneNumber = item.PhoneNumber,
+                    Head = item.Head
                 });
             };
             return teachersBusiness;
@@ -73,7 +76,8 @@ namespace business.WSAdmin
                 FName = _hr.FName,
                 SName = _hr.SName,
                 Login = _hr.Login,
-                Password = _hr.Password
+                Password = _hr.Password,
+                Head = _hr.Head
             };
             bool success = _storage.Add(hR);
             if (success)
@@ -91,7 +95,8 @@ namespace business.WSAdmin
                 SName = _teacher.SName,
                 PhoneNumber = _teacher.PhoneNumber,
                 Login = _teacher.Login,
-                Password = _teacher.Password
+                Password = _teacher.Password,
+                Head = _teacher.Head
             };
             bool success = _storage.Add(teacher);
             if (success)

@@ -22,6 +22,7 @@ namespace data
         public DbSet<SkillsLead> SkillsLeads { get; set; }
         public DbSet<Teacher> Teacherss { get; set; }
         public DbSet<Group> Groups { get; set; }
+        public DbSet<LinkTeacherCourse> LinkTeacherCourses { get; set; }
         public ApplicationContext()
         {
             //Database.EnsureCreated();

@@ -16,6 +16,8 @@ namespace business.WSHR
         public abstract bool DeleteLead(LeadBusinessModel _model);
         public abstract bool DeleteGroup(GroupBusinessModel _model);
         public abstract bool CreateGroup(GroupBusinessModel _model);
+        public abstract IEnumerable<IModelsBusiness> GetGroups();
+        public abstract IEnumerable<IModelsBusiness> GetHR();
 
 
     }

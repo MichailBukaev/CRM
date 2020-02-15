@@ -46,7 +46,7 @@ namespace business.WSHR
                     SName = item.SName,
                     Numder = item.Numder,
                     DateBirthday = item.DateBirthday,
-                    Status = GetStatus(item.StatusId),
+                    Status = GetStatus(item.StatusId).Name,
                     EMail = item.EMail,
                     Login = item.Login,
                     Password = item.Password
@@ -54,12 +54,12 @@ namespace business.WSHR
             }
             return leadBusinesses;
         }
-        string GetStatus(int id)
+        Status GetStatus(int id)
         {
             _storage = new StorageStatus();
             List<Status> statuses = (List<Status>)_storage.GetAll();
             Status st = statuses.FirstOrDefault(x => x.Id == id);
-            return st.Name;
+            return st;
         }
         public override bool CreateLead(LeadBusinessModel _model)
         {
@@ -79,6 +79,7 @@ namespace business.WSHR
                 DateRegistration = Convert.ToString(DateTime.UtcNow),
                 Login = _model.Login,
                 Password = _model.Password
+
             };
             bool success = _storage.Add(lead);
             if (success)
@@ -97,7 +98,8 @@ namespace business.WSHR
                     Id = item.Id,
                     FName = item.FName,
                     SName = item.SName,
-                    PhoneNumber = item.PhoneNumber
+                    PhoneNumber = item.PhoneNumber,
+                    Head = item.Head
                 });
             };
             return teachersBusiness;

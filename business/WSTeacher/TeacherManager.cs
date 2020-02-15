@@ -146,7 +146,8 @@ namespace business.WSTeacher
                 SName = _models["SName"],
                 PhoneNumber = Convert.ToInt32(_models["PhoneNumber"]),
                 Login = _models["Login"],
-                Password = _models["Pasword"]
+                Password = _models["Pasword"],
+                Head = Convert.ToBoolean(_models["Head"])
             };
             return storage.Add(teacher);
         }

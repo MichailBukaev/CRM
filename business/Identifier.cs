@@ -11,10 +11,10 @@ namespace business
 {
     public class Identifier
     {
-        static IStorage _storage; 
+        static IStorage _storage;
         public static User Check(string _login, string _password)
         {
-            if (_login=="admin"&&_password=="qqq1")
+            if (_login == "admin" && _password == "qqq1")
             {
                 return new User() { Login = _login, Password = _password, Role = "Admin" };
             }
@@ -25,7 +25,10 @@ namespace business
                 HR hr = hrs.FirstOrDefault(x => x.Login == _login && x.Password == _password);
                 if (hr != null)
                 {
-                    return new User() { Login = hr.Login, Password = hr.Password, Role = "HR" };
+                    if (hr.Head)
+                        return new User() { Login = hr.Login, Password = hr.Password, Role = "HeadHR" };
+                    else
+                        return new User() { Login = hr.Login, Password = hr.Password, Role = "HR" };
                 }
                 else
                 {
@@ -34,7 +37,10 @@ namespace business
                     Teacher teacher = teachers.FirstOrDefault(x => x.Login == _login && x.Password == _password);
                     if (teacher != null)
                     {
-                        return new User() { Login = teacher.Login, Password = teacher.Password, Role = "Teacher" };
+                        if (teacher.Head)
+                            return new User() { Login = teacher.Login, Password = teacher.Password, Role = "HeadTeacher" };
+                        else
+                            return new User() { Login = teacher.Login, Password = teacher.Password, Role = "Teacher" };
                     }
                 }
 
