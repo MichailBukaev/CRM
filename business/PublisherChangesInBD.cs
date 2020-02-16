@@ -6,7 +6,7 @@ using System.Text;
 namespace business
 {
     public delegate void ObserverChangeInBD(IEntity _entity);
-    class PublisherChangesInBD
+    public class PublisherChangesInBD
     {
         private static PublisherChangesInBD publisher = null;
         private ObserverChangeInBD observers = null;
