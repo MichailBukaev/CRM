@@ -7,7 +7,7 @@ using System.Text;
 
 namespace data.StorageEntity
 {
-    class StorageLinkTeacherCourse : IStorage
+    public class StorageLinkTeacherCourse : IStorage
     {
         IReader _reader;
 

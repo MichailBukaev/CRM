@@ -6,7 +6,7 @@ using System.Text;
 
 namespace data.Storage
 {
-    class ReaderLinkTeacherCourse : IReader
+    public class ReaderLinkTeacherCourse : IReader
     {
         public IEnumerable<IEntity> Read(string TKey, string TValue, IEnumerable<IEntity> entities)
         {
