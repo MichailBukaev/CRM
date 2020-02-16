@@ -13,12 +13,16 @@ namespace business.WSTeacher
         public List<Skills> Skills { get; set; }
         public List<SkillsLead> SkillsLeads { get; set; }
         public List<Log> Logs { get; set; }
+        public List<LinkTeacherCourse> LinkTeacherCourses { get; set; }
         public bool FlagActual { get; set; }
 
         public TeacherCache()
         {
             FlagActual = false;
+            PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
+            publisher.Event += this.ReadChange;
         }
+
 
         public void ReadChange(IEntity entity)
         {
