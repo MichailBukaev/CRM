@@ -13,9 +13,13 @@ namespace business.WSTeacher
         public NormalTeacherManager(int teacherId)
         {
             _storage = new StorageTeacher();
-            _teacher = (Teacher)_storage.GetAll(Teacher.Fields.Id.ToString(), teacherId.ToString());
+            List<Teacher> teachers = (List<Teacher>)_storage.GetAll();
+            _teacher = teachers.FirstOrDefault(p => p.Id == teacherId);
             _cache = new TeacherCache();
-
+            if (!_teacher.Head)
+            {
+                SetCache();
+            }
         }
 
         public override void AddSkillsForLead(SkillsForLeadBusinessModel model)
@@ -35,23 +39,28 @@ namespace business.WSTeacher
 
         public override List<GroupBusinessModel> GetAllGroupe()
         {
+            _storage = new StorageTeacher();
+            _cache.Teachers.Add(_teacher);
             List<GroupBusinessModel> groups = new List<GroupBusinessModel>();
             foreach(Group item in _cache.Groups)
             {
                 List<LeadBusinessModel> leadsbusines = new List<LeadBusinessModel>();
-                List<Lead> leads = (List<Lead>)_cache.Leads.Where(p => p.GroupId == item.Id);
-                foreach(Lead itemLead in leads)
+                if (_cache.Leads != null)
                 {
-                    leadsbusines.Add(new LeadBusinessModel()
+                    List<Lead> leads = (List<Lead>)_cache.Leads.Where(p => p.GroupId == item.Id);
+                    foreach (Lead itemLead in leads)
                     {
-                        Id =itemLead.Id,
-                        FName = itemLead.FName,
-                        SName = itemLead.SName,
-                        DateBirthday = itemLead.DateBirthday,
-                        EMail =itemLead.EMail,
-                        Status = itemLead.Status.Name,
-                        Numder =itemLead.Numder
-                    });
+                        leadsbusines.Add(new LeadBusinessModel()
+                        {
+                            Id = itemLead.Id,
+                            FName = itemLead.FName,
+                            SName = itemLead.SName,
+                            DateBirthday = itemLead.DateBirthday,
+                            EMail = itemLead.EMail,
+                            Status = itemLead.Status.Name,
+                            Numder = itemLead.Numder
+                        });
+                    }
                 }
                 groups.Add(new GroupBusinessModel()
                 {

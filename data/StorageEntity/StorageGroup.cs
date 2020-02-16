@@ -1,4 +1,5 @@
 ﻿using data.Storage;
+using Microsoft.EntityFrameworkCore;
 using models;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var groups = db.Groups.ToList();
+                var groups = db.Groups.Include(p=>p.Course).Include(p=>p.Teacher).ToList();
                 return _reader.Read(Tkey, TValue, groups);
             }
         }
@@ -55,7 +56,7 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var groups = db.Groups.ToList();
+                var groups = db.Groups.Include(p => p.Course).Include(p => p.Teacher).ToList();
                 return _reader.Read(null, null, groups);
             }
         }

@@ -12,6 +12,8 @@ namespace business.WSTeacher
         protected IStorage _storage;
         protected TeacherCache _cache;
         protected Teacher _teacher;
+        public TeacherCache Cache { get { return _cache; } }
+        public Teacher Teacher { get { return _teacher; } }
         public abstract List<GroupBusinessModel> GetAllGroupe();
         protected abstract void SetCache();
         public abstract void SetAttendence(DayInLogBusinessModel dayLog);
