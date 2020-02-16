@@ -30,6 +30,7 @@ namespace CRMDevEducation.Controllers
         [HttpGet]
         public string Get()
         {
+            
             string json = "";
             foreach (HRBusinessModel model in manager.GetHR())
             {

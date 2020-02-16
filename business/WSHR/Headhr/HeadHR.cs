@@ -34,6 +34,8 @@ namespace business.WSHR
                 _cache.Groups = (List<Group>)_storage.GetAll();
                 _storage = new StorageHR();
                 _cache.Hrs = (List<HR>)_storage.GetAll();
+                _storage = new StorageLog();
+                _cache.Logs = (List<Log>)_storage.GetAll();
                 _cache.FlagActual = true;
             }
         }
@@ -123,11 +125,7 @@ namespace business.WSHR
             _storage = new StorageGroup();
             Group group = new Group()
             {
-                NameGroup = _model.Name,
-                CourseId = _model.CourseId,
-                Course = GetCourse(_model.CourseId),
-                TeacherId = _model.TeacherId,
-                Teacher = GetTeacher(_model.TeacherId),
+                NameGroup = _model.Name,      
                 StartDate = _model.StartDate
             };
             bool success = _storage.Add(group);
@@ -192,7 +190,7 @@ namespace business.WSHR
         Teacher GetTeacher(int id)
         {
             _storage = new StorageTeacher();
-            List<Teacher> teachers = (List<Teacher>)_storage.GetAll();
+            List<Teacher> teachers = _cache.Teachers;
             Teacher teacher = teachers.FirstOrDefault(x => x.Id == id);
             return teacher;
         }
@@ -203,18 +201,18 @@ namespace business.WSHR
             Status st = statuses.FirstOrDefault(x => x.Name == name);
             return st;
         }
-        List<LeadsInGroupBusinessModel> GetLeads(Group group)
+        List<LeadBusinessModel> GetLeads(Group group)
         {
             _storage = new StorageLead();
-            List<LeadsInGroupBusinessModel> leadsInGroupBusiness = new List<LeadsInGroupBusinessModel>();
-            List<Lead> leads = (List<Lead>)_storage.GetAll();
+            List<LeadBusinessModel> leadsInGroupBusiness = new List<LeadBusinessModel>();
+            List<Lead> leads = _cache.Leads;
             foreach (Lead item in leads)
             {
                 if (item.Group.Id != group.Id)
                 {
                     leads.Remove(item);
                 }
-                leadsInGroupBusiness.Add(new LeadsInGroupBusinessModel()
+                leadsInGroupBusiness.Add(new LeadBusinessModel()
                 {
                     Id = item.Id,
                     FName = item.FName,
@@ -225,30 +223,39 @@ namespace business.WSHR
         }
         LogBusinessModel GetLog(Group group)
         {
-            _storage = new StorageLead();
-            List<Lead> leads = (List<Lead>)_storage.GetAll();
+            List<Lead> leads = _cache.Leads;
             LogBusinessModel logBus = null;
             Log log = null;
-            Dictionary<int, bool> leadVisit = null;
+            List<Log> logs = null;
+            List<DayInLogBusinessModel> dayInLogs = new List<DayInLogBusinessModel>();
+            List<StudentInLogBusinessModel> studentsInLog = new List<StudentInLogBusinessModel>();
             foreach (Lead item in leads)
             {
                 if (item.GroupId == group.Id)
                 {
-                    _storage = new StorageLog();
-                    List<Log> logs = (List<Log>)_storage.GetAll();
+                    logs = _cache.Logs;
                     log = logs.FirstOrDefault(x => x.LeadId == item.Id);
-                    leadVisit.Add(log.LeadId, log.Visit);
+                    studentsInLog.Add(new StudentInLogBusinessModel()
+                    {
+                        LeadId = item.Id,
+                        LeadFName = item.FName,
+                        LeadSName = item.SName,
+                        Visit = log.Visit
+                    });
+                    dayInLogs.Add(new DayInLogBusinessModel() {
+                        Date = log.Date,
+                        StudentsInLog = studentsInLog
+                    });
                 }
             }
             logBus = new LogBusinessModel()
             {
-                Date = log.Date,
-                LeadsVisit = leadVisit
+                GroupId = group.Id,
+                GroupName = group.NameGroup,
+                Days = dayInLogs
             };
             return logBus;
         }
-
-       
         int GetTeacher(Group group)
         {
             if (group.TeacherId != null)

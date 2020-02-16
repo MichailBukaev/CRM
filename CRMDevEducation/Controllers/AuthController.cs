@@ -9,9 +9,10 @@ using business.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-
+using Microsoft.AspNetCore.Authorization;
 namespace CRMDevEducation.Controllers
 {
+    [AllowAnonymous]
     [Route("[controller]")]
     [ApiController]
     public class AuthController : Controller
@@ -36,13 +37,12 @@ namespace CRMDevEducation.Controllers
                     SecurityAlgorithms.HmacSha256)
                 );
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            StorageToken.Add(jwt);
-            var respose = new { access_token = encodedJwt, role = identity.Name };
+            //StorageToken.Add(jwt);
+            var respose = new { access_token = encodedJwt, login = identity.Name };
             return Json(respose);
             //return RedirectToRoute("default", new { controller = "HomeAdmin", action = "Get"});
         }
 
-      
         private ClaimsIdentity GetIndentity(string login, string password)
         {
             User user = Identifier.Check(login, password);

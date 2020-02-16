@@ -50,7 +50,7 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var leads = db.HRs.ToList();
+                var leads = db.Leads.ToList();
                 return _reader.Read(Tkey, TValue, leads);
             }
         }
@@ -59,7 +59,7 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var leads = db.HRs.ToList();
+                var leads = db.Leads.ToList();
                 return _reader.Read(null, null, leads);
             }
         }
