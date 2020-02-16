@@ -36,17 +36,17 @@ namespace CRMDevEducation.Controllers
         {
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
-                List<IModelOutput> models = new List<IModelOutput>();
+                //List<IModelOutput> models = new List<IModelOutput>();
                 string json = "";
                 foreach (TeacherBusinessModel model in manager.GetTeacher())
                 {
                     json += JsonSerializer.Serialize<OutputTeacherModel>(TeacherMappingBusinessToOutput.Map(model));
-                    models.Add(TeacherMappingBusinessToOutput.Map(model));
+                    //models.Add(TeacherMappingBusinessToOutput.Map(model));
                 }
                 foreach (LeadBusinessModel model in manager.GetLead())
                 {
                     json += JsonSerializer.Serialize<OutputLeadModel>(LeadMappingBusinessToOutput.Map(model));
-                    models.Add(LeadMappingBusinessToOutput.Map(model));
+                    //models.Add(LeadMappingBusinessToOutput.Map(model));
                 }
                 return json;
             }
@@ -54,6 +54,7 @@ namespace CRMDevEducation.Controllers
             {
                 return "Bad Login";
             }
+
         }
         [Route("CreateLead")]
         [HttpPost]
@@ -83,6 +84,16 @@ namespace CRMDevEducation.Controllers
         {
             return "Ты ахуел?";
         }
+
+        [HttpGet]
+        [Route("red")]
+        public IActionResult Test(string name)
+        {
+            var a = RedirectToAction("Get", "HomeHR");
+            return a;
+        }
+
+        
 
     }
 }

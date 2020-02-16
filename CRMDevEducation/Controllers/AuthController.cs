@@ -39,8 +39,7 @@ namespace CRMDevEducation.Controllers
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             StorageToken.Add("Bearer " + encodedJwt);
             var respose = new { access_token = encodedJwt, login = identity.Name };
-            return Json(respose);
-           
+            return Json(respose); 
         }
 
         private ClaimsIdentity GetIndentity(string login, string password)

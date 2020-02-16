@@ -10,7 +10,6 @@ namespace data
 {
     public class ApplicationContext : DbContext
     {
-        
         public DbSet<Course> Courses { get; set; }
         public DbSet<Lead> Leads { get; set; }
         public DbSet<History> Historys { get; set; }
@@ -29,7 +28,6 @@ namespace data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             optionsBuilder.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = CRM; Trusted_Connection = True; ");
         }   
         protected override void OnModelCreating(ModelBuilder modelBuilder)

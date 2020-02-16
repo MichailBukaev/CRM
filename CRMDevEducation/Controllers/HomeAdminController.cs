@@ -48,10 +48,8 @@ namespace CRMDevEducation.Controllers
             {
                 return "Bad Login";
             }
-            
         }
 
-       
         [HttpPost]
         [Route("CreateHR")]
         public string CreateHr([FromBody] InputHRModel model)
