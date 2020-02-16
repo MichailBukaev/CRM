@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
+using business;
 
 namespace CRMDevEducation.Controllers
 {
@@ -30,17 +31,24 @@ namespace CRMDevEducation.Controllers
         [HttpGet]
         public string Get()
         {
+            if (StorageToken.Check(Request.Headers["Authorization"]))
+            {
+                string json = "";
+                foreach (HRBusinessModel model in manager.GetHR())
+                {
+                    json += JsonSerializer.Serialize<OutputHRModel>(HRMappingBusinessToOutput.Map(model));
+                }
+                foreach (TeacherBusinessModel model in manager.GetTeacher())
+                {
+                    json += JsonSerializer.Serialize<OutputTeacherModel>(TeacherMappingBusinessToOutput.Map(model));
+                }
+                return json;
+            }
+            else
+            {
+                return "Bad Login";
+            }
             
-            string json = "";
-            foreach (HRBusinessModel model in manager.GetHR())
-            {
-                json += JsonSerializer.Serialize<OutputHRModel>(HRMappingBusinessToOutput.Map(model));
-            }
-            foreach (TeacherBusinessModel model in manager.GetTeacher())
-            {
-                json += JsonSerializer.Serialize<OutputTeacherModel>(TeacherMappingBusinessToOutput.Map(model));
-            }
-            return json;
         }
 
        
@@ -48,29 +56,38 @@ namespace CRMDevEducation.Controllers
         [Route("CreateHR")]
         public string CreateHr([FromBody] InputHRModel model)
         {
-            if (manager.CreateHR(HRMappingInputToBusiness.Map(model)))
+            if (StorageToken.Check(Request.Headers["Authorization"]))
             {
-                return "true";
-            } else
-            {
-                return "false";
+                if (manager.CreateHR(HRMappingInputToBusiness.Map(model)))
+                {
+                    return "true";
+                } else
+                {
+                    return "false";
+                }
             }
-           
+            else
+            {
+                return "Bad Login";
+            }
+
         }
        
         [HttpPost]
         [Route("CreateTeacher")]
         public string CreatTeacher([FromBody] InputTeacherModel model)
         {
-            if (manager.CreateTeacher(TeacherMappingInputToBusiness.Map(model)))
+            if (StorageToken.Check(Request.Headers["Authorization"]))
             {
-                return "true";
+                if (manager.CreateTeacher(TeacherMappingInputToBusiness.Map(model)))
+                {
+                    return "true";
+                }
+                else
+                {
+                    return "false";
+                }
             }
-            else
-            {
-                return "false";
-            }
-            // json = JsonSerializer.Serialize<HR>(manager.());
         }
 
 

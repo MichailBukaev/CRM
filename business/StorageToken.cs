@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -7,11 +8,11 @@ namespace business
 {
     public class Node
     {
-        public JwtSecurityToken Value;
+        public string Value;
 
         public Node Next;
 
-        public Node(JwtSecurityToken value)
+        public Node(string value)
         {
             this.Value = value;
             Next = null;
@@ -22,16 +23,57 @@ namespace business
     {
         public static Node Root;
  
-        public static void Add(JwtSecurityToken _token)
+        public static void Add(string _token)
         {
             if (Root == null)
             {
-                Root = new Node(_token);
+                Root = new Node(_token);   
             }
             else
             {
                 Root.Next = new Node(_token);
             }
         }
+
+        public static bool Check(string input)
+        {
+            Node temp = Root;
+            while (temp != null)
+            {
+                if (temp.Value == input)
+                {
+                    return true;
+                }
+                temp = temp.Next;
+            }
+            return false;
+        }
+
+        public static bool Delete(string input)
+        {
+            if (input == Root.Value)
+            {
+                Root = Root.Next;
+                return true;
+            }
+            else
+            {
+                Node temp = Root;
+                while (temp.Next != null)
+                {
+                    if (temp.Next.Value == input)
+                    {
+                        temp.Next = temp.Next.Next;
+                        return true;
+                    }
+                    temp = temp.Next;
+                }
+            }
+           
+           
+            return false;
+        }
+
+        
     }
 }

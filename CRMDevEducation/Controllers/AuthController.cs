@@ -37,7 +37,7 @@ namespace CRMDevEducation.Controllers
                     SecurityAlgorithms.HmacSha256)
                 );
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            //StorageToken.Add(jwt);
+            StorageToken.Add(jwt.EncodedPayload);
             var respose = new { access_token = encodedJwt, login = identity.Name };
             return Json(respose);
             //return RedirectToRoute("default", new { controller = "HomeAdmin", action = "Get"});

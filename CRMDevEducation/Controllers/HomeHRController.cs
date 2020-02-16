@@ -34,9 +34,7 @@ namespace CRMDevEducation.Controllers
         public string Get()
         {
            
-
-           
-            //string q = Request.Headers["1"];
+            string q = Request.Headers["Authorization"];
 
             
             List<IModelOutput> models = new List<IModelOutput>();
@@ -51,7 +49,7 @@ namespace CRMDevEducation.Controllers
                 json += JsonSerializer.Serialize<OutputLeadModel>(LeadMappingBusinessToOutput.Map(model));
                 models.Add(LeadMappingBusinessToOutput.Map(model));
             }
-            return json;
+            return q;
         }
         [Route("CreateLead")]
         [HttpPost]
