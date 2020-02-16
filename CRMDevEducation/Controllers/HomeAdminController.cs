@@ -48,10 +48,8 @@ namespace CRMDevEducation.Controllers
             {
                 return "Bad Login";
             }
-            
         }
 
-       
         [HttpPost]
         [Route("CreateHR")]
         public string CreateHr([FromBody] InputHRModel model)
@@ -75,7 +73,7 @@ namespace CRMDevEducation.Controllers
        
         [HttpPost]
         [Route("CreateTeacher")]
-        public string CreatTeacher([FromBody] InputTeacherModel model)
+        public string CreateTeacher([FromBody] InputTeacherModel model)
         {
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {

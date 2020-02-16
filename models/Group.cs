@@ -4,8 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace models
 {
     public class Group: IEntity
-    {
-        
+    {  
         public int Id { get; set; }
         public string NameGroup { get; set; }
         public int CourseId { get; set; }

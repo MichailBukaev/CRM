@@ -126,7 +126,6 @@ namespace business.WSHR
             if (success)
                 _publisher.Notify(lead);
             return success;
-
         }
 
 

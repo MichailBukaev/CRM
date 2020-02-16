@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using business;
 using business.Models;
 using business.WSHR;
 using CRMDevEducation.Models.Input;
@@ -33,38 +34,66 @@ namespace CRMDevEducation.Controllers
         [HttpGet]
         public string Get()
         {
-           
-            string q = Request.Headers["Authorization"];
+            if (StorageToken.Check(Request.Headers["Authorization"]))
+            {
+                //List<IModelOutput> models = new List<IModelOutput>();
+                string json = "";
+                foreach (TeacherBusinessModel model in manager.GetTeacher())
+                {
+                    json += JsonSerializer.Serialize<OutputTeacherModel>(TeacherMappingBusinessToOutput.Map(model));
+                    //models.Add(TeacherMappingBusinessToOutput.Map(model));
+                }
+                foreach (LeadBusinessModel model in manager.GetLead())
+                {
+                    json += JsonSerializer.Serialize<OutputLeadModel>(LeadMappingBusinessToOutput.Map(model));
+                    //models.Add(LeadMappingBusinessToOutput.Map(model));
+                }
+                return json;
+            }
+            else
+            {
+                return "Bad Login";
+            }
 
-            
-            List<IModelOutput> models = new List<IModelOutput>();
-            string json = "";
-            foreach (TeacherBusinessModel model in manager.GetTeacher())
-            {
-                json += JsonSerializer.Serialize<OutputTeacherModel>(TeacherMappingBusinessToOutput.Map(model));
-                models.Add(TeacherMappingBusinessToOutput.Map(model));
-            }
-            foreach (LeadBusinessModel model in manager.GetLead())
-            {
-                json += JsonSerializer.Serialize<OutputLeadModel>(LeadMappingBusinessToOutput.Map(model));
-                models.Add(LeadMappingBusinessToOutput.Map(model));
-            }
-            return q;
         }
         [Route("CreateLead")]
         [HttpPost]
         public string CreateLead(InputLeadModel model)
         {
-            if (manager.CreateLead(LeadMappingInputToBusness.Map((model))))
+            if (StorageToken.Check(Request.Headers["Authorization"]))
             {
-                return "true";
+                if (manager.CreateLead(LeadMappingInputToBusness.Map((model))))
+                {
+                    return "true";
+                }
+                else
+                {
+                    return "false";
+                }
             }
             else
             {
-                return "false";
+                return "Bad Login";
             }
         }
 
+        [Authorize(Roles = "HeadHR")]
+        [Route("CreateGroup")]
+        [HttpPost]
+        public string CreateGroup()
+        {
+            return "Ты ахуел?";
+        }
+
+        [HttpGet]
+        [Route("red")]
+        public IActionResult Test(string name)
+        {
+            var a = RedirectToAction("Get", "HomeHR");
+            return a;
+        }
+
+        
 
     }
 }

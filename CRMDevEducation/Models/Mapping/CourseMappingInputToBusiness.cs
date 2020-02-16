@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CRMDevEducation.Models.Mapping
 {
-    public class CorseMappingInputToBusiness
+    public class CourseMappingInputToBusiness
     {
         public static CourseBusinessModel Map(InputCourseModel model)
         {
