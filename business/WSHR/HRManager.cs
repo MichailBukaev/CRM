@@ -61,10 +61,10 @@ namespace business.WSHR
             Status st = statuses.FirstOrDefault(x => x.Id == id);
             return st;
         }
-        public override bool CreateLead(LeadBusinessModel _model)
+        public override int? CreateLead(LeadBusinessModel _model)
         {
             _storage = new StorageLead();
-            Lead lead = new Lead
+            IEntity lead = new Lead
             {
                 FName = _model.FName,
                 SName = _model.SName,
@@ -81,10 +81,14 @@ namespace business.WSHR
                 Password = _model.Password
 
             };
-            bool success = _storage.Add(lead);
+            bool success = _storage.Add(ref lead);
+            Lead result = (Lead)lead;
             if (success)
+            {
                 _publisher.Notify(lead);
-            return success;
+                return result.Id;
+            }
+            return null;
         }
 
         public override IEnumerable<IModelsBusiness> GetTeacher()

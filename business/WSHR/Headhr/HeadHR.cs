@@ -116,22 +116,27 @@ namespace business.WSHR
             return groupBusinesses;
         }
         #endregion
-        public override bool CreateLead(LeadBusinessModel _model)
+        public override int? CreateLead(LeadBusinessModel _model)
         {
             return defaultHR.CreateLead(_model);
         }
-        public override bool CreateGroup(GroupBusinessModel _model)
+        public override int? CreateGroup(GroupBusinessModel _model)
         {
             _storage = new StorageGroup();
-            Group group = new Group()
+            IEntity group = new Group()
             {
                 NameGroup = _model.Name,      
                 StartDate = _model.StartDate
             };
-            bool success = _storage.Add(group);
+            bool success = _storage.Add(ref group);
+
             if (success)
+            {
                 _publisher.Notify(group);
-            return success;
+                Group result = (Group)group;
+                return result.Id;
+            }
+            return null;
         }
        
         public override bool DeleteGroup(GroupBusinessModel _model)
@@ -146,7 +151,7 @@ namespace business.WSHR
                 TeacherId = _model.TeacherId,
                 Teacher = GetTeacher(_model.TeacherId)
             };
-            bool success = _storage.Add(group);
+            bool success = _storage.Delete(group);
             if (success)
                 _publisher.Notify(group);
             return success;
@@ -168,7 +173,7 @@ namespace business.WSHR
                 Password = _model.Password
 
             };
-            bool success = _storage.Add(lead);
+            bool success = _storage.Delete(lead);
             if (success)
                 _publisher.Notify(lead);
             return success;
