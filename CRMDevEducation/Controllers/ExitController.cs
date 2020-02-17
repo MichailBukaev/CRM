@@ -19,7 +19,6 @@ namespace CRMDevEducation.Controllers
         {
             StorageToken.Delete(Request.Headers["Authorization"]);
 
-
             return RedirectToRoute("Get", "HomeAdmin");
         }
     }

@@ -36,9 +36,15 @@ namespace CRMDevEducation.Controllers
                     AuthOptions.GetSymmetricSecurityKey(),
                     SecurityAlgorithms.HmacSha256)
                 );
+            
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            StorageToken.Add("Bearer " + encodedJwt);
-            var respose = new { access_token = encodedJwt, IdUser = identity.Name };
+            StorageToken.Add("Bearer " + encodedJwt); 
+            var respose = new { 
+                access_token = encodedJwt,
+                Id = identity.Claims.ToArray()[0].Value,
+                Login = identity.Claims.ToArray()[1].Value,
+                Role = identity.Claims.ToArray()[2].Value
+            };
             return Json(respose); 
         }
 
@@ -48,11 +54,12 @@ namespace CRMDevEducation.Controllers
 
             if (user == null)
                 return null;
-            else
+            else 
             {
                 var claim = new List<Claim>
-                {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                { 
+                    new Claim("Id", Convert.ToString(user.Id)),
+                    new Claim("Login", Convert.ToString(user.Login)),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role),
                 };
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(

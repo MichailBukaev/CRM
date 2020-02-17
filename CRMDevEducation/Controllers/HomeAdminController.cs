@@ -56,9 +56,9 @@ namespace CRMDevEducation.Controllers
         {
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
-                if (manager.CreateHR(HRMappingInputToBusiness.Map(model)))
+                if (manager.CreateHR(HRMappingInputToBusiness.Map(model)) != null)
                 {
-                    return "true";
+                    return (StorageToken.GetId(Request.Headers["Authorization"]).ToString());
                 } else
                 {
                     return "false";
@@ -77,7 +77,7 @@ namespace CRMDevEducation.Controllers
         {
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
-                if (manager.CreateTeacher(TeacherMappingInputToBusiness.Map(model)))
+                if (manager.CreateTeacher(TeacherMappingInputToBusiness.Map(model)) != null)
                 {
                     return "true";
                 }

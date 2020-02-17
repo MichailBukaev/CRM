@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Text;
 
 namespace business
@@ -74,6 +75,12 @@ namespace business
             return false;
         }
 
-        
+        public static int GetId(string input)
+        {
+            var jwtEncodedString = input.Substring(7);
+            var token = new JwtSecurityToken(jwtEncodedString: jwtEncodedString);
+            int id = Convert.ToInt32(token.Claims.First(c => c.Type == "Id").Value);
+            return id;
+        }
     }
 }
