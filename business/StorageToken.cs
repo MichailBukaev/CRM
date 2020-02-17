@@ -82,5 +82,12 @@ namespace business
             int id = Convert.ToInt32(token.Claims.First(c => c.Type == "Id").Value);
             return id;
         }
+        public static string GetRole(string input)
+        {
+            var jwtEncodedString = input.Substring(7);
+            var token = new JwtSecurityToken(jwtEncodedString: jwtEncodedString);
+            string role = token.Claims.First(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value;
+            return role;
+        }
     }
 }
