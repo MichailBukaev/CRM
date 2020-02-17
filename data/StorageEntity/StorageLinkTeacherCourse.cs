@@ -1,4 +1,5 @@
 ﻿using data.Storage;
+using Microsoft.EntityFrameworkCore;
 using models;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,10 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var links = db.LinkTeacherCourses.ToList();
+                var links = db.LinkTeacherCourses.
+                    Include(p => p.Teacher).
+                    Include(p => p.Course).
+                    ToList();
                 return _reader.Read(Tkey, TValue, links);
 
             }
@@ -57,7 +61,10 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var links = db.LinkTeacherCourses.ToList();
+                var links = db.LinkTeacherCourses.
+                    Include(p => p.Teacher).
+                    Include(p => p.Course).
+                    ToList();
                 return _reader.Read(null, null, links);
 
             }

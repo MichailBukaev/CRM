@@ -42,8 +42,10 @@ namespace CRMDevEducation.Controllers
         [Route("AddSkillForLead")]
         public string AddSkillForLead([FromBody] InputSkillsForLeadModel model)
         {
-            teacher.AddSkillsForLead(SkillsForLeadMappingInputToBusiness.Map(model));
-            
+            LeadBusinessModel lead = teacher.AddSkillsForLead(SkillsForLeadMappingInputToBusiness.Map(model));
+
+            return JsonSerializer.Serialize<OutputLeadModel>(LeadMappingBusinessToOutput.Map(lead));
+
         }
 
     }

@@ -38,7 +38,7 @@ namespace CRMDevEducation.Controllers
                 );
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             StorageToken.Add("Bearer " + encodedJwt);
-            var respose = new { access_token = encodedJwt, login = identity.Name };
+            var respose = new { access_token = encodedJwt, IdUser = identity.Name };
             return Json(respose); 
         }
 

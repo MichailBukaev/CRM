@@ -93,7 +93,7 @@ namespace business.WSTeacher
             return groups;
         }
 
-        public override void SetAttendence(DayInLogBusinessModel dayLog)
+        public override LogBusinessModel SetAttendence(DayInLogBusinessModel dayLog)
         {
             PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
             _storage = new StorageLog();

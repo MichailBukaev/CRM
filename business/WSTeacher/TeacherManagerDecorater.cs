@@ -22,7 +22,7 @@ namespace business.WSTeacher
             return _teacherManager.GetAllGroupe();
         }
 
-        public override void SetAttendence(DayInLogBusinessModel dayLog)
+        public override LogBusinessModel SetAttendence(DayInLogBusinessModel dayLog)
         {
             _teacherManager.SetAttendence(dayLog);
         }
