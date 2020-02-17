@@ -29,12 +29,12 @@ namespace business.WSTeacher
             bool ok = true;
             for (int i = 0; i < model.IdSkills.Length; i++)
             {
-                SkillsLead skillsLead = new SkillsLead()
+                IEntity skillsLead = new SkillsLead()
                 {
                     LeadId = model.IdLead,
                     SkillsId = model.IdSkills[i]
                 };
-                if (!_storage.Add(skillsLead))
+                if (!_storage.Add(ref skillsLead))
                     ok = false;
                 else
                     publisher.Notify(skillsLead);
@@ -88,12 +88,12 @@ namespace business.WSTeacher
             bool ok = true;
             for (int i = 0; i < dayLog.StudentsInLog.Count; i++)
             {
-                Log log = new Log()
+                IEntity log = new Log()
                 {
                     Date = dayLog.Date,
                     LeadId = dayLog.StudentsInLog[i].LeadId
                 };
-                if (!_storage.Add(log))
+                if (!_storage.Add(ref log))
                     ok = false;
                 else
                     publisher.Notify(new Lead() { Id = dayLog.StudentsInLog[i].LeadId });
