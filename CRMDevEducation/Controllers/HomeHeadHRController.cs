@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using business;
-<<<<<<< HEAD
 using business.Models;
 using business.WSHR;
+using CRMDevEducation.Models.Input;
 using CRMDevEducation.Models.Mapping;
 using CRMDevEducation.Models.Output;
-=======
-
->>>>>>> cc4d0416bf36f6364eda91b477bd0c2d2870d663
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,31 +28,7 @@ namespace CRMDevEducation.Controllers
             hr = new HRManager();
             manager = new HeadHR(hr);
         }
-        [HttpGet]
-        public string Get()
-        {
-            if (StorageToken.Check(Request.Headers["Authorization"]))
-            {
-                //List<IModelOutput> models = new List<IModelOutput>();
-                string json = "";
-                foreach (TeacherBusinessModel model in manager.GetTeacher())
-                {
-                    json += JsonSerializer.Serialize<OutputTeacherModel>(TeacherMappingBusinessToOutput.Map(model));
-                    //models.Add(TeacherMappingBusinessToOutput.Map(model));
-                }
-                foreach (LeadBusinessModel model in manager.GetLead())
-                {
-                    json += JsonSerializer.Serialize<OutputLeadModel>(LeadMappingBusinessToOutput.Map(model));
-                    //models.Add(LeadMappingBusinessToOutput.Map(model));
-                }
-                return json;
-            }
-            else
-            {
-                return "Bad Login";
-            }
-
-        }
+       
         [Route("CreateLead")]
         [HttpPost]
         public string CreateLead(InputLeadModel model)
@@ -117,26 +90,27 @@ namespace CRMDevEducation.Controllers
                 return "Bad Login";
             }
         }
-
-
-<<<<<<< HEAD
         
-        [Route("GetHr")]
         [HttpGet]
         public string GetHr()
         {
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
-               
+
                 string json = "";
                 foreach (HRBusinessModel model in manager.GetHR())
                 {
                     json += JsonSerializer.Serialize<OutputHRModel>(HRMappingBusinessToOutput.Map(model));
-                    
+
                 }
-               
+
                 return json;
-=======
+            }
+            else
+            {
+                return "Bad Login";
+            }
+        }
         [Route("CreateGroup")]
         [HttpPost]
         public string CreateGroup(InputGroupModel model)
@@ -151,15 +125,11 @@ namespace CRMDevEducation.Controllers
                 {
                     return "false";
                 }
->>>>>>> cc4d0416bf36f6364eda91b477bd0c2d2870d663
             }
             else
             {
                 return "Bad Login";
             }
-<<<<<<< HEAD
-
-=======
         }
 
         [Route("DeleteGroup")]
@@ -181,7 +151,6 @@ namespace CRMDevEducation.Controllers
             {
                 return "Bad Login";
             }
->>>>>>> cc4d0416bf36f6364eda91b477bd0c2d2870d663
         }
     }
 }
