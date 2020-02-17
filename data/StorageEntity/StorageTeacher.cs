@@ -16,7 +16,7 @@ namespace data.StorageEntity
             _reader = new ReaderTeacher();
         }
 
-        public bool Add(IEntity obj)
+        public bool Add(ref IEntity obj)
         {
             using (ApplicationContext db = new ApplicationContext())
             {
