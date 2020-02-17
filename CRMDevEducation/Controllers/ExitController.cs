@@ -15,12 +15,12 @@ namespace CRMDevEducation.Controllers
     public class ExitController : ControllerBase
     {
         [HttpGet]
-        public IActionResult Get()
+        public void Get()
         {
             StorageToken.Delete(Request.Headers["Authorization"]);
 
 
-            return RedirectToRoute("Get", "HomeAdmin");
+            
         }
     }
 }

@@ -26,9 +26,9 @@ namespace business
                 if (hr != null)
                 {
                     if (hr.Head)
-                        return new User() { Login = hr.Login, Password = hr.Password, Role = "HeadHR" };
+                        return new User() { Id = hr.Id, Login = hr.Login, Password = hr.Password, Role = "HeadHR" };
                     else
-                        return new User() { Login = hr.Login, Password = hr.Password, Role = "HR" };
+                        return new User() { Id = hr.Id, Login = hr.Login, Password = hr.Password, Role = "HR" };
                 }
                 else
                 {
@@ -38,9 +38,9 @@ namespace business
                     if (teacher != null)
                     {
                         if (teacher.Head)
-                            return new User() { Login = teacher.Login, Password = teacher.Password, Role = "HeadTeacher" };
+                            return new User() { Id = teacher.Id, Login = teacher.Login, Password = teacher.Password, Role = "HeadTeacher" };
                         else
-                            return new User() { Login = teacher.Login, Password = teacher.Password, Role = "Teacher" };
+                            return new User() { Id = teacher.Id, Login = teacher.Login, Password = teacher.Password, Role = "Teacher" };
                     }
                 }
 

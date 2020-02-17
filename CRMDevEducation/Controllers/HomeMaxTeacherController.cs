@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using business;
 using business.Models;
 using business.WSTeacher;
 using business.WSTeacher.HeadTeacher;
@@ -21,30 +22,31 @@ namespace CRMDevEducation.Controllers
     public class HomeMaxTeacherController : ControllerBase
     {
         MaxHeadTeacherManager teacher;
-        public HomeMaxTeacherController()
-        {
-            teacher = new MaxHeadTeacherManager(new NormalTeacherManager(Convert.ToInt32(User.Identity.Name)));
-        }
+        
 
         [HttpGet]
         public string Get()
         {
-            string q = Request.Headers["Authorization"];
+            teacher = new MaxHeadTeacherManager(new NormalTeacherManager(StorageToken.GetID(Request.Headers["Authorization"])));
             string json = "";
-            foreach (GroupBusinessModel item in teacher.GetAllGroupe())
+            if (StorageToken.Check(Request.Headers["Authorization"]))
             {
-                json += JsonSerializer.Serialize<OutputGroupModel>(GroupMappingBusinessToOutput.Map(item));
+                foreach (GroupBusinessModel item in teacher.GetAllGroupe())
+                {
+                    json += JsonSerializer.Serialize<OutputGroupModel>(GroupMappingBusinessToOutput.Map(item));
+                }
+                return json;
             }
-            return json;
+            return "Bad Login";
         }
 
-        [HttpPost]
-        [Route("AddSkillForLead")]
-        public string AddSkillForLead([FromBody] InputSkillsForLeadModel model)
-        {
-            teacher.AddSkillsForLead(SkillsForLeadMappingInputToBusiness.Map(model));
+        //[HttpPost]
+        //[Route("AddSkillForLead")]
+        //public string AddSkillForLead([FromBody] InputSkillsForLeadModel model)
+        //{
+        //    teacher.AddSkillsForLead(SkillsForLeadMappingInputToBusiness.Map(model));
             
-        }
+        //}
 
     }
 }

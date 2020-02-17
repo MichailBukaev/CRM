@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Text;
 
 namespace business
@@ -11,6 +12,7 @@ namespace business
         public string Value;
 
         public Node Next;
+
 
         public Node(string value)
         {
@@ -25,6 +27,8 @@ namespace business
  
         public static void Add(string _token)
         {
+            
+            
             if (Root == null)
             {
                 Root = new Node(_token);   
@@ -37,6 +41,7 @@ namespace business
 
         public static bool Check(string input)
         {
+            
             Node temp = Root;
             while (temp != null)
             {
@@ -74,6 +79,12 @@ namespace business
             return false;
         }
 
-        
+        public static int GetID(string input)
+        {
+            var jwtEncodedString = input.Substring(7);
+            var token = new JwtSecurityToken(jwtEncodedString: jwtEncodedString);
+            int id = Convert.ToInt32(token.Claims.First(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name").Value);
+            return id;
+        }
     }
 }

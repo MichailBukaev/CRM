@@ -38,9 +38,11 @@ namespace CRMDevEducation.Controllers
                 );
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             StorageToken.Add("Bearer " + encodedJwt);
-            var respose = new { access_token = encodedJwt, login = identity.Name };
+            var respose = new { access_token = encodedJwt, role = identity.Claims.ToArray()[1].Value, id = identity.Name };
+            
             return Json(respose); 
         }
+
 
         private ClaimsIdentity GetIndentity(string login, string password)
         {
@@ -52,8 +54,9 @@ namespace CRMDevEducation.Controllers
             {
                 var claim = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role),
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, Convert.ToString(user.Id)),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
+                    
                 };
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(
                     claim,
