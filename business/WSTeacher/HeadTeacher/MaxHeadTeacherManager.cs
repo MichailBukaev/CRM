@@ -21,7 +21,7 @@ namespace business.WSTeacher.HeadTeacher
             return base.AddSkillsForLead(model);
         }
 
-        public override void SetAttendence(DayInLogBusinessModel dayLog)
+        public override LogBusinessModel SetAttendence(DayInLogBusinessModel dayLog)
         {
             base.SetAttendence(dayLog);
         }
@@ -110,7 +110,7 @@ namespace business.WSTeacher.HeadTeacher
             }
         }
 
-        public void AddNewSkill(SkillBusinessModel skill)
+        public SkillBusinessModel AddNewSkill(SkillBusinessModel skill)
         {
             _storage = new StorageSkills();
             PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
@@ -121,7 +121,7 @@ namespace business.WSTeacher.HeadTeacher
                 publisher.Notify(skills);
         }
 
-        public void AssignTeacherForGroup(UpdateGroupeTecherModelBusinessModel model)
+        public GroupBusinessModel AssignTeacherForGroup(UpdateGroupeTecherModelBusinessModel model)
         {
             PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
             Group group = _cache.Groups.FirstOrDefault(p => p.Id == model.GroupId);
@@ -130,7 +130,7 @@ namespace business.WSTeacher.HeadTeacher
             if (_storage.Update(group))
                 publisher.Notify(group);
         }
-        public void AddNewCourse(CourseBusinessModel model)
+        public CourseBusinessModel AddNewCourse(CourseBusinessModel model)
         {
             PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
             _storage = new StorageCourse();
