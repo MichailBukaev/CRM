@@ -225,28 +225,30 @@ namespace business.WSHR
         {
             List<Lead> leads = _cache.Leads;
             LogBusinessModel logBus = null;
-            Log log = null;
-            List<Log> logs = null;
+            List<Log> logs = _cache.Logs;
             List<DayInLogBusinessModel> dayInLogs = new List<DayInLogBusinessModel>();
             List<StudentInLogBusinessModel> studentsInLog = new List<StudentInLogBusinessModel>();
-            foreach (Lead item in leads)
+            
+            foreach (Log item in logs)
             {
-                if (item.GroupId == group.Id)
+                foreach (Lead lead in leads)
                 {
-                    logs = _cache.Logs;
-                    log = logs.FirstOrDefault(x => x.LeadId == item.Id);
-                    studentsInLog.Add(new StudentInLogBusinessModel()
+                    if (group.Id == lead.GroupId)
                     {
-                        LeadId = item.Id,
-                        LeadFName = item.FName,
-                        LeadSName = item.SName,
-                        Visit = log.Visit
-                    });
-                    dayInLogs.Add(new DayInLogBusinessModel() {
-                        Date = log.Date,
-                        StudentsInLog = studentsInLog
-                    });
+                        studentsInLog.Add(new StudentInLogBusinessModel
+                        {
+                            LeadId = lead.Id,
+                            LeadFName = lead.FName,
+                            LeadSName = lead.SName,
+                            Visit = item.Visit
+                        });
+                    }
                 }
+                dayInLogs.Add(new DayInLogBusinessModel{ 
+                    Date = item.Date,
+                    StudentsInLog = studentsInLog
+                });
+                studentsInLog.Clear();
             }
             logBus = new LogBusinessModel()
             {
