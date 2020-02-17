@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using data.Storage;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace data.StorageEntity
 {
@@ -50,7 +50,10 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var skillsLeads = db.SkillsLeads.ToList();
+                var skillsLeads = db.SkillsLeads.
+                    Include(p=>p.Lead).
+                    Include(p => p.Skill).
+                    ToList();
                 return _reader.Read(Tkey, TValue, skillsLeads);
             }
         }
@@ -59,7 +62,10 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var skillsLeads = db.SkillsLeads.ToList();
+                var skillsLeads = db.SkillsLeads.
+                    Include(p => p.Lead).
+                    Include(p => p.Skill).
+                    ToList();
                 return _reader.Read(null, null, skillsLeads);
             }
         }
