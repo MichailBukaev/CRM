@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace data.StorageEntity
 {
@@ -50,7 +51,7 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var logs = db.Logs.ToList();
+                var logs = db.Logs.Include(p=>p.Lead).ToList();
                 return _reader.Read(Tkey, TValue, logs);
             }
         }
@@ -59,7 +60,7 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var logs = db.Logs.ToList();
+                var logs = db.Logs.Include(p => p.Lead).ToList();
                 return _reader.Read(null, null, logs);
             }
         }

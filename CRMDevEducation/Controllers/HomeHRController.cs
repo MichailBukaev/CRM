@@ -17,18 +17,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRMDevEducation.Controllers
 {
-    [Authorize(Roles = "HR, HeadHR")]
+    [Authorize(Roles = "HR")]
     [Route("api/[controller]")]
     [ApiController]
     public class HomeHRController : ControllerBase
     {
         DefaultHR manager;
-        DefaultHR Hmanager;
+       
 
         public HomeHRController()
         {
             manager = new HRManager();
-            Hmanager = new HeadHR(manager);
+            
         }
 
         [HttpGet]
@@ -77,23 +77,37 @@ namespace CRMDevEducation.Controllers
             }
         }
 
-        [Authorize(Roles = "HeadHR")]
-        [Route("CreateGroup")]
-        [HttpPost]
-        public string CreateGroup()
+        [Route("UpdateLead")]
+        [HttpPut]
+        public string UpdateLead(InputLeadModel model)
         {
-            return "Ты ахуел?";
+            if (StorageToken.Check(Request.Headers["Authorization"]))
+            {
+                if (manager.UpdateLead(LeadMappingInputToBusness.Map((model))))
+                {
+                    return "true";
+                }
+                else
+                {
+                    return "false";
+                }
+            }
+            else
+            {
+                return "Bad Login";
+            }
         }
 
-        [HttpGet]
-        [Route("red")]
-        public IActionResult Test(string name)
-        {
-            var a = RedirectToAction("Get", "HomeHR");
-            return a;
-        }
 
-        
+        //[HttpGet]
+        //[Route("red")]
+        //public IActionResult Test(string name)
+        //{
+        //    var a = RedirectToAction("Get", "HomeHR");
+        //    return a;
+        //}
+
+
 
     }
 }

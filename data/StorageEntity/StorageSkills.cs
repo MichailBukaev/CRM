@@ -48,7 +48,7 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var skills = db.SkillsLeads.ToList();
+                var skills = db.Skills.ToList();
                 return _reader.Read(Tkey, TValue, skills);
             }
         }
