@@ -10,7 +10,7 @@ namespace data.Storage
         IEnumerable<IEntity> GetAll(string Tkey, string TValue);
         IEnumerable<IEntity> GetAll();
         bool Update(IEntity obj);
-        bool Add(IEntity obj);
+        bool Add(ref IEntity obj);
         bool Delete(IEntity obj);
 
 

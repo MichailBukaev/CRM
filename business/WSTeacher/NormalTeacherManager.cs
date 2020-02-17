@@ -22,36 +22,24 @@ namespace business.WSTeacher
             }
         }
 
-        public override LeadBusinessModel AddSkillsForLead(SkillsForLeadBusinessModel model)
+        public override bool AddSkillsForLead(SkillsForLeadBusinessModel model)
         {
+            PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
             _storage = new StorageSkillsLead();
+            bool ok = true;
             for (int i = 0; i < model.IdSkills.Length; i++)
             {
-                _storage.Add(new SkillsLead()
+                SkillsLead skillsLead = new SkillsLead()
                 {
                     LeadId = model.IdLead,
                     SkillsId = model.IdSkills[i]
-                });
+                };
+                if (!_storage.Add(skillsLead))
+                    ok = false;
+                else
+                    publisher.Notify(skillsLead);
             }
-            PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
-            publisher.Notify(new Lead() { Id = model.IdLead });
-            if (!_cache.FlagActual)
-            {
-                SetCache();
-            }
-            Lead lead = _cache.Leads.FirstOrDefault(p => p.Id == model.IdLead);
-            return new LeadBusinessModel
-            {
-                Id = lead.Id,
-                FName = lead.FName,
-                SName = lead.SName,
-                DateBirthday = lead.DateBirthday,
-                EMail = lead.EMail,
-                Login = lead.Login,
-                Numder = lead.Numder,
-                Password = lead.Password,
-                Status = lead.Status.Name
-            };
+            return ok;
         }
 
         public override List<GroupBusinessModel> GetAllGroupe()
@@ -93,19 +81,24 @@ namespace business.WSTeacher
             return groups;
         }
 
-        public override LogBusinessModel SetAttendence(DayInLogBusinessModel dayLog)
+        public override bool SetAttendence(DayInLogBusinessModel dayLog)
         {
             PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
             _storage = new StorageLog();
+            bool ok = true;
             for (int i = 0; i < dayLog.StudentsInLog.Count; i++)
             {
-                _storage.Add(new Log()
+                Log log = new Log()
                 {
                     Date = dayLog.Date,
                     LeadId = dayLog.StudentsInLog[i].LeadId
-                });
-                publisher.Notify(new Lead() { Id = dayLog.StudentsInLog[i].LeadId });
+                };
+                if (!_storage.Add(log))
+                    ok = false;
+                else
+                    publisher.Notify(new Lead() { Id = dayLog.StudentsInLog[i].LeadId });
             }
+            return ok;
         }
 
         protected override void SetCache()

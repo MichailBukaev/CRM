@@ -16,7 +16,7 @@ namespace business.WSTeacher
         public Teacher Teacher { get { return _teacher; } }
         public abstract List<GroupBusinessModel> GetAllGroupe();
         protected abstract void SetCache();
-        public abstract LogBusinessModel SetAttendence(DayInLogBusinessModel dayLog);
-        public abstract LeadBusinessModel AddSkillsForLead(SkillsForLeadBusinessModel model);
+        public abstract bool SetAttendence(DayInLogBusinessModel dayLog);
+        public abstract bool AddSkillsForLead(SkillsForLeadBusinessModel model);
     }
 }

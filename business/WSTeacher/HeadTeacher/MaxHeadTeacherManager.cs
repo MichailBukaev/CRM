@@ -16,14 +16,14 @@ namespace business.WSTeacher.HeadTeacher
             _cache = teacherManager.Cache;
             SetCache();
         }
-        public override LeadBusinessModel AddSkillsForLead(SkillsForLeadBusinessModel model)
+        public override bool AddSkillsForLead(SkillsForLeadBusinessModel model)
         {
             return base.AddSkillsForLead(model);
         }
 
-        public override LogBusinessModel SetAttendence(DayInLogBusinessModel dayLog)
+        public override bool SetAttendence(DayInLogBusinessModel dayLog)
         {
-            base.SetAttendence(dayLog);
+            return base.SetAttendence(dayLog);
         }
 
         protected override void SetCache()
@@ -110,35 +110,61 @@ namespace business.WSTeacher.HeadTeacher
             }
         }
 
-        public SkillBusinessModel AddNewSkill(SkillBusinessModel skill)
+        public int? AddNewSkill(SkillBusinessModel skill)
         {
             _storage = new StorageSkills();
             PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
-            Skills skills = new Skills() { 
+            IEntity skills = new Skills() { 
                 NameSkills = skill.NameSkill
             };
-            if(_storage.Add(skills))
+            if (_storage.Add(ref skills))
+            {
                 publisher.Notify(skills);
+                Skills newSkills = (Skills)skills;
+                return newSkills.Id;
+            }
+            else
+            {
+                return null;
+            }
+                
         }
 
-        public GroupBusinessModel AssignTeacherForGroup(UpdateGroupeTecherModelBusinessModel model)
+        public bool AssignTeacherForGroup(UpdateGroupeTecherModelBusinessModel model)
         {
+            bool ok = false;
             PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
             Group group = _cache.Groups.FirstOrDefault(p => p.Id == model.GroupId);
             group.TeacherId = model.TeaherId;
             _storage = new StorageGroup();
             if (_storage.Update(group))
+            {
                 publisher.Notify(group);
+                ok = true;
+            }
+            return ok;
         }
-        public CourseBusinessModel AddNewCourse(CourseBusinessModel model)
+        public int? AddNewCourse(CourseBusinessModel model)
         {
             PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
             _storage = new StorageCourse();
-            _storage.Add(new Course
+            IEntity course = new Course
             {
                 Name = model.Name,
                 CourseInfo = model.CourseInfo
-            });
+            };
+            ;
+            if (_storage.Add(ref course))
+            {
+                publisher.Notify(course);
+                Course newCourse = (Course)course;
+                return newCourse.Id;
+            }
+            else
+            {
+                return null;
+            }
+                
         }
         public override List<GroupBusinessModel> GetAllGroupe()
         {
