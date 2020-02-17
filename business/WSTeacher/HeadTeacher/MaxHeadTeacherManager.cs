@@ -16,9 +16,9 @@ namespace business.WSTeacher.HeadTeacher
             _cache = teacherManager.Cache;
             SetCache();
         }
-        public override void AddSkillsForLead(SkillsForLeadBusinessModel model)
+        public override LeadBusinessModel AddSkillsForLead(SkillsForLeadBusinessModel model)
         {
-            base.AddSkillsForLead(model);
+            return base.AddSkillsForLead(model);
         }
 
         public override void SetAttendence(DayInLogBusinessModel dayLog)
