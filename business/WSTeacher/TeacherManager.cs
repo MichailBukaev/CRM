@@ -17,6 +17,6 @@ namespace business.WSTeacher
         public abstract List<GroupBusinessModel> GetAllGroupe();
         protected abstract void SetCache();
         public abstract void SetAttendence(DayInLogBusinessModel dayLog);
-        public abstract void AddSkillsForLead(SkillsForLeadBusinessModel model);
+        public abstract LeadBusinessModel AddSkillsForLead(SkillsForLeadBusinessModel model);
     }
 }

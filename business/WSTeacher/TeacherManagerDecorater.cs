@@ -12,9 +12,9 @@ namespace business.WSTeacher
         {
             _teacherManager = teacher;
         }
-        public override void AddSkillsForLead(SkillsForLeadBusinessModel model)
+        public override LeadBusinessModel AddSkillsForLead(SkillsForLeadBusinessModel model)
         {
-            _teacherManager.AddSkillsForLead(model);
+            return _teacherManager.AddSkillsForLead(model);
         }
 
         public override List<GroupBusinessModel> GetAllGroupe()

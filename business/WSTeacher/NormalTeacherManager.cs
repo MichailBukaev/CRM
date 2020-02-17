@@ -22,19 +22,36 @@ namespace business.WSTeacher
             }
         }
 
-        public override void AddSkillsForLead(SkillsForLeadBusinessModel model)
+        public override LeadBusinessModel AddSkillsForLead(SkillsForLeadBusinessModel model)
         {
             _storage = new StorageSkillsLead();
             for (int i = 0; i < model.IdSkills.Length; i++)
             {
-                _storage.Add(new SkillsLead() 
-                { 
-                    LeadId = model.IdLead, 
-                    SkillsId = model.IdSkills[i] 
+                _storage.Add(new SkillsLead()
+                {
+                    LeadId = model.IdLead,
+                    SkillsId = model.IdSkills[i]
                 });
             }
             PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
             publisher.Notify(new Lead() { Id = model.IdLead });
+            if (!_cache.FlagActual)
+            {
+                SetCache();
+            }
+            Lead lead = _cache.Leads.FirstOrDefault(p => p.Id == model.IdLead);
+            return new LeadBusinessModel
+            {
+                Id = lead.Id,
+                FName = lead.FName,
+                SName = lead.SName,
+                DateBirthday = lead.DateBirthday,
+                EMail = lead.EMail,
+                Login = lead.Login,
+                Numder = lead.Numder,
+                Password = lead.Password,
+                Status = lead.Status.Name
+            };
         }
 
         public override List<GroupBusinessModel> GetAllGroupe()
@@ -42,7 +59,7 @@ namespace business.WSTeacher
             _storage = new StorageTeacher();
             _cache.Teachers.Add(_teacher);
             List<GroupBusinessModel> groups = new List<GroupBusinessModel>();
-            foreach(Group item in _cache.Groups)
+            foreach (Group item in _cache.Groups)
             {
                 List<LeadBusinessModel> leadsbusines = new List<LeadBusinessModel>();
                 if (_cache.Leads != null)
@@ -80,7 +97,7 @@ namespace business.WSTeacher
         {
             PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
             _storage = new StorageLog();
-            for(int i = 0; i < dayLog.StudentsInLog.Count; i++)
+            for (int i = 0; i < dayLog.StudentsInLog.Count; i++)
             {
                 _storage.Add(new Log()
                 {
@@ -95,66 +112,96 @@ namespace business.WSTeacher
         {
             if (!_cache.FlagActual)
             {
-
+                _storage = new StorageTeacher();
+                _cache.Teachers.Add(_teacher);
                 _storage = new StorageGroup();
                 _cache.Groups = (List<Group>)_storage.GetAll(Group.Fields.TeacherId.ToString(), _teacher.Id.ToString());
 
-                
-                _storage = new StorageLead();
-                foreach(Group item in _cache.Groups)
+
+
+                if (_cache.Groups != null)
                 {
-                    List<Lead> leads =((List<Lead>)_storage.GetAll(Lead.Fields.Id.ToString(), item.Id.ToString()));
-                    foreach(Lead itemLeads in leads)
+                    _storage = new StorageLead();
+                    foreach (Group item in _cache.Groups)
                     {
-                        _cache.Leads.Add(itemLeads);
+                        List<Lead> leads = ((List<Lead>)_storage.GetAll(Lead.Fields.Id.ToString(), item.Id.ToString()));
+                        foreach (Lead itemLeads in leads)
+                        {
+                            _cache.Leads.Add(itemLeads);
+                        }
+                    }
+
+                    _storage = new StorageHistoryGroup();
+                    foreach (Group item in _cache.Groups)
+                    {
+                        List<HistoryGroup> historyGroups = ((List<HistoryGroup>)_storage.GetAll(HistoryGroup.Fields.GroupId.ToString(), item.Id.ToString()));
+                        foreach (HistoryGroup itemhistoryGroups in historyGroups)
+                        {
+                            _cache.HistoryGroups.Add(itemhistoryGroups);
+                        }
                     }
                 }
 
-                _storage = new StorageHistory();
-                foreach (Lead item in _cache.Leads)
+
+
+                if (_cache.Leads != null)
                 {
-                    List<History> histories = ((List<History>)_storage.GetAll(History.Fields.LeadId.ToString(), item.Id.ToString()));
-                    foreach (History itemHistory in histories)
+                    _storage = new StorageHistory();
+                    foreach (Lead item in _cache.Leads)
                     {
-                        _cache.Histories.Add(itemHistory);
+                        List<History> histories = ((List<History>)_storage.GetAll(History.Fields.LeadId.ToString(), item.Id.ToString()));
+                        foreach (History itemHistory in histories)
+                        {
+                            _cache.Histories.Add(itemHistory);
+                        }
+                    }
+
+                    _storage = new StorageLog();
+                    foreach (Lead item in _cache.Leads)
+                    {
+                        List<Log> logs = ((List<Log>)_storage.GetAll(Log.Fields.LeadId.ToString(), item.Id.ToString()));
+                        foreach (Log itemLeads in logs)
+                        {
+                            _cache.Logs.Add(itemLeads);
+                        }
+                    }
+
+                    _storage = new StorageSkillsLead();
+                    foreach (Lead item in _cache.Leads)
+                    {
+                        List<SkillsLead> leads = ((List<SkillsLead>)_storage.GetAll(SkillsLead.Fields.LeadId.ToString(), item.Id.ToString()));
+                        foreach (SkillsLead itemLeads in leads)
+                        {
+                            _cache.SkillsLeads.Add(itemLeads);
+                        }
                     }
                 }
 
-                _storage = new StorageHistoryGroup();
-                foreach (Group item in _cache.Groups)
-                {
-                    List<HistoryGroup> historyGroups = ((List<HistoryGroup>)_storage.GetAll(HistoryGroup.Fields.GroupId.ToString(), item.Id.ToString()));
-                    foreach (HistoryGroup itemhistoryGroups in historyGroups)
-                    {
-                        _cache.HistoryGroups.Add(itemhistoryGroups);
-                    }
-                }
 
-                _storage = new StorageLog();
-                foreach (Lead item in _cache.Leads)
-                {
-                    List<Log> logs = ((List<Log>)_storage.GetAll(Log.Fields.LeadId.ToString(), item.Id.ToString()));
-                    foreach (Log itemLeads in logs)
-                    {
-                        _cache.Logs.Add(itemLeads);
-                    }
-                }
+
+
+
 
                 _storage = new StorageSkills();
                 _cache.Skills = (List<Skills>)_storage.GetAll();
 
-                _storage = new StorageSkillsLead();
-                foreach (Lead item in _cache.Leads)
-                {
-                    List<SkillsLead> leads = ((List<SkillsLead>)_storage.GetAll(SkillsLead.Fields.LeadId.ToString(), item.Id.ToString()));
-                    foreach (SkillsLead itemLeads in leads)
-                    {
-                        _cache.SkillsLeads.Add(itemLeads);
-                    }
-                }
+
 
                 _storage = new StorageLinkTeacherCourse();
                 _cache.LinkTeacherCourses = (List<LinkTeacherCourse>)_storage.GetAll(LinkTeacherCourse.Fields.TeacherId.ToString(), _teacher.Id.ToString());
+
+                if (_cache.LinkTeacherCourses != null)
+                {
+                    _storage = new StorageCourse();
+                    foreach (LinkTeacherCourse item in _cache.LinkTeacherCourses)
+                    {
+                        List<Course> course = ((List<Course>)_storage.GetAll(Course.Fields.Id.ToString(), item.CourseId.ToString()));
+                        foreach (Course itemCourse in course)
+                        {
+                            _cache.Courses.Add(itemCourse);
+                        }
+                    }
+                }
 
 
                 _cache.FlagActual = true;
