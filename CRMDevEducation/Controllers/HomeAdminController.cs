@@ -52,43 +52,45 @@ namespace CRMDevEducation.Controllers
 
         [HttpPost]
         [Route("CreateHR")]
-        public string CreateHr([FromBody] InputHRModel model)
+        public IActionResult CreateHr([FromBody] InputHRModel model)
         {
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
-                if (manager.CreateHR(HRMappingInputToBusiness.Map(model)) != null)
+                int? id = manager.CreateHR(HRMappingInputToBusiness.Map(model));
+                if (id != null)
                 {
-                    return (StorageToken.GetId(Request.Headers["Authorization"]).ToString());
+                    return Ok(new { Id = id});
                 } else
                 {
-                    return "false";
+                    return BadRequest(); ;
                 }
             }
             else
             {
-                return "Bad Login";
+                return BadRequest();
             }
 
         }
        
         [HttpPost]
         [Route("CreateTeacher")]
-        public string CreateTeacher([FromBody] InputTeacherModel model)
+        public IActionResult CreateTeacher([FromBody] InputTeacherModel model)
         {
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
-                if (manager.CreateTeacher(TeacherMappingInputToBusiness.Map(model)) != null)
+                int? id = manager.CreateTeacher(TeacherMappingInputToBusiness.Map(model));
+                if (id != null)
                 {
-                    return "true";
+                    return Ok(new { Id = id} );
                 }
                 else
                 {
-                    return "false";
+                    return BadRequest();
                 }
             }
             else
             {
-                return "Bad Login";
+                return BadRequest();
             }
         }
 
