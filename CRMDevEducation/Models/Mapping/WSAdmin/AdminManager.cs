@@ -70,7 +70,7 @@ namespace business.WSAdmin
         public bool CreateHR(HRBusinessModel _hr)
         {
             _storage = new StorageHR();
-            HR hR = new HR
+            IEntity hR = new HR
             {
                 Id = _hr.Id,
                 FName = _hr.FName,
@@ -79,7 +79,7 @@ namespace business.WSAdmin
                 Password = _hr.Password,
                 Head = _hr.Head
             };
-            bool success = _storage.Add(hR);
+            bool success = _storage.Add(ref hR);
             if (success)
                 _publisher.Notify(hR);
             return success;
@@ -88,7 +88,7 @@ namespace business.WSAdmin
         public bool CreateTeacher(TeacherBusinessModel _teacher)
         {
             _storage = new StorageTeacher();
-            Teacher teacher = new Teacher
+            IEntity teacher = new Teacher
             {
                 Id = _teacher.Id,
                 FName = _teacher.FName,
@@ -98,7 +98,7 @@ namespace business.WSAdmin
                 Password = _teacher.Password,
                 Head = _teacher.Head
             };
-            bool success = _storage.Add(teacher);
+            bool success = _storage.Add(ref teacher);
             if (success)
                 _publisher.Notify(teacher);
             return success;

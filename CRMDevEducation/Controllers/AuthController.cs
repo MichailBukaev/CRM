@@ -23,7 +23,7 @@ namespace CRMDevEducation.Controllers
             var identity = GetIndentity(login, password);
             if (identity == null)
             {
-                return BadRequest(new { errorText = "Ты дурак" });
+                return BadRequest(new { errorText = "Please make sure you've provided a valid login and password!" });
             }
             var nowTime = DateTime.UtcNow;
             var jwt = new JwtSecurityToken(
@@ -31,7 +31,7 @@ namespace CRMDevEducation.Controllers
                 audience: AuthOptions.AUDIENCE,
                 notBefore: nowTime,
                 claims: identity.Claims,
-                expires: nowTime.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+                expires: nowTime.AddMinutes(AuthOptions.LIFETIME),
                 signingCredentials: new SigningCredentials(
                     AuthOptions.GetSymmetricSecurityKey(),
                     SecurityAlgorithms.HmacSha256)
@@ -61,6 +61,7 @@ namespace CRMDevEducation.Controllers
                     new Claim("Id", Convert.ToString(user.Id)),
                     new Claim("Login", Convert.ToString(user.Login)),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role),
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
                 };
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(
                     claim,

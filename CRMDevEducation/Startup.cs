@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using business;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,23 +29,29 @@ namespace CRMDevEducation
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            services.AddAuthentication(options =>
             {
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
                 {
-                    ValidateIssuer = true,
-                    ValidIssuer = AuthOptions.ISSUER,
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = AuthOptions.ISSUER,
 
-                    ValidateAudience = true,
-                    ValidAudience = AuthOptions.AUDIENCE,
+                        ValidateAudience = true,
+                        ValidAudience = AuthOptions.AUDIENCE,
 
-                    ValidateLifetime = true,
+                        ValidateLifetime = true,
 
-                    IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                    ValidateIssuerSigningKey = true
-                };
-            }
+                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        ValidateIssuerSigningKey = true
+                    };
+                }
             );
            
             services.AddControllers();
