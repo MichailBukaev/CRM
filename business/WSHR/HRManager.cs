@@ -11,12 +11,12 @@ namespace business.WSHR
 {
     public class HRManager : DefaultHR
     {
-        HRCache _cache;
+        HRManagerCache _cache;
         IStorage _storage;
         PublisherChangesInBD _publisher;
         public HRManager()
         {
-            _cache = new HRCache();
+            _cache = new HRManagerCache();
             _publisher = PublisherChangesInBD.GetPublisher();
             SetCache();
         }

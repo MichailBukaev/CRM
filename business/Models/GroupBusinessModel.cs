@@ -13,5 +13,6 @@ namespace business.Models
         public List<int> LeadsId { get; set; }
         public string StartDate { get; set; }
         public LogBusinessModel LogOfGroup { get; set; }
+        public List<string> HistoryGroup { get; set; }
     }
 }
