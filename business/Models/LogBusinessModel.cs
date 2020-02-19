@@ -8,6 +8,6 @@ namespace business.Models
     {
         public int GroupId { get; set; }
         public string GroupName { get; set; }
-        public List<DayInLogBusinessModel> Days { get; set; }
+        public List<DayInLogBusinessModel> Days { get; set; } 
     }
 }
