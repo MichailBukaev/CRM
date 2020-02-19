@@ -12,11 +12,11 @@ namespace business.WSAdmin
     {
         IStorage _storage;
         AdminCache _cache;
-        PublisherChangesInBD _publisher;
+        PublisherChangesInDB _publisher;
         public AdminManager()
         {
             _cache = new AdminCache();
-            _publisher = PublisherChangesInBD.GetPublisher();
+            _publisher = PublisherChangesInDB.GetPublisher();
             SetCache();
         }
 

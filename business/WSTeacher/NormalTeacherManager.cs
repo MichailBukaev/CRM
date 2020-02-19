@@ -24,7 +24,7 @@ namespace business.WSTeacher
 
         public override bool AddSkillsForLead(SkillsForLeadBusinessModel model)
         {
-            PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
+            PublisherChangesInDB publisher = PublisherChangesInDB.GetPublisher();
             _storage = new StorageSkillsLead();
             bool ok = true;
             for (int i = 0; i < model.IdSkills.Length; i++)
@@ -88,7 +88,7 @@ namespace business.WSTeacher
 
         public override bool SetAttendence(DayInLogBusinessModel dayLog)
         {
-            PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
+            PublisherChangesInDB publisher = PublisherChangesInDB.GetPublisher();
             _storage = new StorageLog();
             bool ok = true;
             for (int i = 0; i < dayLog.StudentsInLog.Count; i++)

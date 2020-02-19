@@ -7,10 +7,14 @@ namespace business.Cache
 {
     public class CacheGroup
     {
-        public List <GroupBusinessModel> Groups { get; set; }
+        private PublishingHouse publishingHouse;
+        public List<GroupBusinessModel> Groups { get; set; }
         public bool FlagActual { get; set; }
-        public CacheGroup() {
+        public CacheGroup()
+        {
             FlagActual = false;
+            publishingHouse = PublishingHouse.Create();
+            publishingHouse.Group.Event += this.ReadChange;
         }
         public void ReadChange()
         {
