@@ -62,7 +62,7 @@ namespace CRMDevEducation.Controllers
                     return Ok(new { Id = id});
                 } else
                 {
-                    return BadRequest(); ;
+                    return BadRequest(); 
                 }
             }
             else

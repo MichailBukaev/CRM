@@ -170,5 +170,10 @@ namespace business.WSTeacher.HeadTeacher
         {
             return base.GetAllGroupe();
         }
+
+        public override List<LinkTeacherCourseBusinessModel> GetAllCourse()
+        {
+            return base.GetAllCourse();
+        }
     }
 }

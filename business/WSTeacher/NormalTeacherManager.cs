@@ -42,6 +42,11 @@ namespace business.WSTeacher
             return ok;
         }
 
+        public override List<LinkTeacherCourseBusinessModel> GetAllCourse()
+        {
+            throw new NotImplementedException();
+        }
+
         public override List<GroupBusinessModel> GetAllGroupe()
         {
             _storage = new StorageTeacher();
