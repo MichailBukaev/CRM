@@ -5,12 +5,12 @@ using System.Text;
 
 namespace business.Cache
 {
-    public class CacheSkills
+    public class CacheHRs
     {
         public bool FlagActual { get; private set; }
-        public List<SkillBusinessModel> Skills { get; set; }
+        public List<HRBusinessModel> HRs { get; set; }
 
-        public CacheSkills()
+        public CacheHRs()
         {
             FlagActual = false;
         }
