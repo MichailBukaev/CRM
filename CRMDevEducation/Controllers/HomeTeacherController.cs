@@ -37,13 +37,63 @@ namespace CRMDevEducation.Controllers
         [HttpGet]
         public string Get()
         {
-            string q = Request.Headers["Authorization"];
-            string json = "";
-            foreach(GroupBusinessModel item in teacherManager.GetAllGroupe())
+            if (StorageToken.Check(Request.Headers["Authorization"]))
             {
-                json += JsonSerializer.Serialize<OutputGroupModel>(GroupMappingBusinessToOutput.Map(item));
+                string json = "";
+                foreach (GroupBusinessModel item in teacherManager.GetAllGroupe())
+                {
+                    json += JsonSerializer.Serialize<OutputGroupModel>(GroupMappingBusinessToOutput.Map(item));
+                }
+               /* foreach (LinkTeacherCourseBusinessModel item in teacherManager.GetAllCourse())
+                {
+                    json += JsonSerializer.Serialize<OutputLinkTeacherCorsrModel>(LinkTeacherCourseBusinessModelToOutput.Map(item));
+                }*/
+                return json;
             }
-            return json;
+            else
+            {
+                return "Eror Auth";
+            }
         }
+
+        /*[HttpPost]
+        public IActionResult CreateLog([FromBody] InputDayInLogModel model)
+        {
+            if (StorageToken.Check(Request.Headers["Authorization"]))
+            {
+                bool flag = teacherManager.SetAttendence(DayInLogMappingInputToBusiness.Map(model)); // изменить возвращаемое значение чтобы можно было вывести то что мы заполнили
+                if (flag)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+                return BadRequest();
+        }
+
+        [HttpPost]
+        public IActionResult SetSkillForLead([FromBody] InputSkillsForLeadModel model)
+        {
+            if (StorageToken.Check(Request.Headers["Authorization"]))
+            {
+                bool flag = teacherManager.AddSkillsForLead(SkillsForLeadMappingInputToBusiness.Map(model)); //вместо флага вернуть значение?
+                if (flag)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+
+            }
+            else
+                return BadRequest();
+        }
+*/
     }
 }

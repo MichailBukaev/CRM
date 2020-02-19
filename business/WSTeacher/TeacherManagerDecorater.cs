@@ -22,6 +22,10 @@ namespace business.WSTeacher
             return _teacherManager.GetAllGroupe();
         }
 
+        public override List<LinkTeacherCourseBusinessModel> GetAllCourse()
+        {
+            return _teacherManager.GetAllCourse();
+        }
         public override bool SetAttendence(DayInLogBusinessModel dayLog)
         {
             return _teacherManager.SetAttendence(dayLog);
