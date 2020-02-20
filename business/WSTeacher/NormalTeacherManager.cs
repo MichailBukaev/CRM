@@ -1,4 +1,5 @@
 ﻿using business.Models;
+using business.WSUser.interfaces;
 using data.StorageEntity;
 using models;
 using System;
@@ -15,6 +16,18 @@ namespace business.WSTeacher
             _storage = new StorageTeacher();
             List<Teacher> teachers = (List<Teacher>)_storage.GetAll();
             _teacher = teachers.FirstOrDefault(p => p.Id == teacherId);
+            _cache = new TeacherCache();
+            if (!_teacher.Head)
+            {
+                SetCache();
+            }
+        }
+
+        public NormalTeacherManager(string teacherLogin)
+        {
+            _storage = new StorageTeacher();
+            List<Teacher> teachers = (List<Teacher>)_storage.GetAll();
+            _teacher = teachers.FirstOrDefault(p => p.Lo == teacherLogin);
             _cache = new TeacherCache();
             if (!_teacher.Head)
             {
@@ -41,7 +54,7 @@ namespace business.WSTeacher
             }
             return ok;
         }
-
+        
         public override List<GroupBusinessModel> GetAllGroupe()
         {
             _storage = new StorageTeacher();
@@ -79,6 +92,12 @@ namespace business.WSTeacher
                 });
             }
             return groups;
+        }
+
+        public override IEnumerable<IModelsBusiness> GetLeads()
+        {
+            //todo get student for concret teacher
+            throw new NotImplementedException();
         }
 
         public override bool SetAttendence(DayInLogBusinessModel dayLog)

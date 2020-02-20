@@ -1,4 +1,6 @@
 ﻿using business.Models;
+using business.WSUser;
+using business.WSUser.interfaces;
 using data.Storage;
 using models;
 using System;
@@ -7,7 +9,7 @@ using System.Text;
 
 namespace business.WSTeacher
 {
-    public abstract class TeacherManager
+    public abstract class TeacherManager : IUserManager
     {
         protected IStorage _storage;
         protected TeacherCache _cache;

@@ -31,5 +31,11 @@ namespace business.WSTeacher
         {
             
         }
+
+        public override IEnumerable<IModelsBusiness> GetLeads()
+        {
+            //todo get All teacher students
+            throw new NotImplementedException();
+        }
     }
 }

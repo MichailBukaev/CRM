@@ -1,4 +1,6 @@
 ﻿using business.Models;
+using business.WSHR;
+using business.WSUser.interfaces;
 using data.Storage;
 using data.StorageEntity;
 using models;
@@ -8,15 +10,18 @@ using System.Text;
 
 namespace business.WSAdmin
 {
-    public class AdminManager
+    public class AdminManager : IUserManager
     {
         IStorage _storage;
         AdminCache _cache;
         PublisherChangesInBD _publisher;
+        HeadHR _headHr;
         public AdminManager()
         {
             _cache = new AdminCache();
             _publisher = PublisherChangesInBD.GetPublisher();
+            _headHr = new HeadHR(new HRManager());
+
             SetCache();
         }
 
@@ -113,5 +118,9 @@ namespace business.WSAdmin
             return null;
         }
 
+        public override IEnumerable<IModelsBusiness> GetLeads()
+        {
+            return _headHr.GetLeads();
+        }
     }
 }

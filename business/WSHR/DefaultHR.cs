@@ -1,13 +1,13 @@
 ﻿using business.Models;
+using business.WSUser.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace business.WSHR
 {
-    public abstract class DefaultHR
+    public abstract class DefaultHR : IUserManager
     {
-        public abstract IEnumerable<IModelsBusiness> GetLead();
         public abstract IEnumerable<IModelsBusiness> GetTeacher();
         public abstract int? CreateLead(LeadBusinessModel _model);
 

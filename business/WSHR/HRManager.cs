@@ -1,4 +1,5 @@
 ﻿using business.Models;
+using business.WSUser.interfaces;
 using data.Storage;
 using data.StorageEntity;
 using models;
@@ -34,9 +35,14 @@ namespace business.WSHR
             }
         }
 
-        public override IEnumerable<IModelsBusiness> GetLead()
+        public override IEnumerable<IModelsBusiness> GetLeads()
         {
-            List<Lead> leads = _cache.Leads;
+            IEnumerable<IEntity> leads = _cache.Leads;
+            if(leads == null)
+            {
+                _storage = new StorageLead();
+                leads = _storage.GetAll();
+            }
             List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
             foreach (Lead item in leads)
             {
@@ -108,7 +114,7 @@ namespace business.WSHR
             };
             return teachersBusiness;
         }
-
+               
         public override bool UpdateLead(LeadBusinessModel _model)
         {
             _storage = new StorageLead();
@@ -131,7 +137,6 @@ namespace business.WSHR
                 _publisher.Notify(lead);
             return success;
         }
-
 
     }
 }

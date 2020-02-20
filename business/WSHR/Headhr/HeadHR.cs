@@ -59,7 +59,7 @@ namespace business.WSHR
             };
             return hrsBusiness;
         }
-        public override IEnumerable<IModelsBusiness> GetLead()
+        public override IEnumerable<IModelsBusiness> GetLeads()
         {
             List<Lead> leads = _cache.Leads;
             List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
