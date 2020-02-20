@@ -4,6 +4,5 @@
     {
         public int IdSkill { get; set; }
         public string NameSkill { get; set; }
-
     }
 }

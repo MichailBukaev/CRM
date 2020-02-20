@@ -11,7 +11,9 @@ namespace business.Models
         public string SName { get; set; }
         public int Numder { get; set; }
         public string DateBirthday { get; set; }
-        public string Status { get; set; }
+        public int StatusId { get; set; }
+        public List<int> SkillsId { get; set; }
+        public List<string> History { get; set; }
         public string EMail { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }

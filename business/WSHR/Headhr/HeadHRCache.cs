@@ -19,7 +19,7 @@ namespace business.WSHR
         public HeadHRCache()
         {
             FlagActual = false;
-            PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
+            PublisherChangesInDB publisher = PublisherChangesInDB.GetPublisher();
             publisher.Event += this.ReadChange;
         }
 

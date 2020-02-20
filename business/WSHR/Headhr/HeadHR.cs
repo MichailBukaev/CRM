@@ -12,13 +12,13 @@ namespace business.WSHR
     public class HeadHR : HeadHRDecorator
     {
         IStorage _storage;
-        PublisherChangesInBD _publisher;
+        PublisherChangesInDB _publisher;
         HeadHRCache _cache;
 
         public HeadHR(DefaultHR hr)
         {
             this.defaultHR = hr;
-            _publisher = PublisherChangesInBD.GetPublisher();
+            _publisher = PublisherChangesInDB.GetPublisher();
             _cache = new HeadHRCache();
             SetCache();
         }

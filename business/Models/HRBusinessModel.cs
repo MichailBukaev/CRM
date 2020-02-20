@@ -11,6 +11,6 @@ namespace business.Models
         public string SName { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-        public bool Head { get;  set; }
+        public bool Head { get;  set; } 
     }
 }

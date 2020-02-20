@@ -14,7 +14,7 @@ namespace business.WSAdmin
         public AdminCache()
         {
             FlagActual = false;
-            PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
+            PublisherChangesInDB publisher = PublisherChangesInDB.GetPublisher();
             publisher.Event += this.ReadChange;
         }
 

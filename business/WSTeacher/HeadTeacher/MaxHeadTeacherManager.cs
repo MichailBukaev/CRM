@@ -114,7 +114,7 @@ namespace business.WSTeacher.HeadTeacher
         public int? AddNewSkill(SkillBusinessModel skill)
         {
             _storage = new StorageSkills();
-            PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
+            PublisherChangesInDB publisher = PublisherChangesInDB.GetPublisher();
             IEntity skills = new Skills() { 
                 NameSkills = skill.NameSkill
             };
@@ -134,7 +134,7 @@ namespace business.WSTeacher.HeadTeacher
         public bool AssignTeacherForGroup(UpdateGroupeTecherModelBusinessModel model)
         {
             bool ok = false;
-            PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
+            PublisherChangesInDB publisher = PublisherChangesInDB.GetPublisher();
             Group group = _cache.Groups.FirstOrDefault(p => p.Id == model.GroupId);
             group.TeacherId = model.TeaherId;
             _storage = new StorageGroup();
@@ -147,7 +147,7 @@ namespace business.WSTeacher.HeadTeacher
         }
         public int? AddNewCourse(CourseBusinessModel model)
         {
-            PublisherChangesInBD publisher = PublisherChangesInBD.GetPublisher();
+            PublisherChangesInDB publisher = PublisherChangesInDB.GetPublisher();
             _storage = new StorageCourse();
             IEntity course = new Course
             {
@@ -170,6 +170,11 @@ namespace business.WSTeacher.HeadTeacher
         public override List<GroupBusinessModel> GetAllGroupe()
         {
             return base.GetAllGroupe();
+        }
+
+        public override List<LinkTeacherCourseBusinessModel> GetAllCourse()
+        {
+            return base.GetAllCourse();
         }
     }
 }
