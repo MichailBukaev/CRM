@@ -38,7 +38,7 @@
 //        public override IEnumerable<IModelsBusiness> GetLeads()
 //        {
 //            IEnumerable<IEntity> leads = _cache.Leads;
-//            if(leads == null)
+//            if (leads == null)
 //            {
 //                _storage = new StorageLead();
 //                leads = _storage.GetAll();
@@ -52,7 +52,7 @@
 //                    SName = item.SName,
 //                    Numder = item.Numder,
 //                    DateBirthday = item.DateBirthday,
-//                    Status = GetStatus(item.StatusId).Name,
+//                    Status = new StatusBusinessModel() { Id = GetStatus(item.StatusId).Id, Name = GetStatus(item.StatusId).Name },
 //                    EMail = item.EMail,
 //                    Login = item.Login,
 //                    Password = item.Password
@@ -78,7 +78,8 @@
 //                DateBirthday = _model.DateBirthday,
 //                Status = new Status
 //                {
-//                    Name = _model.Status
+//                    Id = _model.Status.Id,
+//                    Name = _model.Status.Name
 //                },
 //                EMail = _model.EMail,
 //                AccessStatus = true,
@@ -114,7 +115,7 @@
 //            };
 //            return teachersBusiness;
 //        }
-               
+
 //        public override bool UpdateLead(LeadBusinessModel _model)
 //        {
 //            _storage = new StorageLead();
@@ -126,7 +127,8 @@
 //                DateBirthday = _model.DateBirthday,
 //                Status = new Status
 //                {
-//                    Name = _model.Status
+//                    Id = _model.Status.Id,
+//                    Name = _model.Status.Name
 //                },
 //                EMail = _model.EMail,
 //                Login = _model.Login,
