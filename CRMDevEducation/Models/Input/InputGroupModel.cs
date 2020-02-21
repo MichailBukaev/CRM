@@ -7,7 +7,7 @@ namespace CRMDevEducation.Models.Input
 {
     public class InputGroupModel : IModelInput
     {
-        public string NameGroup { get; set; }
+        public string NameGroup { get; set; } 
         public int CourseId { get; set; }
         public int TeacherId { get; set; }
         public int[] LeadId { get; set; }

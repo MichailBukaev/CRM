@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 namespace CRMDevEducation.Models.Input
 {
     public interface IModelInput
-    {
+    { 
     }
 }

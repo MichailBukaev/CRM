@@ -7,7 +7,7 @@ namespace CRMDevEducation.Models.Input
 {
     public class InputSkillsForLeadModel : IModelInput
     {
-        public int LeadId { get; set; }
+        public int LeadId { get; set; } 
         public int[] SkillsId { get; set; }
 
     }

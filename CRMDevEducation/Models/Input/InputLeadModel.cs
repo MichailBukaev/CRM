@@ -7,7 +7,7 @@ namespace CRMDevEducation.Models.Input
 {
     public class InputLeadModel : IModelInput
     {
-        public string FName { get; set; }
+        public string FName { get; set; } 
         public string SName { get; set; }
         public int Numder { get; set; }
         public string DateBirthday { get; set; }
