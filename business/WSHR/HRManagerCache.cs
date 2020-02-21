@@ -8,7 +8,7 @@ namespace business.WSHR
 {
     class HRManagerCache
     {
-        public List<CacheLeads> Leads { get; set; }
+        public List<CacheLeadsCombineByStatus> Leads { get; set; }
         public CacheCourse Courses { get; set; } 
         public CacheGroup Groups { get; set; }
         public CacheHRs HRs { get; set; }
