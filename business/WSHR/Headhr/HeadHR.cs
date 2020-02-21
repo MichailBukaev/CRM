@@ -1,4 +1,5 @@
 ﻿using business.Models;
+using business.Models.CutModel;
 using data.Storage;
 using data.StorageEntity;
 using models;
@@ -105,10 +106,18 @@ namespace business.WSHR
                 groupBusinesses.Add(new GroupBusinessModel
                 {
                     Name = item.NameGroup,
-                    CourseId = item.CourseId,
-                    CourseName = item.Course.Name,
-                    TeacherId = GetTeacher(item),
-                    Leads = GetLeads(item),
+                    Course = new CutCourseBusinessModel()
+                    {
+                        Id = item.CourseId,
+                        Name = item.Course.Name
+                    },
+                    Teacher = new CutTeacherBusinessModel()
+                    {
+                        Id = item.TeacherId,
+                        FName = GetTeacher(Convert.ToInt32(item.TeacherId)).FName,
+                        SName = GetTeacher(Convert.ToInt32(item.TeacherId)).SName
+                    },
+                    Leads = GetCutLead(item),
                     StartDate = item.StartDate,
                     LogOfGroup = GetLog(item)
                 });
@@ -145,11 +154,11 @@ namespace business.WSHR
             Group group = new Group()
             {
                 NameGroup = _model.Name,
-                CourseId = _model.CourseId,
-                Course = GetCourse(_model.CourseId),
+                CourseId = _model.Course.Id,
+                Course = GetCourse(_model.Course.Id),
                 StartDate = _model.StartDate,
-                TeacherId = _model.TeacherId,
-                Teacher = GetTeacher(_model.TeacherId)
+                TeacherId = _model.Teacher.Id,
+                Teacher = GetTeacher(Convert.ToInt32(_model.Teacher.Id))
             };
             bool success = _storage.Delete(group);
             if (success)
@@ -167,8 +176,8 @@ namespace business.WSHR
                 DateBirthday = _model.DateBirthday,
                 Numder = _model.Numder,
                 EMail = _model.EMail,
-                StatusId = GetStatus(_model.Status).Id,
-                Status = GetStatus(_model.Status),
+                StatusId = _model.Status.Id,
+                Status = GetStatus(_model.Status.Id),
                 Login = _model.Login,
                 Password = _model.Password
 
@@ -199,11 +208,11 @@ namespace business.WSHR
             Teacher teacher = teachers.FirstOrDefault(x => x.Id == id);
             return teacher;
         }
-        Status GetStatus(string name)
+        Status GetStatus(int id)
         {
             _storage = new StorageStatus();
             List<Status> statuses = (List<Status>)_storage.GetAll();
-            Status st = statuses.FirstOrDefault(x => x.Name == name);
+            Status st = statuses.FirstOrDefault(x => x.Id == id);
             return st;
         }
         List<LeadBusinessModel> GetLeads(Group group)
@@ -272,6 +281,26 @@ namespace business.WSHR
             {
                 return 0;
             }
+        }
+        List<CutLeadBusinessModel> GetCutLead(Group group)
+        {
+            _storage = new StorageLead();
+            List<CutLeadBusinessModel> leadsInGroupBusiness = new List<CutLeadBusinessModel>();
+            List<Lead> leads = _cache.Leads;
+            foreach (Lead item in leads)
+            {
+                if (item.Group.Id != group.Id)
+                {
+                    leads.Remove(item);
+                }
+                leadsInGroupBusiness.Add(new CutLeadBusinessModel()
+                {
+                    Id = item.Id,
+                    FName = item.FName,
+                    SName = item.SName
+                });
+            }
+            return leadsInGroupBusiness;
         }
     }
 }
