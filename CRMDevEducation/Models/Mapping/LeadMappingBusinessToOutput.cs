@@ -20,7 +20,7 @@ namespace CRMDevEducation.Models.Mapping
                 DateBirthday = models.DateBirthday,
                 Numder = models.Numder,
                 EMail = models.EMail,
-                Status = models.Status,
+                Status = models.Status.Name,
                 Login = models.Login,
                 Password = models.Password
             };         

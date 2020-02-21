@@ -12,5 +12,7 @@ namespace CRMDevEducation.Models.Output
         public string SName { get; set; }
         public int PhoneNumber { get; set; }
         public bool Head { get; set; }
+        public List<CutGroupOutputModel> Groups { get; set; }
+        public List<CutCourseOutputModel> Courses { get; set; }
     }
 }

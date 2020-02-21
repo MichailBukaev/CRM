@@ -7,10 +7,11 @@ namespace CRMDevEducation.Models.Output
 {
     public class OutputGroupModel : IModelOutput
     {
+        public int Id { get; set; }
         public string NameGroup { get; set; }
-        public int CourseId { get; set; }
-        public string CourseName { get; set; }
-        public int TeacherId { get; set; }
-        public List<OutputLeadModel> LeadsInGroup { get; set; }
+        public CutCourseOutputModel Course { get; set; }
+        public CutTeacherOutputModel Teacher { get; set; }
+        public string StartData { get; set; }
+        public List<CutLeadOutputModel> Leads { get; set; }
     }
 }

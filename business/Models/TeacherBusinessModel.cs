@@ -1,4 +1,5 @@
-﻿using System;
+﻿using business.Models.CutModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,7 +14,7 @@ namespace business.Models
         public string Login { get; set; }
         public string Password { get; set; }
         public bool Head { get; set; }
-        public List<int> GroupsId { get; set; }
-        public List<int> CoursesId { get; set; }
+        public List<CutGroupBusinessModel> Groups { get; set; }
+        public List<CutCourseBusinessModel> Courses { get; set; }
     }
 }

@@ -11,6 +11,17 @@ namespace CRMDevEducation.Models.Mapping
     {
         public static LeadBusinessModel Map(InputLeadModel model)
         {
+            StatusBusinessModel status = StatusMappingInputToBusiness.Map(model.Status);
+            List<SkillBusinessModel> skills = new List<SkillBusinessModel>();
+
+            foreach (InputSkillModel item in model.Skills)
+            {
+                skills.Add(SkillMappingInputToBusiness.Map(item));
+            }
+
+            List<string> history = new List<string>();
+            history.Add(model.History);
+
             return new LeadBusinessModel()
             {
                 FName = model.FName,
@@ -18,9 +29,11 @@ namespace CRMDevEducation.Models.Mapping
                 Numder = model.Numder,
                 DateBirthday = model.DateBirthday,
                 EMail = model.EMail,
-                Status = model.Status,
+                Status = status,
                 Login = model.Login,
-                Password = model.Password
+                Password = model.Password,
+                Skills = skills,
+                History = history
             };
         }
     }

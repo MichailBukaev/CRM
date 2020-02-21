@@ -13,10 +13,13 @@ namespace CRMDevEducation.Models.Mapping
             foreach(StudentInLogBusinessModel item in _studentsInLog)
             {
                 studentsInLog.Add(new OutputStudentInLog { 
-                    LeadId = item.LeadId, 
-                    LeadFName = item.LeadFName, 
-                    LeadSName = item.LeadSName, 
-                    Vist = item.Visit 
+                    Lead = new CutLeadOutputModel()
+                    {
+                        Id = item.Lead.Id,
+                        FName = item.Lead.FName,
+                        SName = item.Lead.SName
+                    },
+                    Visit = item.Visit
                 });
             }
             return studentsInLog;

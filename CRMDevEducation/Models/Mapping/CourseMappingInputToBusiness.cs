@@ -13,6 +13,7 @@ namespace CRMDevEducation.Models.Mapping
         {
             return new CourseBusinessModel()
             {
+                Id = model.Id,
                 Name = model.Name,
                 CourseInfo = model.CourseInfo
             };

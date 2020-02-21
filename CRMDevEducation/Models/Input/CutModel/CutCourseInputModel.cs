@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
 namespace CRMDevEducation.Models.Input
 {
-    public class InputCourseModel: IModelInput
+    public class CutCourseInputModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string CourseInfo { get; set; }
-
     }
 }

@@ -14,5 +14,7 @@ namespace CRMDevEducation.Models.Input
         public string Login { get; set; }
         public string Password { get; set; }
         public bool Head { get; set; }
+        public List<CutGroupInputModel> Groups { get; set; }
+        public List<CutCourseInputModel> Courses { get; set; }
     }
 }

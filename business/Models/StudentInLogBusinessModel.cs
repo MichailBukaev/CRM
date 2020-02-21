@@ -1,8 +1,10 @@
-﻿namespace business.Models
+﻿using business.Models.CutModel;
+
+namespace business.Models
 {
     public class StudentInLogBusinessModel
     {
-        public int LeadId { get; set; }
+        public CutLeadBusinessModel Lead { get; set; }
         public bool Visit { get; set; }
     }
 }

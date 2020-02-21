@@ -1,4 +1,6 @@
 ﻿using business.Models;
+using business.Models.CutModel;
+using CRMDevEducation.Models.Mapping.MappingCutModel;
 using CRMDevEducation.Models.Output;
 using System;
 using System.Collections.Generic;
@@ -11,20 +13,24 @@ namespace CRMDevEducation.Models.Mapping
     {
         public static OutputGroupModel Map(GroupBusinessModel model)
         {
-            List<OutputLeadModel> leads = new List<OutputLeadModel>();
-            foreach(LeadBusinessModel item in model.Leads)
+            List<CutLeadOutputModel> leads = new List<CutLeadOutputModel>();
+            foreach (CutLeadBusinessModel item in model.Leads)
             {
-                leads.Add(LeadMappingBusinessToOutput.Map(item));
+                leads.Add(CutLeadMappingBusinessToOutput.Map(item));
             }
+
+            CutCourseOutputModel course = CutCourseMappingBusinessToOutput.Map(model.Course);
+            CutTeacherOutputModel teacher = CutTeacherMappingBusinessToOutput.Map(model.Teacher);
+
             return new OutputGroupModel()
             {
-                NameGroup = model.Name,
-                CourseId = model.CourseId,
-                TeacherId = model.TeacherId,
-                CourseName = model.CourseName,
-                LeadsInGroup = leads
-            };            
+                Id = model.Id,
+                NameGroup = model.Name,                
+                Teacher = teacher,
+                Course = course,
+                StartData = model.StartDate,
+                Leads = leads
+            };
         }
-        
     }
 }

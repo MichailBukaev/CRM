@@ -1,4 +1,5 @@
 ﻿using business.Models;
+using CRMDevEducation.Models.Mapping.MappingCutModel;
 using CRMDevEducation.Models.Output;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,12 @@ namespace CRMDevEducation.Models.Mapping
     {
         public static OutputCourseModel Map(CourseBusinessModel model)
         {
-            List<OutputTeacherModel> teahers = new List<OutputTeacherModel>();
-            foreach(TeacherBusinessModel item in model.Teachers)
+            List<CutTeacherOutputModel> teahers = new List<CutTeacherOutputModel>();
+            foreach (CutTeacherBusinessModel item in model.Teachers)
             {
-                teahers.Add(TeacherMappingBusinessToOutput.Map(item));
+                teahers.Add(CutTeacherMappingBusinessToOutput.Map(item));
             };
+
             return new OutputCourseModel()
             {
                 Id = model.Id,
@@ -23,6 +25,6 @@ namespace CRMDevEducation.Models.Mapping
                 CourseInfo = model.CourseInfo,
                 Teachers = teahers
             };
-        } 
+        }
     }
 }
