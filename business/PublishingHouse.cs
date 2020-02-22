@@ -37,6 +37,14 @@ namespace business
 
         
         private PublishingHouse() {
+            combineByGroup = new Dictionary<int, PublisherChangesInDB>();
+            combineByStatus = new Dictionary<int, PublisherChangesInDB>();
+            Courses = new PublisherChangesInDB();
+            Group = new PublisherChangesInDB();
+            HR = new PublisherChangesInDB();
+            Skills = new PublisherChangesInDB();
+            Status= new PublisherChangesInDB();
+            Teacher = new PublisherChangesInDB();
             SetDictionaries();
         }
 

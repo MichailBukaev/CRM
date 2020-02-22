@@ -13,7 +13,7 @@ namespace CRMDevEducation.Models.Mapping.MappingCutModel
         {
             return new CutTeacherOutputModel()
             {
-                Id = model.Id,
+                Id = Convert.ToInt32(model.Id),
                 FName = model.FName,
                 SName = model.SName,
             };

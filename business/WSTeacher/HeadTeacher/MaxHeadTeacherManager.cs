@@ -1,4 +1,5 @@
 ﻿using business.Models;
+using business.WSTeacher.Cache;
 using business.WSUser.interfaces;
 using data.StorageEntity;
 using models;
@@ -17,9 +18,9 @@ namespace business.WSTeacher.HeadTeacher
             _cache = teacherManager.Cache;
             SetCache();
         }
-        public override bool AddSkillsForLead(SkillsForLeadBusinessModel model)
+        public override bool AddSkillsForLead(int skillId, int LeadId)
         {
-            return base.AddSkillsForLead(model);
+            return base.AddSkillsForLead(skillId, LeadId);
         }
 
         public override bool SetAttendence(DayInLogBusinessModel dayLog)
@@ -27,100 +28,23 @@ namespace business.WSTeacher.HeadTeacher
             return base.SetAttendence(dayLog);
         }
 
-        protected override void SetCache()
+        public override void SetCache()
         {
-          
-            if (!_cache.FlagActual)
-            {
-                _cache.Teachers = (List<Teacher>)new StorageTeacher().GetAll();
 
-                _storage = new StorageGroup();
-                _cache.Groups = (List<Group>)_storage.GetAll();
-
-                _storage = new StorageCourse();
-                _cache.Courses = (List<Course>)_storage.GetAll();
-
-                if (_cache.Groups != null)
-                {
-                    _storage = new StorageLead();
-                    foreach (Group item in _cache.Groups)
-                    {
-                        List<Lead> leads = ((List<Lead>)_storage.GetAll(Lead.Fields.Id.ToString(), item.Id.ToString()));
-                        foreach (Lead itemLeads in leads)
-                        {
-                            _cache.Leads.Add(itemLeads);
-                        }
-                    }
-                }
-                else if (_cache.Leads != null)
-                {
-                    _storage = new StorageHistory();
-                    foreach (Lead item in _cache.Leads)
-                    {
-                        List<History> histories = ((List<History>)_storage.GetAll(History.Fields.LeadId.ToString(), item.Id.ToString()));
-                        foreach (History itemHistory in histories)
-                        {
-                            _cache.Histories.Add(itemHistory);
-                        }
-                    }
-                }
-                else if (_cache.Groups != null)
-                {
-                    _storage = new StorageHistoryGroup();
-                    foreach (Group item in _cache.Groups)
-                    {
-                        List<HistoryGroup> historyGroups = ((List<HistoryGroup>)_storage.GetAll(HistoryGroup.Fields.GroupId.ToString(), item.Id.ToString()));
-                        foreach (HistoryGroup itemhistoryGroups in historyGroups)
-                        {
-                            _cache.HistoryGroups.Add(itemhistoryGroups);
-                        }
-                    }
-                }
-                else if (_cache.Leads != null)
-                {
-                    _storage = new StorageLog();
-                    foreach (Lead item in _cache.Leads)
-                    {
-                        List<Log> logs = ((List<Log>)_storage.GetAll(Log.Fields.LeadId.ToString(), item.Id.ToString()));
-                        foreach (Log itemLeads in logs)
-                        {
-                            _cache.Logs.Add(itemLeads);
-                        }
-                    }
-                }
-                else if (_cache.Leads != null)
-                {
-                    _storage = new StorageSkillsLead();
-                    foreach (Lead item in _cache.Leads)
-                    {
-                        List<SkillsLead> leads = ((List<SkillsLead>)_storage.GetAll(SkillsLead.Fields.LeadId.ToString(), item.Id.ToString()));
-                        foreach (SkillsLead itemLeads in leads)
-                        {
-                            _cache.SkillsLeads.Add(itemLeads);
-                        }
-                    }
-                }
-                
-                _storage = new StorageLinkTeacherCourse();
-                _cache.LinkTeacherCourses = (List<LinkTeacherCourse>)_storage.GetAll();
-
-                _storage = new StorageSkills();
-                _cache.Skills = (List<Skills>)_storage.GetAll();
-
-                _cache.FlagActual = true;
-            }
+            base.SetCache();
         }
 
         public int? AddNewSkill(SkillBusinessModel skill)
         {
             _storage = new StorageSkills();
-            PublisherChangesInDB publisher = PublisherChangesInDB.GetPublisher();
+            PublishingHouse publishingHouse = PublishingHouse.Create();
+            PublisherChangesInDB publisher =  publishingHouse.Skills;
             IEntity skills = new Skills() { 
                 NameSkills = skill.NameSkill
             };
             if (_storage.Add(ref skills))
             {
-                publisher.Notify(skills);
+                publisher.Notify();
                 Skills newSkills = (Skills)skills;
                 return newSkills.Id;
             }
@@ -131,23 +55,62 @@ namespace business.WSTeacher.HeadTeacher
                 
         }
 
-        public bool AssignTeacherForGroup(UpdateGroupeTecherModelBusinessModel model)
+        public bool AssignTeacherForGroup(int teacherId, int groupeId)
         {
             bool ok = false;
-            PublisherChangesInDB publisher = PublisherChangesInDB.GetPublisher();
-            Group group = _cache.Groups.FirstOrDefault(p => p.Id == model.GroupId);
-            group.TeacherId = model.TeaherId;
-            _storage = new StorageGroup();
-            if (_storage.Update(group))
+            if(!_cache.Group.FlagActual)
             {
-                publisher.Notify(group);
-                ok = true;
+                ReconstructorTeacherManagerCache.UpdateCacheGroup(_cache.Group, _teacherManager.Teacher);
+            }
+            GroupBusinessModel group = _cache.Group.Groups.FirstOrDefault(x => x.Id == groupeId);
+
+            if(!_cache.Teachers.FlagActual)
+            {
+                ReconstructorTeacherManagerCache.UpdateCacheTeachers(_cache.Teachers, _teacherManager.Teacher);
+            }
+            TeacherBusinessModel teacherLocal = _cache.Teachers.Teachers.FirstOrDefault(p => p.Id == teacherId);
+            
+            if(teacherLocal != null && group != null)
+            {
+                bool flag = false;
+                for (int i = 0; i<teacherLocal.Courses.Count; i++)
+                {
+                    if(group.Course.Id== teacherLocal.Courses[i].Id)
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag)
+                {
+                    throw new Exception($"Этот преподаватель не может вести группу с курсом {group.Course.Name}");
+                }
+
+                Group currentGroup = new Group()
+                {
+                    Id = group.Id,
+                    CourseId = group.Course.Id,
+                    StartDate = group.StartDate,
+                    NameGroup = group.Name,
+                    TeacherId = teacherLocal.Id
+                    
+                };
+
+                _storage = new StorageGroup();
+                ok = _storage.Update(currentGroup);
+                PublishingHouse publishingHouse = PublishingHouse.Create();
+
+                PublisherChangesInDB publisherGroupe = publishingHouse.Group,
+                                     publisherTeacher = publishingHouse.Teacher;
+                publisherGroupe.Notify();
+                publisherTeacher.Notify();
             }
             return ok;
         }
         public int? AddNewCourse(CourseBusinessModel model)
         {
-            PublisherChangesInDB publisher = PublisherChangesInDB.GetPublisher();
+            PublishingHouse publishingHouse = PublishingHouse.Create();
+            PublisherChangesInDB publisher = publishingHouse.Courses;
             _storage = new StorageCourse();
             IEntity course = new Course
             {
@@ -157,7 +120,7 @@ namespace business.WSTeacher.HeadTeacher
             ;
             if (_storage.Add(ref course))
             {
-                publisher.Notify(course);
+                publisher.Notify();
                 Course newCourse = (Course)course;
                 return newCourse.Id;
             }

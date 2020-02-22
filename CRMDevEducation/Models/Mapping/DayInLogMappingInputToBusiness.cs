@@ -1,4 +1,5 @@
 ﻿using business.Models;
+using business.Models.CutModel;
 using CRMDevEducation.Models.Input;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace CRMDevEducation.Models.Mapping
             {
                 students.Add(new StudentInLogBusinessModel
                 {
-                    LeadId = item.Key,
+                    Lead = new CutLeadBusinessModel(){ Id = item.Key },
                     Visit = item.Value
                 });
             }

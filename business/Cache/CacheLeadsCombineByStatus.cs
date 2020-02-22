@@ -14,13 +14,13 @@ namespace business.Cache
         private PublisherChangesInDB publisher;
         
         
-        public CacheLeadsCombineByStatus()
+        public CacheLeadsCombineByStatus(int statusId)
         {
+            StatusId = statusId;
             FlagActual = false;
             publishingHouse = PublishingHouse.Create();
-            publisher = new PublisherChangesInDB();
-            publisher.Event += this.ReadChange;
-            publishingHouse.CombineByStatus.Add(StatusId, publisher);
+            publishingHouse.CombineByStatus[StatusId].Event += this.ReadChange;
+
         }
 
         public void ReadChange()

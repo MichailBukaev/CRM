@@ -12,9 +12,9 @@ namespace business.WSTeacher
         {
             _teacherManager = teacher;
         }
-        public override bool AddSkillsForLead(SkillsForLeadBusinessModel model)
+        public override bool AddSkillsForLead(int skillId, int LeadId)
         {
-            return _teacherManager.AddSkillsForLead(model);
+            return _teacherManager.AddSkillsForLead(skillId, LeadId);
         }
 
         public override List<GroupBusinessModel> GetAllGroupe()
@@ -31,9 +31,9 @@ namespace business.WSTeacher
             return _teacherManager.SetAttendence(dayLog);
         }
 
-        protected override void SetCache()
+        public override void SetCache()
         {
-            
+            _teacherManager.SetCache();
         }
 
         public override IEnumerable<IModelsBusiness> GetLeads()

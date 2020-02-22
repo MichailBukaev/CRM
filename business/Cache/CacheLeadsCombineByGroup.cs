@@ -7,19 +7,18 @@ namespace business.Cache
 {
     public class CacheLeadsCombineByGroup
     {
-        public bool FlagActual { get; private set; }
-        public int StatusId { get; set; }
+        public bool FlagActual { get; set; }
+        public int GroupId { get; set; }
         public List<LeadBusinessModel> Leads { get; set; }
         private PublishingHouse publishingHouse;
         private PublisherChangesInDB publisher;
 
-        public CacheLeadsCombineByGroup()
+        public CacheLeadsCombineByGroup(int groupId)
         {
+            GroupId = groupId;
             FlagActual = false;
             publishingHouse = PublishingHouse.Create();
-            publisher = new PublisherChangesInDB();
-            publisher.Event += this.ReadChange;
-            publishingHouse.CombineByGroup.Add(StatusId, publisher);
+            publishingHouse.CombineByGroup[GroupId].Event += this.ReadChange;
         }
 
         public void ReadChange()

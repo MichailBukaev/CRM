@@ -8,7 +8,7 @@ namespace business.Cache
     public class CacheSkills
     {
         private PublishingHouse publishingHouse;
-        public bool FlagActual { get; private set; }
+        public bool FlagActual { get; set; }
         public List<SkillBusinessModel> Skills { get; set; }
 
         public CacheSkills()

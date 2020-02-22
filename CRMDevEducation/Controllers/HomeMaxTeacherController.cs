@@ -24,12 +24,13 @@ namespace CRMDevEducation.Controllers
         MaxHeadTeacherManager teacher;
         public HomeMaxTeacherController()
         {
-            teacher = new MaxHeadTeacherManager(new NormalTeacherManager(Convert.ToInt32(User.Identity.Name)));
+            
         }
 
         [HttpGet]
         public string Get()
         {
+            teacher = new MaxHeadTeacherManager(new NormalTeacherManager(StorageToken.GetId(Request.Headers["Authorization"])));
             string q = Request.Headers["Authorization"];
             string json = "";
             /*foreach (TeacherBusinessModel model in teacher.GetTeacher())
