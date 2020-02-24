@@ -7,13 +7,13 @@ using System.Text;
 
 namespace data.StorageEntity
 {
-    public class StorageTaskWork : IStorage
+    public class StorageTasksStatus : IStorage
     {
         IReader _reader;
 
-        public StorageTaskWork()
+        public StorageTasksStatus()
         {
-            _reader = new ReaderTaskWork();
+            _reader = new ReaderTasksStatus();
         }
         public bool Add(ref IEntity obj)
         {
@@ -21,7 +21,7 @@ namespace data.StorageEntity
             {
                 if (obj != null)
                 {
-                    db.TaskWorks.Add((TaskWork)obj);
+                    db.TasksStatuses.Add((TasksStatus)obj);
                     db.SaveChanges();
                     return true;
                 }
@@ -35,7 +35,7 @@ namespace data.StorageEntity
             {
                 if (obj != null)
                 {
-                    db.TaskWorks.Remove((TaskWork)obj);
+                    db.TasksStatuses.Remove((TasksStatus)obj);
                     db.SaveChanges();
                     return true;
                 }
@@ -47,8 +47,8 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var tasks = db.TaskWorks.ToList();
-                return _reader.Read(null, null, tasks);
+                var tasksStatus = db.TasksStatuses.ToList();
+                return _reader.Read(null, null, tasksStatus);
 
             }
         }
@@ -57,8 +57,8 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var taskWork = db.TaskWorks.ToList();
-                return _reader.Read(Tkey, TValue, taskWork);
+                var taskStatus = db.TasksStatuses.ToList();
+                return _reader.Read(Tkey, TValue, taskStatus);
 
             }
         }
@@ -69,7 +69,7 @@ namespace data.StorageEntity
             {
                 if (obj != null)
                 {
-                    db.TaskWorks.Update((TaskWork)obj);
+                    db.TasksStatuses.Update((TasksStatus)obj);
                     db.SaveChanges();
                     return true;
                 }
