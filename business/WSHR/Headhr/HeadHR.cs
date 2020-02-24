@@ -24,6 +24,7 @@ namespace business.WSHR
             List<HRBusinessModel> hrs = _cache.HRs.HRs;
             return hrs;
         }
+
         public IEnumerable<IModelsBusiness> GetLeadsByStatus(int statusId)
         {
             List<CacheLeadsCombineByStatus> leads = _cache.Leads;
@@ -38,12 +39,14 @@ namespace business.WSHR
             }
             return leadBusinesses;
         }
+
         public override IEnumerable<IModelsBusiness> GetTeacher()
         {
             List<TeacherBusinessModel> teachers = _cache.Teachers.Teachers;
 
             return teachers;
         }
+
         public override IEnumerable<IModelsBusiness> GetGroups()
         {
             List<GroupBusinessModel> groups = _cache.Groups.Groups;
@@ -55,6 +58,7 @@ namespace business.WSHR
         {
             return defaultHR.CreateLead(_model);
         }
+
         public override int? CreateGroup(GroupBusinessModel _model)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
@@ -124,6 +128,7 @@ namespace business.WSHR
         {
             return defaultHR.UpdateLead(_model);
         }        
+
         Course GetCourse(int id)
         {
             Course course = null;
@@ -138,6 +143,7 @@ namespace business.WSHR
             
             return course;
         }
+
         Teacher GetTeacher(int id)
         {
             Teacher teacher = null;
@@ -160,6 +166,7 @@ namespace business.WSHR
             
             return teacher;
         }
+
         Status GetStatus(int id)
         {
             Status st = null;
@@ -193,6 +200,7 @@ namespace business.WSHR
 
             return logBus;
         }
+
         int GetTeacher(GroupBusinessModel group)
         {
             int teacherId = 0;
@@ -205,6 +213,7 @@ namespace business.WSHR
             }
             return teacherId;            
         }
+
         List<CutLeadBusinessModel> GetCutLead(GroupBusinessModel group)
         {            
             List<CutLeadBusinessModel> leadsInGroupBusiness = new List<CutLeadBusinessModel>();

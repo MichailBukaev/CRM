@@ -1,4 +1,5 @@
-﻿using business.Models;
+﻿using business.Cache;
+using business.Models;
 using business.WSHR.Headhr.Cache;
 using business.WSUser.interfaces;
 using data.Storage;
@@ -23,37 +24,29 @@ namespace business.WSHR
         }
 
         //метод заполнения cache
-        public override void SetCache()
+        public void SetCache()
         {
             HREntityCache entityCache = new FillEntityCache(_hr).Fill();
             _cache = new FillHRManagerCache(entityCache).Fill();
         }
 
-        public override IEnumerable<IModelsBusiness> GetLeads(int statusId)
+        public IEnumerable<IModelsBusiness> GetLeadsByStatus(int statusId)
         {
-            IEnumerable<IEntity> leads = _cache.Leads;
-            if (leads == null)
-            {
-                _storage = new StorageLead();
-                leads = _storage.GetAll();
-            }
             List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
-            foreach (Lead item in leads)
+            foreach (CacheLeadsCombineByStatus item in _cache.Leads)
             {
-                leadBusinesses.Add(new LeadBusinessModel
+                if(item.StatusId == statusId)
                 {
-                    FName = item.FName,
-                    SName = item.SName,
-                    Numder = item.Numder,
-                    DateBirthday = item.DateBirthday,
-                    Status = new StatusBusinessModel() { Id = GetStatus(item.StatusId).Id, Name = GetStatus(item.StatusId).Name },
-                    EMail = item.EMail,
-                    Login = item.Login,
-                    Password = item.Password
-                });
-            }
+                    foreach (LeadBusinessModel lead in item.Leads)
+                    {
+                        leadBusinesses.Add(lead);                        
+                    }
+                }
+            }           
+            
             return leadBusinesses;
         }
+
         Status GetStatus(int id)
         {
             _storage = new StorageStatus();
@@ -61,8 +54,11 @@ namespace business.WSHR
             Status st = statuses.FirstOrDefault(x => x.Id == id);
             return st;
         }
+
         public override int? CreateLead(LeadBusinessModel _model)
         {
+            PublishingHouse publishingHouse = PublishingHouse.Create();
+            PublisherChangesInDB publisher = publishingHouse.CombineByStatus[_model.Status.Id];
             _storage = new StorageLead();
             IEntity lead = new Lead
             {
@@ -86,32 +82,23 @@ namespace business.WSHR
             Lead result = (Lead)lead;
             if (success)
             {
-                _publisher.Notify(lead);
+                publisher.Notify();
                 return result.Id;
             }
             return null;
         }
 
         public override IEnumerable<IModelsBusiness> GetTeacher()
-        {
-            List<Teacher> teachers = _cache.Teachers;
-            List<TeacherBusinessModel> teachersBusiness = new List<TeacherBusinessModel>();
-            foreach (Teacher item in teachers)
-            {
-                teachersBusiness.Add(new TeacherBusinessModel
-                {
-                    Id = item.Id,
-                    FName = item.FName,
-                    SName = item.SName,
-                    PhoneNumber = item.PhoneNumber,
-                    Head = item.Head
-                });
-            };
+        {            
+            List<TeacherBusinessModel> teachersBusiness = _cache.Teachers.Teachers;
+            
             return teachersBusiness;
         }
 
         public override bool UpdateLead(LeadBusinessModel _model)
         {
+            PublishingHouse publishingHouse = PublishingHouse.Create();
+            PublisherChangesInDB publisher = publishingHouse.CombineByStatus[_model.Status.Id];
             _storage = new StorageLead();
             Lead lead = new Lead
             {
@@ -130,9 +117,13 @@ namespace business.WSHR
             };
             bool success = _storage.Update(lead);
             if (success)
-                _publisher.Notify(lead);
+                publisher.Notify();
             return success;
         }
 
+        public override IEnumerable<IModelsBusiness> GetLeads()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
