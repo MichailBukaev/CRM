@@ -2,17 +2,18 @@
 using models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace data.StorageEntity
 {
     public class StorageTaskWork : IStorage
     {
-        IReader reader;
+        IReader _reader;
 
         public StorageTaskWork()
         {
-            reader = new ReaderTask();
+            _reader = new ReaderTaskWork();
         }
         public bool Add(ref IEntity obj)
         {
@@ -20,7 +21,7 @@ namespace data.StorageEntity
             {
                 if (obj != null)
                 {
-                    db. Add((Course)obj);
+                    db.TaskWorks.Add((TaskWork)obj);
                     db.SaveChanges();
                     return true;
                 }
@@ -30,12 +31,26 @@ namespace data.StorageEntity
 
         public bool Delete(IEntity obj)
         {
-            throw new NotImplementedException();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                if (obj != null)
+                {
+                    db.TaskWorks.Remove((TaskWork)obj);
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
         }
 
         public IEnumerable<IEntity> GetAll()
         {
-            throw new NotImplementedException();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var tasks = db.TaskWorks.ToList();
+                return _reader.Read(null, null, tasks);
+
+            }
         }
 
         public IEnumerable<IEntity> GetAll(string Tkey, string TValue)
@@ -45,7 +60,16 @@ namespace data.StorageEntity
 
         public bool Update(IEntity obj)
         {
-            throw new NotImplementedException();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                if (obj != null)
+                {
+                    db.TaskWorks.Update((TaskWork)obj);
+                    db.SaveChanges();
+                    return true;
+                }
+                return false;
+            }
         }
     }
 }

@@ -22,7 +22,8 @@ namespace data
         public DbSet<Teacher> Teacherss { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<LinkTeacherCourse> LinkTeacherCourses { get; set; }
-        public DbSet<Task> Tasks { get; set; } 
+        public DbSet<TaskWork> TaskWorks { get; set; }
+        public DbSet<TasksStatus> TasksStatuses { get; set; }
 
         public ApplicationContext()
         {
