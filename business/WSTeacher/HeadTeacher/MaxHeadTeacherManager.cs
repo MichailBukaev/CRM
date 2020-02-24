@@ -129,7 +129,7 @@ namespace business.WSTeacher.HeadTeacher
             return base.GetAllGroupe();
         }
 
-        public override List<LinkTeacherCourseBusinessModel> GetAllCourse()
+        public override List<CourseBusinessModel> GetAllCourse()
         {
             return base.GetAllCourse();
         }

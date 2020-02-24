@@ -82,13 +82,14 @@ namespace business.WSTeacher.Cache.CacheEntity
         }
         private void SetEntityHistoryLead()
         {
-            _storage = new StorageLead();
-            List<History> historys = null;
+            _storage = new StorageHistory();
+            List<History> historys = new List<History>();
             if (entityCache.Leads != null)
             {
                 foreach (Lead item in entityCache.Leads)
                 {
                     historys = (List<History>)_storage.GetAll(History.Fields.LeadId.ToString(), item.Id.ToString());
+                    if(historys.Count>0)
                     entityCache.Histories.AddRange(historys);
                 }
             }

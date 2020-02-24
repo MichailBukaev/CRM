@@ -22,6 +22,9 @@ namespace data
         public DbSet<Teacher> Teacherss { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<LinkTeacherCourse> LinkTeacherCourses { get; set; }
+        public DbSet<TaskWork> TaskWorks { get; set; }
+        public DbSet<TasksStatus> TasksStatuses { get; set; }
+
         public ApplicationContext()
         {
             //Database.EnsureCreated();
@@ -35,7 +38,7 @@ namespace data
             modelBuilder.Entity<HistoryGroup>().HasNoKey();
             modelBuilder.Entity<History>().HasNoKey();
             modelBuilder.Entity<Log>().HasNoKey();
-            modelBuilder.Entity<SkillsLead>().HasNoKey();
+           
             //base.OnModelCreating(modelBuilder);
 
         }

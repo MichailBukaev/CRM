@@ -30,8 +30,7 @@ namespace CRMDevEducation.Controllers
         [HttpGet]
         public string Get()
         {
-            teacher = new MaxHeadTeacherManager(new NormalTeacherManager(StorageToken.GetId(Request.Headers["Authorization"])));
-            string q = Request.Headers["Authorization"];
+            teacher = (MaxHeadTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
             string json = "";
             /*foreach (TeacherBusinessModel model in teacher.GetTeacher())
             {

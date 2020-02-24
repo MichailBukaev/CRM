@@ -12,31 +12,30 @@ using business.WSTeacher;
 using business.WSTeacher.HeadTeacher;
 using CRMDevEducation.Models.Input;
 using CRMDevEducation.Models.Mapping;
+using CRMDevEducation.Models.Mapping.MappingCutModel;
 using CRMDevEducation.Models.Output;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
 
 namespace CRMDevEducation.Controllers
 {
-    [Authorize(Roles = "Teacher, HeadTeacher")]
+    [Authorize(Roles = "Teacher")]
     [Route("api/[controller]")]
     [ApiController]
     public class HomeTeacherController : ControllerBase
     {
-        TeacherManager teacherManager;
+        NormalTeacherManager teacherManager = null;
 
         public HomeTeacherController()
         {
-            teacherManager = new NormalTeacherManager(1);
-            if (teacherManager.Teacher.Head)
-            {
-                teacherManager = new MaxHeadTeacherManager(teacherManager);
-            }
+            
         }
         [HttpGet]
         public string Get()
         {
+            teacherManager = (NormalTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
                 string json = "";
@@ -44,56 +43,32 @@ namespace CRMDevEducation.Controllers
                 {
                     json += JsonSerializer.Serialize<OutputGroupModel>(GroupMappingBusinessToOutput.Map(item));
                 }
-               /* foreach (LinkTeacherCourseBusinessModel item in teacherManager.GetAllCourse())
+                foreach (CourseBusinessModel item in teacherManager.GetAllCourse())
                 {
-                    json += JsonSerializer.Serialize<OutputLinkTeacherCorsrModel>(LinkTeacherCourseBusinessModelToOutput.Map(item));
-                }*/
+                    json += JsonSerializer.Serialize<CutCourseOutputModel>(CourseMappingBusinessToCutOutput.Map(item));
+                }
                 return json;
             }
             else
             {
-                return "Eror Auth";
+                return "You do not have access to this page :(";
             }
         }
-
-        /*[HttpPost]
-        public IActionResult CreateLog([FromBody] InputDayInLogModel model)
-        {
-            if (StorageToken.Check(Request.Headers["Authorization"]))
-            {
-                bool flag = teacherManager.SetAttendence(DayInLogMappingInputToBusiness.Map(model)); // изменить возвращаемое значение чтобы можно было вывести то что мы заполнили
-                if (flag)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            else
-                return BadRequest();
-        }
-
+        //этот метод доджен быть в контроллере лида
+        [Route("AddSkillsForLead")]
         [HttpPost]
-        public IActionResult SetSkillForLead([FromBody] InputSkillsForLeadModel model)
+        public HttpResponseMessage AddSkillsForLead(int leadId, int skillId)
         {
-            if (StorageToken.Check(Request.Headers["Authorization"]))
-            {
-                bool flag = teacherManager.AddSkillsForLead(SkillsForLeadMappingInputToBusiness.Map(model)); //вместо флага вернуть значение?
-                if (flag)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-
-            }
+            if (teacherManager==null)
+                teacherManager = (NormalTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
+            if (teacherManager.AddSkillsForLead(skillId, leadId))
+                return new HttpResponseMessage(HttpStatusCode.OK);
             else
-                return BadRequest();
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
         }
-*/
+
+
+
+
     }
 }
