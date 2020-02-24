@@ -15,6 +15,7 @@ namespace business.Cache
 
         public CacheLeadsCombineByGroup(int groupId)
         {
+            Leads = new List<LeadBusinessModel>();
             GroupId = groupId;
             FlagActual = false;
             publishingHouse = PublishingHouse.Create();

@@ -19,10 +19,7 @@ namespace business.WSTeacher
             List<Teacher> teachers = (List<Teacher>)_storage.GetAll();
             _teacher = teachers.FirstOrDefault(p => p.Id == teacherId);
             _cache = new TeacherManagerCache();
-            if (!_teacher.Head)
-            {
-                SetCache();
-            }
+            SetCache();
         }
 
 
@@ -104,7 +101,7 @@ namespace business.WSTeacher
             return ok;
         }
 
-        public override void SetCache()
+        private void SetCache()
         {
             TeacherEntityCache entityCache = new FillEntityCache(_teacher).Fill();
             _cache = new FillTeacherManagerCache(entityCache).Fill();

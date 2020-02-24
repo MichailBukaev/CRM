@@ -12,6 +12,7 @@ namespace business.Cache
         public bool FlagActual { get; set; }
         public CacheCourse()
         {
+            Courses = new List<CourseBusinessModel>();
             FlagActual = false;
             publishingHouse = PublishingHouse.Create();
             publishingHouse.Courses.Event += this.ReadChange;

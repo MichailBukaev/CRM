@@ -23,7 +23,7 @@ namespace business.WSTeacher.Cache
             {
                 foreach (Lead itemLead in leadsEntity)
                 {
-                    List<SkillBusinessModel> skillsList = null;
+                    List<SkillBusinessModel> skillsList = new List<SkillBusinessModel>();
                     storage = new StorageSkillsLead();
                     List<SkillsLead> skillsleads = (List<SkillsLead>)storage.GetAll(SkillsLead.Fields.LeadId.ToString(), itemLead.Id.ToString());
                     if (skillsleads != null)
@@ -39,7 +39,7 @@ namespace business.WSTeacher.Cache
                     }
 
 
-                    List<string> histories = null;
+                    List<string> histories = new List<string>();
                     storage = new StorageHistory();
                     List<History> historiesEntity = (List<History>)storage.GetAll(History.Fields.LeadId.ToString(), itemLead.Id.ToString());
                     if (historiesEntity != null)
@@ -79,7 +79,7 @@ namespace business.WSTeacher.Cache
         {
             storage = new StorageGroup();
             List<GroupBusinessModel> groups = new List<GroupBusinessModel>();
-            List<Group> entityGroups = null;
+            List<Group> entityGroups = new List<Group>();
             if (teacher.Head)
             {
                 entityGroups = (List<Group>)storage.GetAll();
@@ -103,7 +103,7 @@ namespace business.WSTeacher.Cache
                     storage = new StorageHistoryGroup();
 
                     List<HistoryGroup> _history = (List<HistoryGroup>)storage.GetAll(HistoryGroup.Fields.GroupId.ToString(), item.Id.ToString());
-                    List<string> history = null;
+                    List<string> history = new List<string>();
                     if (_history != null)
                     {
                         foreach (HistoryGroup historyItem in _history)
@@ -131,7 +131,7 @@ namespace business.WSTeacher.Cache
 
                     storage = new StorageLog();
 
-                    List<Log> logs = null;
+                    List<Log> logs = new List<Log>();
                     if (leads != null)
                     {
                         foreach (var itemLead in leads)
@@ -141,7 +141,7 @@ namespace business.WSTeacher.Cache
                     }
 
                     
-                    List<DayInLogBusinessModel> days = null;
+                    List<DayInLogBusinessModel> days = new List<DayInLogBusinessModel>();
                     if (logs != null)
                     {
                         var groupedLogByDay = logs.GroupBy(p => p.Date);
@@ -197,8 +197,8 @@ namespace business.WSTeacher.Cache
         public static CacheTeachers UpdateCacheTeachers(CacheTeachers cache, Teacher teacher)
         {
             storage = new StorageTeacher();
-            List<TeacherBusinessModel> teachersCache = null;
-            List<Teacher> teachers = null;
+            List<TeacherBusinessModel> teachersCache = new List<TeacherBusinessModel>();
+            List<Teacher> teachers = new List<Teacher>();
             if (teacher.Head)
             {
                 teachers = (List<Teacher>)storage.GetAll();  
@@ -256,15 +256,15 @@ namespace business.WSTeacher.Cache
         public static CacheCourse UpdateCacheCourses(CacheCourse cache, Teacher teacher)
         {
             storage = new StorageCourse();
-            List<Course> courses = null;
+            List<Course> courses = new List<Course>();
             
             courses = (List<Course>)storage.GetAll();
-            List<CourseBusinessModel> resultCourses = null;
+            List<CourseBusinessModel> resultCourses = new List<CourseBusinessModel>();
             storage = new StorageLinkTeacherCourse();
             List<LinkTeacherCourse> courseWithteacher = (List<LinkTeacherCourse>)storage.GetAll();
             if (!teacher.Head)
             {
-                List<Course> coursestmp = null;
+                List<Course> coursestmp = new List<Course>();
                 List<LinkTeacherCourse> courseWithCurrentteacher = (List<LinkTeacherCourse>)courseWithteacher.Where(p => p.TeacherId == teacher.Id);
                 foreach (LinkTeacherCourse item in courseWithCurrentteacher)
                 {
@@ -274,7 +274,7 @@ namespace business.WSTeacher.Cache
             }
             foreach (Course item in courses)
             {
-                List<CutTeacherBusinessModel> teachers = null;
+                List<CutTeacherBusinessModel> teachers = new List<CutTeacherBusinessModel>();
                 foreach (LinkTeacherCourse itemTeacher in courseWithteacher.Where(x => x.CourseId == item.Id))
                 {
                     teachers.Add(new CutTeacherBusinessModel()
@@ -300,7 +300,7 @@ namespace business.WSTeacher.Cache
         {
             storage = new StorageStatus();
             List<Status> statuses = (List<Status>)storage.GetAll();
-            List<StatusBusinessModel> statusesB = null;
+            List<StatusBusinessModel> statusesB = new List<StatusBusinessModel>();
             foreach (Status item in statuses)
             {
                 statusesB.Add(new StatusBusinessModel { Id = item.Id, Name = item.Name });
@@ -313,7 +313,7 @@ namespace business.WSTeacher.Cache
         {
             storage = new StorageSkills();
             List<Skills> skills = (List<Skills>)storage.GetAll();
-            List<SkillBusinessModel> skillsB = null;
+            List<SkillBusinessModel> skillsB = new List<SkillBusinessModel>();
             foreach (Skills item in skills)
             {
                 skillsB.Add(new SkillBusinessModel()

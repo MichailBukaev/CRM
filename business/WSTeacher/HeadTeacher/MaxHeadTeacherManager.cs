@@ -16,7 +16,7 @@ namespace business.WSTeacher.HeadTeacher
             : base(teacherManager)
         {
             _cache = teacherManager.Cache;
-            SetCache();
+            
         }
         public override bool AddSkillsForLead(int skillId, int LeadId)
         {
@@ -26,12 +26,6 @@ namespace business.WSTeacher.HeadTeacher
         public override bool SetAttendence(DayInLogBusinessModel dayLog)
         {
             return base.SetAttendence(dayLog);
-        }
-
-        public override void SetCache()
-        {
-
-            base.SetCache();
         }
 
         public int? AddNewSkill(SkillBusinessModel skill)

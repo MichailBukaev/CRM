@@ -13,6 +13,7 @@ namespace business.Cache
 
         public CacheSkills()
         {
+            Skills = new List<SkillBusinessModel>();
             FlagActual = false;
             publishingHouse = PublishingHouse.Create();
             publishingHouse.Skills.Event += this.ReadChange;

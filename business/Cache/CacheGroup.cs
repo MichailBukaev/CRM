@@ -12,6 +12,7 @@ namespace business.Cache
         public bool FlagActual { get; set; }
         public CacheGroup()
         {
+            Groups = new List<GroupBusinessModel>();
             FlagActual = false;
             publishingHouse = PublishingHouse.Create();
             publishingHouse.Group.Event += this.ReadChange;

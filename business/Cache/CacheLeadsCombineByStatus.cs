@@ -16,11 +16,11 @@ namespace business.Cache
         
         public CacheLeadsCombineByStatus(int statusId)
         {
+            Leads = new List<LeadBusinessModel>();
             StatusId = statusId;
             FlagActual = false;
             publishingHouse = PublishingHouse.Create();
             publishingHouse.CombineByStatus[StatusId].Event += this.ReadChange;
-
         }
 
         public void ReadChange()

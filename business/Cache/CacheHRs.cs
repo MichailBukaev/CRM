@@ -13,6 +13,7 @@ namespace business.Cache
 
         public CacheHRs()
         {
+            HRs = new List<HRBusinessModel>();
             FlagActual = false;
             publishingHouse = PublishingHouse.Create();
             publishingHouse.HR.Event += this.ReadChange;

@@ -85,7 +85,7 @@ namespace business.WSTeacher.Cache
                             cutCourse = new CutCourseBusinessModel() { Id = item.CourseId, Name = item.Course.Name };
 
 
-                        List<HistoryGroup> _history = (List<HistoryGroup>)entityCache.HistoryGroups.Where(x => x.GroupId == item.Id);
+                        List<HistoryGroup> _history = (List<HistoryGroup>)entityCache.HistoryGroups.Where(x => x.GroupId == item.Id).ToList();
                         List<string> history = null;
                         if (_history != null)
                         {
@@ -96,7 +96,7 @@ namespace business.WSTeacher.Cache
                         }
 
 
-                        List<Lead> leads = (List<Lead>)entityCache.Leads.Where(x => x.GroupId == item.Id);
+                        List<Lead> leads = (List<Lead>)entityCache.Leads.Where(x => x.GroupId == item.Id).ToList();
                         List<CutLeadBusinessModel> cutLeads = new List<CutLeadBusinessModel>();
                         if (leads != null)
                         {
@@ -122,7 +122,7 @@ namespace business.WSTeacher.Cache
                         }
 
 
-                        List<DayInLogBusinessModel> days = null;
+                        List<DayInLogBusinessModel> days = new List<DayInLogBusinessModel>();
                         if (logs != null)
                         {
                             var groupedLogByDay = logs.GroupBy(p => p.Date);
@@ -186,7 +186,7 @@ namespace business.WSTeacher.Cache
                     {
                         foreach(Lead itemLead in entityCache.Leads.Where(p => p.GroupId == item.Id))
                         {
-                            List<SkillBusinessModel> skillsList = null;
+                            List<SkillBusinessModel> skillsList = new List<SkillBusinessModel>();
                             List<SkillsLead> skillsleads = entityCache.SkillsLeads.Where(x => x.LeadId == itemLead.Id).ToList();
                             if(skillsleads != null)
                             {
@@ -201,7 +201,7 @@ namespace business.WSTeacher.Cache
                             }
 
 
-                            List<string> histories = null;
+                            List<string> histories = new List<string>();
                             List<History> historiesEntity = entityCache.Histories.Where(p => p.LeadId == itemLead.Id).ToList();
                             if (historiesEntity != null)
                             {
@@ -241,7 +241,7 @@ namespace business.WSTeacher.Cache
         {
             if (entityCache.Leads != null)
             {
-                List<SkillBusinessModel> skills = null;
+                List<SkillBusinessModel> skills = new List<SkillBusinessModel>();
                 foreach (Skills item in entityCache.Skills)
                 {
                     skills.Add(new SkillBusinessModel()
@@ -251,6 +251,7 @@ namespace business.WSTeacher.Cache
                     });
                 }
                 cache.Skills.FlagActual = true;
+                if(skills!=null)
                 cache.Skills.Skills.AddRange(skills);
             }
         }
@@ -258,11 +259,11 @@ namespace business.WSTeacher.Cache
         {
             if (entityCache.Teachers != null)
             {
-                List<CourseBusinessModel> courses = null;
+                List<CourseBusinessModel> courses = new List<CourseBusinessModel>();
                 
                 foreach (Course item in entityCache.Courses)
                 {
-                    List<CutTeacherBusinessModel> teachers = null;
+                    List<CutTeacherBusinessModel> teachers = new List<CutTeacherBusinessModel>();
                     foreach (LinkTeacherCourse itemTeacher in entityCache.LinkTeacherCourses.Where(x => x.CourseId == item.Id))
                     {
                         teachers.Add(new CutTeacherBusinessModel()
@@ -288,7 +289,7 @@ namespace business.WSTeacher.Cache
         {
             if (entityCache.Statuses != null)
             {
-                List<StatusBusinessModel> statuses = null;
+                List<StatusBusinessModel> statuses = new List<StatusBusinessModel>();
                 foreach (Status item in entityCache.Statuses)
                 {
                     statuses.Add(new StatusBusinessModel { Id = item.Id, Name = item.Name });
