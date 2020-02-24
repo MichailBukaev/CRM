@@ -15,6 +15,7 @@ namespace models
 
         public int TasksStatusId { get; set; }
         public TasksStatus TasksStatus { get; set; }
+<<<<<<< HEAD
 
         public enum Fields
         {
@@ -23,6 +24,14 @@ namespace models
             DateStart,
             DateEnd,
             LoginAuthor,
+=======
+        public enum Fields
+        {
+            Id,
+            DateStart,
+            DateEnd,
+            LoginAutor,
+>>>>>>> 6a1d71cab29169f5471efc096a5f27976ddb5947
             LoginExecuter,
             Text,
             TasksStatusId
