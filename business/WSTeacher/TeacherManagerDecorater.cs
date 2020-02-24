@@ -22,7 +22,7 @@ namespace business.WSTeacher
             return _teacherManager.GetAllGroupe();
         }
 
-        public override List<LinkTeacherCourseBusinessModel> GetAllCourse()
+        public override List<CourseBusinessModel> GetAllCourse()
         {
             return _teacherManager.GetAllCourse();
         }

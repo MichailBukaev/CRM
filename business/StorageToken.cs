@@ -1,4 +1,5 @@
-﻿using System;
+﻿using business.WSUser.interfaces;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -9,13 +10,15 @@ namespace business
 {
     public class Node
     {
-        public string Value;
+        public string Value { get; set; }
+        public IUserManager Manager{get; set; }
 
         public Node Next;
 
-        public Node(string value)
+        public Node(string _value, IUserManager _userManager)
         {
-            this.Value = value;
+            this.Value = _value;
+            this.Manager = _userManager;
             Next = null;
         }
     }
@@ -24,15 +27,15 @@ namespace business
     {
         public static Node Root;
  
-        public static void Add(string _token)
+        public static void Add(string _token, IUserManager _userManager)
         {
             if (Root == null)
             {
-                Root = new Node(_token);   
+                Root = new Node(_token, _userManager);   
             }
             else
             {
-                Root.Next = new Node(_token);
+                Root.Next = new Node(_token, _userManager);
             }
         }
 
@@ -88,6 +91,20 @@ namespace business
             var token = new JwtSecurityToken(jwtEncodedString: jwtEncodedString);
             string role = token.Claims.First(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value;
             return role;
+        }
+
+        public static IUserManager GetManager(string input)
+        {
+            Node temp = Root;
+            while (temp != null)
+            {
+                if (input == temp.Value)
+                {
+                    return temp.Manager;
+                }
+                temp = temp.Next;
+            }
+            return null;
         }
     }
 }

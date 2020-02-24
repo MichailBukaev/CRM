@@ -10,6 +10,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
+using business.WSUser.interfaces;
+using business.WSTeacher;
+using business.WSTeacher.HeadTeacher;
+
 namespace CRMDevEducation.Controllers
 {
     [AllowAnonymous]
@@ -21,6 +25,7 @@ namespace CRMDevEducation.Controllers
         public IActionResult Token(string login, string password)
         {
             var identity = GetIndentity(login, password);
+            IUserManager manager = CreateManager(identity);
             if (identity == null)
             {
                 return BadRequest(new { errorText = "Please make sure you've provided a valid login and password!" });
@@ -38,7 +43,8 @@ namespace CRMDevEducation.Controllers
                 );
             
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            StorageToken.Add("Bearer " + encodedJwt); 
+
+            StorageToken.Add("Bearer " + encodedJwt, manager); 
             var respose = new { 
                 access_token = encodedJwt,
                 Id = identity.Claims.ToArray()[0].Value,
@@ -46,6 +52,19 @@ namespace CRMDevEducation.Controllers
                 Role = identity.Claims.ToArray()[2].Value
             };
             return Json(respose); 
+        }
+
+        private IUserManager CreateManager(ClaimsIdentity identity)
+        {
+            if (identity == null) throw new NullReferenceException("User is not existed");
+            IUserManager manager = null;
+            //if (identity.Claims.ToArray()[2].Value == "Admin") manager = new AdminManager();
+            //else if (identity.Claims.ToArray()[2].Value == "HR") manager = new HRManager();
+            //else if (identity.Claims.ToArray()[2].Value == "HeadHR") manager = new HeadHR(new HRManager());
+            if (identity.Claims.ToArray()[2].Value == "Teacher") manager = new NormalTeacherManager(Convert.ToInt32(identity.Claims.ToArray()[0].Value));
+            else if (identity.Claims.ToArray()[2].Value == "HeadTeacher") manager = new MaxHeadTeacherManager(new NormalTeacherManager(Convert.ToInt32(identity.Claims.ToArray()[0].Value)));
+
+            return manager;
         }
 
         private ClaimsIdentity GetIndentity(string login, string password)
@@ -72,5 +91,6 @@ namespace CRMDevEducation.Controllers
                 return claimsIdentity;
             }
         }
+        
     }
 }

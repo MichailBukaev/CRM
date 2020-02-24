@@ -19,7 +19,7 @@ namespace CRMDevEducation.Models.Mapping
                 leads.Add(CutLeadMappingBusinessToOutput.Map(item));
             }
 
-            CutCourseOutputModel course = CutCourseMappingBusinessToOutput.Map(model.Course);
+            CutCourseOutputModel course = CutCourseMappingCutBusinessToOutput.Map(model.Course);
             CutTeacherOutputModel teacher = CutTeacherMappingBusinessToOutput.Map(model.Teacher);
 
             return new OutputGroupModel()

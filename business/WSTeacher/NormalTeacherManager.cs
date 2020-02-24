@@ -61,9 +61,12 @@ namespace business.WSTeacher
         }
 
 
-        public override List<LinkTeacherCourseBusinessModel> GetAllCourse()
+        public override List<CourseBusinessModel> GetAllCourse()
         {
-            throw new NotImplementedException();
+            if (!_cache.Course.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheCourses(_cache.Course, _teacher);
+            List<CourseBusinessModel> courses = _cache.Course.Courses;
+            return courses;
         }
 
         public override List<GroupBusinessModel> GetAllGroupe()

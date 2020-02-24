@@ -1,4 +1,5 @@
-﻿using business.Models.CutModel;
+﻿
+using business.Models;
 using CRMDevEducation.Models.Output;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace CRMDevEducation.Models.Mapping.MappingCutModel
 {
-    public class CutCourseMappingBusinessToOutput
+    public static class CourseMappingBusinessToCutOutput
     {
-        public static CutCourseOutputModel Map(CutCourseBusinessModel model)
+        public static CutCourseOutputModel Map(CourseBusinessModel model)
         {
             return new CutCourseOutputModel()
             {

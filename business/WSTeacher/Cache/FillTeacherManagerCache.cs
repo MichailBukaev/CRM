@@ -112,12 +112,14 @@ namespace business.WSTeacher.Cache
                         }
 
 
-                        List<Log> logs = null;
+                        List<Log> logs = new List<Log>();
                         if (leads != null)
                         {
                             foreach (var itemLead in leads)
                             {
-                                logs.AddRange(entityCache.Logs.Where(p => p.LeadId == itemLead.Id));
+                                List<Log> entityLog = entityCache.Logs.Where(p => p.LeadId == itemLead.Id).ToList();
+                                if(entityLog.Count>0)
+                                logs.AddRange(entityLog);
                             }
                         }
 
