@@ -9,6 +9,6 @@ namespace business.WSUser.interfaces
 {
     public abstract class IUserManager
     {
-        public abstract IEnumerable<IModelsBusiness> GetLeads();
+        public abstract IModelsBusiness GetLead(int id);
     }
 }

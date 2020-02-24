@@ -1,4 +1,5 @@
-﻿using business.Models;
+﻿using business.Cache;
+using business.Models;
 using business.WSTeacher.Cache;
 using business.WSTeacher.Cache.CacheEntity;
 using business.WSUser.interfaces;
@@ -77,11 +78,17 @@ namespace business.WSTeacher
             return groups;
         }
 
-        public override IEnumerable<IModelsBusiness> GetLeads()
+        public override IModelsBusiness GetLead(int id)
         {
-            //todo get student for concret teacher
-            throw new NotImplementedException();
+            LeadBusinessModel leadBusinesses = null;
+            foreach (CacheLeadsCombineByGroup item in _cache.Leads)
+            {
+                leadBusinesses = item.Leads.FirstOrDefault(x => x.Id == id);
+            }
+            return leadBusinesses;
         }
+
+        
 
         public override bool SetAttendence(DayInLogBusinessModel dayLog)
         {

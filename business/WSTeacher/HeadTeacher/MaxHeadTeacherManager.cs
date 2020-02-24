@@ -1,4 +1,5 @@
-﻿using business.Models;
+﻿using business.Cache;
+using business.Models;
 using business.WSTeacher.Cache;
 using business.WSUser.interfaces;
 using data.StorageEntity;
@@ -132,6 +133,21 @@ namespace business.WSTeacher.HeadTeacher
         public override List<CourseBusinessModel> GetAllCourse()
         {
             return base.GetAllCourse();
+        }
+
+        public override bool SetSelfTask(string task, DateTime deadLine, int tasksStatusId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IModelsBusiness GetLead(int id)
+        {
+            LeadBusinessModel leadBusinesses = null;
+            foreach (CacheLeadsCombineByGroup item in _cache.Leads)
+            {
+                leadBusinesses = item.Leads.FirstOrDefault(x => x.Id == id);
+            }
+            return leadBusinesses;
         }
     }
 }

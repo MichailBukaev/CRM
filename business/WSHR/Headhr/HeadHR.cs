@@ -228,9 +228,15 @@ namespace business.WSHR
             return leadsInGroupBusiness;
         }
 
-        public override IEnumerable<IModelsBusiness> GetLeads()
+     
+        public override IModelsBusiness GetLead(int id)
         {
-            throw new NotImplementedException();
+            LeadBusinessModel leadBusinesses = null;
+            foreach (CacheLeadsCombineByStatus item in _cache.Leads)
+            {
+                leadBusinesses = item.Leads.FirstOrDefault(x => x.Id == id);
+            }
+            return leadBusinesses;
         }
     }
 }

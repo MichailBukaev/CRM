@@ -31,10 +31,6 @@ namespace business.WSTeacher
             return _teacherManager.SetAttendence(dayLog);
         }
 
-        public override IEnumerable<IModelsBusiness> GetLeads()
-        {
-            //todo get All teacher students
-            throw new NotImplementedException();
-        }
+       
     }
 }

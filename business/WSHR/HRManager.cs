@@ -23,7 +23,7 @@ namespace business.WSHR
             SetCache();
         }
 
-        //метод заполнения cache
+       
         public void SetCache()
         {
             HREntityCache entityCache = new FillEntityCache(_hr).Fill();
@@ -121,9 +121,14 @@ namespace business.WSHR
             return success;
         }
 
-        public override IEnumerable<IModelsBusiness> GetLeads()
+        public override IModelsBusiness GetLead(int id)
         {
-            throw new NotImplementedException();
+            LeadBusinessModel leadBusinesses = null;
+            foreach (CacheLeadsCombineByStatus item in _cache.Leads)
+            {
+                leadBusinesses = item.Leads.FirstOrDefault(x => x.Id == id);  
+            }
+            return leadBusinesses;
         }
     }
 }

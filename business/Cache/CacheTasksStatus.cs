@@ -12,7 +12,7 @@ namespace business.Cache
         public bool FlagActual { get; set; }
         public CacheTasksStatus()
         {
-            Courses = new List<TasksStatusBusinessModel>();
+            TasksStatus = new List<TasksStatusBusinessModel>();
             FlagActual = false;
             publishingHouse = PublishingHouse.Create();
             publishingHouse.TasksStatus.Event += this.ReadChange;
