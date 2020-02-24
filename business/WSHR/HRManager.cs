@@ -1,4 +1,5 @@
 ﻿using business.Cache;
+
 using business.Models;
 using business.WSHR.Headhr.Cache;
 using business.WSUser.interfaces;
@@ -14,11 +15,13 @@ namespace business.WSHR
 {
     public class HRManager : DefaultHR
     {
+        HistoryWriter historyWriter;
         public HRManager(int hrId)
         {
             _storage = new StorageHR();
             List<HR> hrs = (List<HR>)_storage.GetAll();
             _hr = hrs.FirstOrDefault(p => p.Id == hrId);
+            historyWriter = new HistoryWriter();
             _cache = new HRManagerCache();
             SetCache();
         }
@@ -58,6 +61,7 @@ namespace business.WSHR
         public override int? CreateLead(LeadBusinessModel _model)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
+            _model.Status.Id = 1; 
             PublisherChangesInDB publisher = publishingHouse.CombineByStatus[_model.Status.Id];
             _storage = new StorageLead();
             IEntity lead = new Lead
@@ -66,20 +70,17 @@ namespace business.WSHR
                 SName = _model.SName,
                 Numder = _model.Numder,
                 DateBirthday = _model.DateBirthday,
-                Status = new Status
-                {
-                    Id = _model.Status.Id,
-                    Name = _model.Status.Name
-                },
+                StatusId = _model.Status.Id,
                 EMail = _model.EMail,
                 AccessStatus = true,
                 DateRegistration = Convert.ToString(DateTime.UtcNow),
                 Login = _model.Login,
                 Password = _model.Password
-
             };
-            bool success = _storage.Add(ref lead);
+            
+            //bool success = _storage.Add(ref lead);
             Lead result = (Lead)lead;
+            bool success = historyWriter.CreateLead(ref result);
             if (success)
             {
                 publisher.Notify();
@@ -102,15 +103,12 @@ namespace business.WSHR
             _storage = new StorageLead();
             Lead lead = new Lead
             {
+                Id = _model.Id,
                 FName = _model.FName,
                 SName = _model.SName,
                 Numder = _model.Numder,
                 DateBirthday = _model.DateBirthday,
-                Status = new Status
-                {
-                    Id = _model.Status.Id,
-                    Name = _model.Status.Name
-                },
+                StatusId = _model.Status.Id,
                 EMail = _model.EMail,
                 Login = _model.Login,
                 Password = _model.Password

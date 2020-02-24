@@ -9,8 +9,7 @@ namespace CRMDevEducation.Models.Mapping
         {
             return new StatusBusinessModel()
             {
-                Id = model.Id,
-                Name = model.Name
+                Id = model.Id
             };
         }
     }

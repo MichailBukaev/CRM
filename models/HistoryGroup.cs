@@ -7,6 +7,7 @@ namespace models
 {
     public class HistoryGroup: IEntity
     {
+        public int Id { get; set; }
         public int GroupId { get; set; }
         public Group Group { get; set; }
         public string HistoryText { get; set; }

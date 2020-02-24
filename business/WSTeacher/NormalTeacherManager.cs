@@ -23,7 +23,6 @@ namespace business.WSTeacher
             SetCache();
         }
 
-
         public override bool AddSkillsForLead(int skillId, int LeadId)
         {
             bool ok = false;
@@ -61,7 +60,6 @@ namespace business.WSTeacher
             return ok;
         }
 
-
         public override List<CourseBusinessModel> GetAllCourse()
         {
             if (!_cache.Course.FlagActual)
@@ -87,8 +85,6 @@ namespace business.WSTeacher
             }
             return leadBusinesses;
         }
-
-        
 
         public override bool SetAttendence(DayInLogBusinessModel dayLog)
         {

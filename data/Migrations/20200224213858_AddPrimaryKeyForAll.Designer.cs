@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using data;
 
 namespace data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20200224213858_AddPrimaryKeyForAll")]
+    partial class AddPrimaryKeyForAll
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,18 +96,14 @@ namespace data.Migrations
 
             modelBuilder.Entity("models.History", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<string>("HistoryText")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LeadId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<int>("LeadId")
+                        .HasColumnType("int");
 
                     b.HasIndex("LeadId");
 
@@ -362,7 +360,9 @@ namespace data.Migrations
                 {
                     b.HasOne("models.Lead", "Lead")
                         .WithMany()
-                        .HasForeignKey("LeadId");
+                        .HasForeignKey("LeadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("models.HistoryGroup", b =>

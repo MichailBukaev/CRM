@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 using business.WSUser.interfaces;
 using business.WSTeacher;
 using business.WSTeacher.HeadTeacher;
+using business.WSAdmin;
+using business.WSHR;
 
 namespace CRMDevEducation.Controllers
 {
@@ -58,10 +60,10 @@ namespace CRMDevEducation.Controllers
         {
             if (identity == null) throw new NullReferenceException("User is not existed");
             IUserManager manager = null;
-            //if (identity.Claims.ToArray()[2].Value == "Admin") manager = new AdminManager();
-            //else if (identity.Claims.ToArray()[2].Value == "HR") manager = new HRManager();
-            //else if (identity.Claims.ToArray()[2].Value == "HeadHR") manager = new HeadHR(new HRManager());
-            if (identity.Claims.ToArray()[2].Value == "Teacher") manager = new NormalTeacherManager(Convert.ToInt32(identity.Claims.ToArray()[0].Value));
+            if (identity.Claims.ToArray()[2].Value == "Admin") manager = new AdminManager();
+            else if (identity.Claims.ToArray()[2].Value == "HR") manager = new HRManager(Convert.ToInt32(identity.Claims.ToArray()[0].Value));
+            else if (identity.Claims.ToArray()[2].Value == "HeadHR") manager = new HeadHR(new HRManager(Convert.ToInt32(identity.Claims.ToArray()[0].Value)));
+            else if (identity.Claims.ToArray()[2].Value == "Teacher") manager = new NormalTeacherManager(Convert.ToInt32(identity.Claims.ToArray()[0].Value));
             else if (identity.Claims.ToArray()[2].Value == "HeadTeacher") manager = new MaxHeadTeacherManager(new NormalTeacherManager(Convert.ToInt32(identity.Claims.ToArray()[0].Value)));
 
             return manager;

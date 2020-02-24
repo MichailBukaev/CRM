@@ -54,18 +54,8 @@ namespace CRMDevEducation.Controllers
                 return "You do not have access to this page :(";
             }
         }
-        //этот метод доджен быть в контроллере лида
-        [Route("AddSkillsForLead")]
-        [HttpPost]
-        public HttpResponseMessage AddSkillsForLead(int leadId, int skillId)
-        {
-            if (teacherManager==null)
-                teacherManager = (NormalTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
-            if (teacherManager.AddSkillsForLead(skillId, leadId))
-                return new HttpResponseMessage(HttpStatusCode.OK);
-            else
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-        }
+        
+       
 
 
 

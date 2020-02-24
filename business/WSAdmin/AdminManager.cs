@@ -113,7 +113,7 @@ namespace business.WSAdmin
             _storage = new StorageLead();
             List<Lead> leads = (List<Lead>)_storage.GetAll();
             Lead lead = leads.FirstOrDefault(x => x.Id == id);
-            _storage = new StorageSkills();
+            _storage = new StorageSkillsLead();
             List<SkillsLead> skillsEntity = (List<SkillsLead>)_storage.GetAll(SkillsLead.Fields.LeadId.ToString(), lead.Id.ToString());
             List<SkillBusinessModel> skills = new List<SkillBusinessModel>();
             foreach (SkillsLead item in skillsEntity)

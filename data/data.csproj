@@ -5,6 +5,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200224221829_TestReferenceHistoryWithLead1.cs" />
+    <Compile Remove="Migrations\20200224221829_TestReferenceHistoryWithLead1.Designer.cs" />
+    <Compile Remove="Migrations\20200224222058_TestReferenceHistoryWithLead2.cs" />
+    <Compile Remove="Migrations\20200224222058_TestReferenceHistoryWithLead2.Designer.cs" />
+    <Compile Remove="Migrations\20200224222336_TestReferenceHistoryWithLead3.cs" />
+    <Compile Remove="Migrations\20200224222336_TestReferenceHistoryWithLead3.Designer.cs" />
+    <Compile Remove="Migrations\20200224223550_TestReferenceHistoryWithLead1.cs" />
+    <Compile Remove="Migrations\20200224223550_TestReferenceHistoryWithLead1.Designer.cs" />
+    <Compile Remove="Migrations\20200224224332_TestReferenceHistoryWithLead2.cs" />
+    <Compile Remove="Migrations\20200224224332_TestReferenceHistoryWithLead2.Designer.cs" />
+    <Compile Remove="Migrations\20200224224905_TesetReferenceHistoryWithLead2.cs" />
+    <Compile Remove="Migrations\20200224224905_TesetReferenceHistoryWithLead2.Designer.cs" />
+    <Compile Remove="Migrations\20200224225152_TesetReferenceHistoryWithLead2.cs" />
+    <Compile Remove="Migrations\20200224225152_TesetReferenceHistoryWithLead2.Designer.cs" />
+    <Compile Remove="Migrations\20200224230738_Testhistory.cs" />
+    <Compile Remove="Migrations\20200224230738_Testhistory.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EO.Pdf" Version="20.0.33" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />

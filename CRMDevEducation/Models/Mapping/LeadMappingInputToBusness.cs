@@ -11,19 +11,28 @@ namespace CRMDevEducation.Models.Mapping
     {
         public static LeadBusinessModel Map(InputLeadModel model)
         {
-            StatusBusinessModel status = StatusMappingInputToBusiness.Map(model.Status);
-            List<SkillBusinessModel> skills = new List<SkillBusinessModel>();
-
-            foreach (InputSkillModel item in model.Skills)
+            StatusBusinessModel status = new StatusBusinessModel();
+            if (model.Status != null)
             {
-                skills.Add(SkillMappingInputToBusiness.Map(item));
+                status = StatusMappingInputToBusiness.Map(model.Status);
             }
+            
+            List<SkillBusinessModel> skills = new List<SkillBusinessModel>();
+            if (model.Skills != null)
+            {
+                foreach (InputSkillModel item in model.Skills)
+                {
+                    skills.Add(SkillMappingInputToBusiness.Map(item));
+                }
+            }
+            
 
             List<string> history = new List<string>();
             history.Add(model.History);
 
             return new LeadBusinessModel()
             {
+                Id = model.Id,
                 FName = model.FName,
                 SName = model.SName,
                 Numder = model.Numder,

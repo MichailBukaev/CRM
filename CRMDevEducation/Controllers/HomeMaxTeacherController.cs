@@ -24,9 +24,8 @@ namespace CRMDevEducation.Controllers
         MaxHeadTeacherManager teacher;
         public HomeMaxTeacherController()
         {
-            
-        }
 
+        }
         [HttpGet]
         public string Get()
         {
