@@ -4,7 +4,7 @@ using System.Text;
 
 namespace models
 {
-    public class Task : IEntity
+    public class TaskWork : IEntity
     {
         public int Id { get; set; }
         public DateTime DateStart { get; set; }
