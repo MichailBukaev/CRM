@@ -21,6 +21,9 @@ namespace business
         public PublisherChangesInDB Skills { get; set; }
         public PublisherChangesInDB Status { get; set; }
         public PublisherChangesInDB Teacher { get; set; }
+        public PublisherChangesInDB TaskWork { get; set; }
+        public PublisherChangesInDB TasksStatus { get; set; }
+
 
 
         public Dictionary<int, PublisherChangesInDB> CombineByGroup
@@ -45,6 +48,8 @@ namespace business
             Skills = new PublisherChangesInDB();
             Status= new PublisherChangesInDB();
             Teacher = new PublisherChangesInDB();
+            TaskWork = new PublisherChangesInDB();
+            TasksStatus = new PublisherChangesInDB();
             SetDictionaries();
         }
 

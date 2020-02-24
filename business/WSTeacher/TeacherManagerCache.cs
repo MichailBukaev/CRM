@@ -13,6 +13,8 @@ namespace business.WSTeacher
         public CacheCourse Course { get; set; }
         public CacheSkills Skills { get; set; }
         public CacheStatus Status { get; set; }
+        public CacheTaskWork TaskWork { get; set; }
+        public CacheTasksStatus TasksStatus { get; set; }
 
         public TeacherManagerCache()
         {
@@ -22,6 +24,8 @@ namespace business.WSTeacher
             Course = new CacheCourse();
             Skills = new CacheSkills();
             Status = new CacheStatus();
+            TaskWork = new CacheTaskWork();
+            TasksStatus = new CacheTasksStatus();
         }
     }
 }

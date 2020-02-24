@@ -104,6 +104,11 @@ namespace business.WSTeacher
             return ok;
         }
 
+        public override bool SetSelfTask(string task, DateTime deadLine, int tasksStatusId)
+        {
+            return true;
+        }
+
         private void SetCache()
         {
             TeacherEntityCache entityCache = new FillEntityCache(_teacher).Fill();

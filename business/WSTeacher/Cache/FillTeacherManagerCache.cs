@@ -28,6 +28,8 @@ namespace business.WSTeacher.Cache
             SetSkills();
             SetCourse();
             SetStatus();
+            SetTaskWork();
+            SetTasksStatus();
             return cache;
         }
         private void SetTeachers()
@@ -300,6 +302,39 @@ namespace business.WSTeacher.Cache
                 cache.Status.FlagActual = true;
             }
 
+        }
+        private void SetTaskWork()
+        {
+            List<TaskWork> tasksEntity = entityCache.TaskWorks;
+            List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
+            foreach(TaskWork item in tasksEntity)
+            {
+                tasks.Add(new TaskWorkBusinessModel()
+                {
+                    Id = item.Id,
+                    DateEnd = item.DateEnd,
+                    DateStart = item.DateStart,
+                    LoginAuthor = item.LoginAuthor,
+                    LoginExecuter = item.LoginExecuter,
+                    TasksStatusId = item.TasksStatusId,
+                    Text = item.Text
+                });
+            }
+            cache.TaskWork.TasksWork = tasks;
+        }
+        private void SetTasksStatus()
+        {
+            List<TasksStatus> tasksStatuses = entityCache.TasksStatuses;
+            List<TasksStatusBusinessModel> tasks = new List<TasksStatusBusinessModel>();
+            foreach (TasksStatus item in tasksStatuses)
+            {
+                tasks.Add(new TasksStatusBusinessModel()
+                {
+                    Id = item.Id,
+                    Name = item.Name
+                });
+            }
+            cache.TasksStatus.TasksStatus = tasks;
         }
     }
 }

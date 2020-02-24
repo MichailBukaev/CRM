@@ -32,6 +32,8 @@ namespace business.WSTeacher.Cache.CacheEntity
             SetEntitySkill();
             SetEntitySkillsLead();
             SetEntityStatus();
+            SetEntityTaskWork();
+            SetEntityTaskStatus();
             return entityCache;
         }
 
@@ -148,6 +150,27 @@ namespace business.WSTeacher.Cache.CacheEntity
         {
             _storage = new StorageStatus();
             entityCache.Statuses = (List<Status>)_storage.GetAll();
+        }
+        private void SetEntityTaskWork()
+        {
+            _storage = new StorageTaskWork();
+            List<TaskWork> tasks = new List<TaskWork>();
+            if (!teacher.Head)
+            {
+                tasks = (List<TaskWork>)_storage.GetAll(TaskWork.Fields.LoginExecuter.ToString(), teacher.Login);
+            }
+            else
+            {
+                tasks = (List<TaskWork>)_storage.GetAll();
+                tasks = tasks.Where(p => p.LoginAuthor == teacher.Login || p.LoginExecuter == teacher.Login).ToList();
+            }
+            entityCache.TaskWorks = tasks;
+        }
+        private void SetEntityTaskStatus()
+        {
+            _storage = new StorageTasksStatus();
+            List<TasksStatus> taskStatuses = (List<TasksStatus>)_storage.GetAll();
+            entityCache.TasksStatuses = taskStatuses;
         }
     }
 }

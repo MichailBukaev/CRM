@@ -18,6 +18,8 @@ namespace business.WSTeacher
         public List<Log> Logs { get; set; }
         public List<Course> Courses { get; set; }
         public List<LinkTeacherCourse> LinkTeacherCourses { get; set; }
+        public List<TaskWork> TaskWorks { get; set; }
+        public List<TasksStatus> TasksStatuses { get; set; }
         public TeacherEntityCache()
         {
             Teachers = new List<Teacher>();
@@ -31,6 +33,8 @@ namespace business.WSTeacher
             Logs = new List<Log>();
             Courses = new List<Course>();
             LinkTeacherCourses = new List<LinkTeacherCourse>();
+            TaskWorks = new List<TaskWork>();
+            TasksStatuses = new List<TasksStatus>();
         }
 
     }
