@@ -30,7 +30,11 @@ namespace business.WSTeacher
         {
             return _teacherManager.SetAttendence(dayLog);
         }
+        public override List<TaskWorkBusinessModel> GetMyselfTask()
+        {
+            return _teacherManager.GetMyselfTask();
+        }
+            
 
-       
     }
 }

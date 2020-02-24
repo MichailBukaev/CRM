@@ -13,11 +13,13 @@ namespace business.WSTeacher.Cache
     {
         private TeacherEntityCache entityCache;
         private TeacherManagerCache cache;
+        private Teacher teacher;
 
-        public FillTeacherManagerCache(TeacherEntityCache entityCache)
+        public FillTeacherManagerCache(TeacherEntityCache entityCache, Teacher teacher)
         {
             this.entityCache = entityCache;
-            cache = new TeacherManagerCache();
+            cache = new TeacherManagerCache(teacher);
+            this.teacher = teacher;
         }
 
         public TeacherManagerCache Fill()
@@ -28,7 +30,8 @@ namespace business.WSTeacher.Cache
             SetSkills();
             SetCourse();
             SetStatus();
-            SetTaskWork();
+            SetTaskWorkMyself();
+            SetTaskWorkForSlaves();
             SetTasksStatus();
             return cache;
         }
@@ -255,8 +258,9 @@ namespace business.WSTeacher.Cache
                     });
                 }
                 cache.Skills.FlagActual = true;
-                if(skills!=null)
+                if(skills.Count>0)
                 cache.Skills.Skills.AddRange(skills);
+                cache.Skills.FlagActual = true;
             }
         }
         private void SetCourse()
@@ -301,26 +305,51 @@ namespace business.WSTeacher.Cache
                 cache.Status.Statuses = statuses;
                 cache.Status.FlagActual = true;
             }
-
         }
-        private void SetTaskWork()
+        private void SetTaskWorkMyself()
         {
-            List<TaskWork> tasksEntity = entityCache.TaskWorks;
+            List<TaskWork> taskWorks = entityCache.TaskWorks.Where(x => x.LoginExecuter == teacher.Login).ToList();
             List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
-            foreach(TaskWork item in tasksEntity)
+            foreach(TaskWork item in taskWorks)
             {
                 tasks.Add(new TaskWorkBusinessModel()
                 {
                     Id = item.Id,
-                    DateEnd = item.DateEnd,
-                    DateStart = item.DateStart,
                     LoginAuthor = item.LoginAuthor,
                     LoginExecuter = item.LoginExecuter,
+                    DateStart = item.DateStart,
+                    DateEnd = item.DateEnd,
                     TasksStatusId = item.TasksStatusId,
                     Text = item.Text
                 });
             }
-            cache.TaskWork.TasksWork = tasks;
+            cache.TaskWorkMyself.TasksWork = tasks;
+            cache.TaskWorkMyself.FlagActual = true;
+        }
+        private void SetTaskWorkForSlaves()
+        {
+            List<TaskWork> taskWorks = entityCache.TaskWorks.Where(x => x.LoginExecuter != teacher.Login).ToList();
+            var taskWorkGroupedByExecuter = taskWorks.GroupBy(x => x.LoginExecuter);
+            foreach (IGrouping<string, TaskWork> item in taskWorkGroupedByExecuter)
+            {
+                CacheTaskWorkForSlavesCombineByExecuter TasksForSlaves = new CacheTaskWorkForSlavesCombineByExecuter(item.Key, teacher.Login);
+                foreach (var task in item)
+                {
+                    TasksForSlaves.TasksWork.Add(new TaskWorkBusinessModel()
+                    {
+                        Id = task.Id,
+                        LoginAuthor = task.LoginAuthor,
+                        LoginExecuter = task.LoginExecuter,
+                        DateStart = task.DateStart,
+                        DateEnd = task.DateEnd,
+                        TasksStatusId = task.TasksStatusId,
+                        Text = task.Text
+                    });
+                }
+                TasksForSlaves.FlagActual = true;
+                cache.TaskWorkForSlavesCombineByExecuters.Add(TasksForSlaves);
+            }
+            
         }
         private void SetTasksStatus()
         {

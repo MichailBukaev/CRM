@@ -1,4 +1,5 @@
 ﻿using business.Cache;
+using models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,10 +14,11 @@ namespace business.WSTeacher
         public CacheCourse Course { get; set; }
         public CacheSkills Skills { get; set; }
         public CacheStatus Status { get; set; }
-        public CacheTaskWork TaskWork { get; set; }
+        public CacheTaskWorkMyself TaskWorkMyself { get; set; }
+        public List<CacheTaskWorkForSlavesCombineByExecuter> TaskWorkForSlavesCombineByExecuters { get; set; }
         public CacheTasksStatus TasksStatus { get; set; }
 
-        public TeacherManagerCache()
+        public TeacherManagerCache(Teacher _teacher)
         {
             Teachers = new CacheTeachers();
             Leads = new List<CacheLeadsCombineByGroup>();
@@ -24,8 +26,9 @@ namespace business.WSTeacher
             Course = new CacheCourse();
             Skills = new CacheSkills();
             Status = new CacheStatus();
-            TaskWork = new CacheTaskWork();
             TasksStatus = new CacheTasksStatus();
+            TaskWorkMyself = new CacheTaskWorkMyself(_teacher.Login);
+            TaskWorkForSlavesCombineByExecuters = new List<CacheTaskWorkForSlavesCombineByExecuter>();
         }
     }
 }

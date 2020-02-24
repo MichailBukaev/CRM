@@ -13,7 +13,10 @@ namespace business
         private static PublishingHouse publisherHouse = null;
         private Dictionary<int, PublisherChangesInDB> combineByGroup;
         private Dictionary<int, PublisherChangesInDB> combineByStatus;
+        private Dictionary<string, PublisherChangesInTasks> combineByExecuter;
+
         private IStorage storage;
+
 
         public PublisherChangesInDB Courses { get; set; }
         public PublisherChangesInDB Group { get; set; }
@@ -21,7 +24,6 @@ namespace business
         public PublisherChangesInDB Skills { get; set; }
         public PublisherChangesInDB Status { get; set; }
         public PublisherChangesInDB Teacher { get; set; }
-        public PublisherChangesInDB TaskWork { get; set; }
         public PublisherChangesInDB TasksStatus { get; set; }
 
 
@@ -38,17 +40,23 @@ namespace business
             set { combineByStatus = value; }
         }
 
+        public Dictionary<string, PublisherChangesInTasks> CombineByExecuter
+        {
+            get { return combineByExecuter; }
+            set { combineByExecuter = value; }
+        }
+
         
         private PublishingHouse() {
             combineByGroup = new Dictionary<int, PublisherChangesInDB>();
             combineByStatus = new Dictionary<int, PublisherChangesInDB>();
+            combineByExecuter = new Dictionary<string, PublisherChangesInTasks>();
             Courses = new PublisherChangesInDB();
             Group = new PublisherChangesInDB();
             HR = new PublisherChangesInDB();
             Skills = new PublisherChangesInDB();
             Status= new PublisherChangesInDB();
             Teacher = new PublisherChangesInDB();
-            TaskWork = new PublisherChangesInDB();
             TasksStatus = new PublisherChangesInDB();
             SetDictionaries();
         }
@@ -66,6 +74,20 @@ namespace business
             foreach(Status item in statuses)
             {
                 CombineByStatus.Add(item.Id, new PublisherChangesInDB());
+            }
+
+
+            storage = new StorageTeacher();
+            List<Teacher> teachers = (List<Teacher>)storage.GetAll();
+            foreach(Teacher item in teachers)
+            {
+                combineByExecuter.Add(item.Login, new PublisherChangesInTasks());
+            }
+            storage = new StorageHR();
+            List<HR> hrs = (List<HR>)storage.GetAll();
+            foreach (HR item in hrs)
+            {
+                combineByExecuter.Add(item.Login, new PublisherChangesInTasks());
             }
         }
 
