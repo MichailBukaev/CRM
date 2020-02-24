@@ -6,7 +6,7 @@ using System.Text;
 
 namespace business.WSHR
 {
-    class HRManagerCache
+    public class HRManagerCache
     {
         public List<CacheLeadsCombineByStatus> Leads { get; set; }
         public CacheCourse Courses { get; set; } 
@@ -15,5 +15,17 @@ namespace business.WSHR
         public CacheSkills Skills { get; set; }
         public CacheStatus Statuses { get; set; }
         public CacheTeachers Teachers { get; set; }
+
+        public HRManagerCache()
+
+        {
+            Statuses = new CacheStatus();
+            Leads = new List<CacheLeadsCombineByStatus>();
+            Courses = new CacheCourse();
+            Groups = new CacheGroup();
+            HRs = new CacheHRs();
+            Skills = new CacheSkills();            
+            Teachers = new CacheTeachers();
+        }
     }
 }
