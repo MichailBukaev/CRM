@@ -5,20 +5,20 @@ using System.Text;
 
 namespace business.WSHR
 {
-    //public abstract class HeadHRDecorator : DefaultHR
-    //{
-    //    protected DefaultHR defaultHR;
-    //    public void SetHR(DefaultHR defaultHR) 
-    //    {
-    //        this.defaultHR = defaultHR;
-    //    }
+    public abstract class HeadHRDecorator : DefaultHR
+    {
+        protected DefaultHR defaultHR;
+        public HeadHRDecorator(DefaultHR defaultHR)
+        {
+            this.defaultHR = defaultHR;
+        }
 
-    //    public abstract bool DeleteLead(LeadBusinessModel _model);
-    //    public abstract bool DeleteGroup(GroupBusinessModel _model);
-    //    public abstract int? CreateGroup(GroupBusinessModel _model);
-    //    public abstract IEnumerable<IModelsBusiness> GetGroups();
-    //    public abstract IEnumerable<IModelsBusiness> GetHR();
+        public abstract bool DeleteLead(LeadBusinessModel _model);
+        public abstract bool DeleteGroup(GroupBusinessModel _model);
+        public abstract int? CreateGroup(GroupBusinessModel _model);
+        public abstract IEnumerable<IModelsBusiness> GetGroups();
+        public abstract IEnumerable<IModelsBusiness> GetHR();
 
 
-    //}
+    }
 }
