@@ -199,7 +199,7 @@ namespace business.WSHR.Cache
                 foreach (Teacher item in teachers)
                 {
                     storage = new StorageLinkTeacherCourse();
-                    List<LinkTeacherCourse> courses = (List<LinkTeacherCourse>)storage.GetAll(LinkTeacherCourse.Fields.TeacherId.ToString(), teacher.Id.ToString());
+                    List<LinkTeacherCourse> courses = (List<LinkTeacherCourse>)storage.GetAll(LinkTeacherCourse.Fields.TeacherId.ToString(), item.Id.ToString());
                     List<CutCourseBusinessModel> cutCourses = new List<CutCourseBusinessModel>();
                     foreach (LinkTeacherCourse itemCourse in courses)
                     {
@@ -211,7 +211,7 @@ namespace business.WSHR.Cache
                     }
 
                     storage = new StorageGroup();
-                    List<Group> groups = (List<Group>)storage.GetAll(Group.Fields.TeacherId.ToString(), teacher.Id.ToString());
+                    List<Group> groups = (List<Group>)storage.GetAll(Group.Fields.TeacherId.ToString(), item.Id.ToString());
                     List<CutGroupBusinessModel> cutGroup = new List<CutGroupBusinessModel>();
                     foreach (Group itemGroup in groups)
                     {

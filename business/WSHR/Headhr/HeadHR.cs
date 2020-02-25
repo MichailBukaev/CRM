@@ -80,6 +80,7 @@ namespace business.WSHR
             {
                 publisher.Notify();
                 Group result = (Group)group;
+                publishingHouse.CombineByGroup.Add(result.Id, new PublisherChangesInDB());
                 return result.Id;
             }
             return null;
