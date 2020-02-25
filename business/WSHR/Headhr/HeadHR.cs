@@ -238,5 +238,10 @@ namespace business.WSHR
             }
             return leadBusinesses;
         }
+
+        public override bool ChangeStatus(int leadId, int statusId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

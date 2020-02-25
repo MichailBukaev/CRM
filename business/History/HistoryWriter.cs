@@ -34,15 +34,28 @@ namespace business
         public bool UpdateLead(Lead lead)
         {
             IEntity result = new History()
-            {
-               
+            {      
                 LeadId = lead.Id,
-               
                 HistoryText = "Обновлен " +
                 Convert.ToString(DateTime.UtcNow) +
                 " с состоянием: " + JsonSerializer.Serialize<Lead>(lead),
             };
             return _storage.Add(ref result);
         }
+
+        public bool AddSkills(int idLead, string skill)
+        {
+            
+            IEntity result = new History()
+            {
+                LeadId = idLead,
+                HistoryText = "Добавлен скилл " +
+                skill 
+            };
+            return _storage.Add(ref result);
+        }
+
+
+
     }
 }

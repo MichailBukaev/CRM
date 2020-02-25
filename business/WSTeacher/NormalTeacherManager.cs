@@ -14,12 +14,15 @@ namespace business.WSTeacher
 {
     public class NormalTeacherManager : TeacherManager
     {
+        HistoryWriter historyWriter;
+
         public NormalTeacherManager(int teacherId)
         {
             _storage = new StorageTeacher();
             List<Teacher> teachers = (List<Teacher>)_storage.GetAll();
             _teacher = teachers.FirstOrDefault(p => p.Id == teacherId);
             _cache = new TeacherManagerCache(_teacher);
+            historyWriter = new HistoryWriter();
             SetCache();
         }
 
@@ -54,6 +57,7 @@ namespace business.WSTeacher
                 };
                 IEntity entity = skillsLead;
                 _storage = new StorageSkillsLead();
+                historyWriter.AddSkills(LeadId, skill.NameSkill);
                 ok = _storage.Add(ref entity);
                 publisher.Notify();
             }

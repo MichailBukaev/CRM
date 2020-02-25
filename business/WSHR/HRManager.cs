@@ -116,8 +116,8 @@ namespace business.WSHR
                 Login = _model.Login,
                 Password = _model.Password
             };
-           // bool success = _storage.Update(lead);
-            bool success = historyWriter.UpdateLead(lead);
+            bool success = _storage.Update(lead);
+            historyWriter.UpdateLead(lead);
             if (success)
                 publisher.Notify();
             return success;
@@ -131,6 +131,11 @@ namespace business.WSHR
                 leadBusinesses = item.Leads.FirstOrDefault(x => x.Id == id);  
             }
             return leadBusinesses;
+        }
+
+        public override bool ChangeStatus(int leadId, int statusId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
