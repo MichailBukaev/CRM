@@ -239,9 +239,11 @@ namespace business.WSHR
             return leadBusinesses;
         }
 
-        public override bool ChangeStatus(int leadId, int statusId)
+       
+
+        public override bool ChangeStatus(LeadBusinessModel lead, int statusId)
         {
-            throw new NotImplementedException();
+            return defaultHR.ChangeStatus(lead, statusId);
         }
     }
 }

@@ -38,7 +38,6 @@ namespace business.WSTeacher.Cache
                         }
                     }
 
-
                     List<string> histories = new List<string>();
                     storage = new StorageHistory();
                     List<History> historiesEntity = (List<History>)storage.GetAll(History.Fields.LeadId.ToString(), itemLead.Id.ToString());

@@ -20,7 +20,7 @@ namespace business.WSHR
 
         public abstract bool UpdateLead(LeadBusinessModel _model);
 
-        public abstract bool ChangeStatus(int leadId, int statusId);
+        public abstract bool ChangeStatus(LeadBusinessModel lead, int statusId);
   
 
     }

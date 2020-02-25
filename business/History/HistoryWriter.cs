@@ -55,7 +55,15 @@ namespace business
             return _storage.Add(ref result);
         }
 
-
+        public bool ChangeStatus(int idLead, string status)
+        {
+            IEntity result = new History()
+            {
+                LeadId = idLead,
+                HistoryText = "Изменен статус на " + status
+            };
+            return _storage.Add(ref result);
+        }
 
     }
 }
