@@ -252,5 +252,10 @@ namespace business.WSHR
         {
             return defaultHR.ChangeStatus(lead, statusId);
         }
+
+        public override IModelsBusiness GetGroup(int id)
+        {
+            return defaultHR.GetGroup(id);
+        }
     }
 }

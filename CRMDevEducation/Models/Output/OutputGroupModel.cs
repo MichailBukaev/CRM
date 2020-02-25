@@ -13,5 +13,6 @@ namespace CRMDevEducation.Models.Output
         public CutTeacherOutputModel Teacher { get; set; }
         public string StartData { get; set; }
         public List<CutLeadOutputModel> Leads { get; set; }
+        public OutputLogModel Log { get; set; }
     }
 }

@@ -37,7 +37,7 @@ namespace data
         {
             modelBuilder.Entity<HistoryGroup>().HasNoKey();
             //modelBuilder.Entity<History>().HasNoKey();
-            modelBuilder.Entity<Log>().HasNoKey();
+            //modelBuilder.Entity<Log>().HasNoKey();
            
             //base.OnModelCreating(modelBuilder);
 
