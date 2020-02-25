@@ -150,5 +150,10 @@ namespace business.WSAdmin
                 History = history
             };
         }
+
+        public override IModelsBusiness GetTacher(int teacherId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -21,6 +21,6 @@ namespace business.WSTeacher
         public abstract bool SetAttendence(DayInLogBusinessModel dayLog);
         public abstract bool AddSkillsForLead(int skillId, int LeadId);
         public abstract bool SetSelfTask(string task, DateTime deadLine, int tasksStatusId);
-        public abstract List<TaskWorkBusinessModel> GetMyselfTask();
+        public abstract List<TaskWorkBusinessModel> GetMyselfTask();        
     }
 }

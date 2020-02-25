@@ -50,7 +50,7 @@ namespace CRMDevEducation.Controllers
             return json;
         }
 
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "HeadTeacher")]
         [Route("AddSkills")]
         [HttpPut]
         public HttpResponseMessage AddSkillsForLead(int leadId, int skillId)

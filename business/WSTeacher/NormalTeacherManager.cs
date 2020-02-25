@@ -86,6 +86,8 @@ namespace business.WSTeacher
             foreach (CacheLeadsCombineByGroup item in _cache.Leads)
             {
                 leadBusinesses = item.Leads.FirstOrDefault(x => x.Id == id);
+                if (leadBusinesses != null)
+                    return leadBusinesses;
             }
             return leadBusinesses;
         }
@@ -93,6 +95,13 @@ namespace business.WSTeacher
         public override List<TaskWorkBusinessModel> GetMyselfTask()
         {
             return _cache.TaskWorkMyself.TasksWork;
+        }
+
+        public override IModelsBusiness GetTacher(int teacherId)
+        {
+            if (!_cache.Teachers.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheTeachers(_cache.Teachers, _teacher);
+            return _cache.Teachers.Teachers.FirstOrDefault(p => p.Id == teacherId);
         }
 
         public override bool SetAttendence(DayInLogBusinessModel dayLog)

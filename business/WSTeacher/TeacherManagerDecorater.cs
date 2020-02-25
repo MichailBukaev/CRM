@@ -34,7 +34,13 @@ namespace business.WSTeacher
         {
             return _teacherManager.GetMyselfTask();
         }
-            
-
+        public override IModelsBusiness GetLead(int id)
+        {
+            return _teacherManager.GetLead(id);
+        }
+        public override IModelsBusiness GetTacher(int teacherId)
+        {
+            return _teacherManager.GetTacher(teacherId);
+        }
     }
 }

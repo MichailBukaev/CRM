@@ -142,17 +142,38 @@ namespace business.WSTeacher.HeadTeacher
 
         public override IModelsBusiness GetLead(int id)
         {
-            LeadBusinessModel leadBusinesses = null;
-            foreach (CacheLeadsCombineByGroup item in _cache.Leads)
-            {
-                leadBusinesses = item.Leads.FirstOrDefault(x => x.Id == id);
-            }
-            return leadBusinesses;
+            return base.GetLead(id);
         }
 
         public override List<TaskWorkBusinessModel> GetMyselfTask()
         {
             return base.GetMyselfTask();
         }
+        public override IModelsBusiness GetTacher(int teacherId)
+        {
+            return base.GetTacher(teacherId);
+        }
+        public bool AssignTeacherForCourse(int teacherId, int courseId)
+        {
+            bool result = false;
+            if (!_cache.Teachers.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheTeachers(_cache.Teachers, _teacher);
+            TeacherBusinessModel currentTeacher = _cache.Teachers.Teachers.FirstOrDefault(p => p.Id == teacherId);
+            if (!_cache.Course.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheCourses(_cache.Course, _teacher);
+            CourseBusinessModel currentCourse = _cache.Course.Courses.FirstOrDefault(p => p.Id == courseId);
+            _storage = new StorageLinkTeacherCourse();
+            LinkTeacherCourse linkTeacherCourse = new LinkTeacherCourse() { CourseId = currentCourse.Id, TeacherId = currentTeacher.Id};
+            IEntity entityNew = linkTeacherCourse;
+            result = _storage.Add(ref entityNew);
+            if (result)
+            {
+                PublishingHouse publishingHouse = PublishingHouse.Create();
+                publishingHouse.Teacher.Notify();
+                publishingHouse.Courses.Notify();
+            }
+            return result;
+        }
+
     }
 }
