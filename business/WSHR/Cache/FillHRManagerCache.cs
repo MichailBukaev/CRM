@@ -13,10 +13,12 @@ namespace business.WSHR.Headhr.Cache
     {
         private HREntityCache entityCache;
         private HRManagerCache cache;
-        public FillHRManagerCache(HREntityCache entityCache)
+        private HR hr;
+        public FillHRManagerCache(HREntityCache entityCache, HR hr)
         {
             this.entityCache = entityCache;
-            cache = new HRManagerCache();
+            cache = new HRManagerCache(hr);
+            this.hr = hr;
         }
         public HRManagerCache Fill()
         {
@@ -27,9 +29,13 @@ namespace business.WSHR.Headhr.Cache
             SetGroups();
             SetSkills();
             SetTeachers();
+            SetTaskWorkMyself();
+            SetTaskWorkForSlaves();
+            SetTasksStatus();
             return cache;
         }
 
+        
         private void SetStatus()
         {
             List<StatusBusinessModel> statuses = new List<StatusBusinessModel>();
@@ -269,6 +275,64 @@ namespace business.WSHR.Headhr.Cache
                 cache.HRs.HRs.Add(hrBusiness);
             }
             cache.HRs.FlagActual = true;
+        }
+        private void SetTaskWorkForSlaves()
+        {
+            List<TaskWork> taskWorks = entityCache.TaskWorks.Where(x => x.LoginExecuter != hr.Login).ToList();
+            var taskWorkGroupedByExecuter = taskWorks.GroupBy(x => x.LoginExecuter);
+            foreach (IGrouping<string, TaskWork> item in taskWorkGroupedByExecuter)
+            {
+                CacheTaskWorkForSlavesCombineByExecuter TasksForSlaves = new CacheTaskWorkForSlavesCombineByExecuter(item.Key, hr.Login);
+                foreach (var task in item)
+                {
+                    TasksForSlaves.TasksWork.Add(new TaskWorkBusinessModel()
+                    {
+                        Id = task.Id,
+                        LoginAuthor = task.LoginAuthor,
+                        LoginExecuter = task.LoginExecuter,
+                        DateStart = task.DateStart,
+                        DateEnd = task.DateEnd,
+                        TasksStatusId = task.TasksStatusId,
+                        Text = task.Text
+                    });
+                }
+                TasksForSlaves.FlagActual = true;
+                cache.TaskWorkForSlavesCombineByExecuters.Add(TasksForSlaves);
+            }
+        }
+        private void SetTasksStatus()
+        {
+            List<TasksStatus> tasksStatuses = entityCache.TasksStatuses;
+            List<TasksStatusBusinessModel> tasks = new List<TasksStatusBusinessModel>();
+            foreach (TasksStatus item in tasksStatuses)
+            {
+                tasks.Add(new TasksStatusBusinessModel()
+                {
+                    Id = item.Id,
+                    Name = item.Name
+                });
+            }
+            cache.TasksStatus.TasksStatus = tasks;
+        }
+        private void SetTaskWorkMyself()
+        {
+            List<TaskWork> taskWorks = entityCache.TaskWorks.Where(x => x.LoginExecuter == hr.Login).ToList();
+            List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
+            foreach (TaskWork item in taskWorks)
+            {
+                tasks.Add(new TaskWorkBusinessModel()
+                {
+                    Id = item.Id,
+                    LoginAuthor = item.LoginAuthor,
+                    LoginExecuter = item.LoginExecuter,
+                    DateStart = item.DateStart,
+                    DateEnd = item.DateEnd,
+                    TasksStatusId = item.TasksStatusId,
+                    Text = item.Text
+                });
+            }
+            cache.TaskWorkMyself.TasksWork = tasks;
+            cache.TaskWorkMyself.FlagActual = true;
         }
 
     }

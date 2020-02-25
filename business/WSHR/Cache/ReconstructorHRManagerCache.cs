@@ -250,7 +250,7 @@ namespace business.WSHR.Cache
             List<CourseBusinessModel> resultCourses = new List<CourseBusinessModel>();
             storage = new StorageLinkTeacherCourse();
             List<LinkTeacherCourse> courseWithteacher = (List<LinkTeacherCourse>)storage.GetAll();
-            
+
             foreach (Course item in courses)
             {
                 List<CutTeacherBusinessModel> teachers = new List<CutTeacherBusinessModel>();
@@ -324,7 +324,7 @@ namespace business.WSHR.Cache
             if (hrs != null)
             {
                 foreach (HR item in hrs)
-                {                    
+                {
                     HRBusinessModel hrBusiness = new HRBusinessModel()
                     {
                         Id = item.Id,
@@ -332,12 +332,82 @@ namespace business.WSHR.Cache
                         SName = item.SName,
                         Head = item.Head,
                         Login = item.Login,
-                        Password = item.Password                        
+                        Password = item.Password
                     };
                     hrsCache.Add(hrBusiness);
                 }
             }
             cache.HRs = hrsCache;
+            cache.FlagActual = true;
+            return cache;
+        }
+
+        public static CacheTasksStatus UpdateCacheTasksStatus(CacheTasksStatus cache)
+        {
+            storage = new StorageTasksStatus();
+            List<TasksStatus> taskStatuses = (List<TasksStatus>)storage.GetAll();
+            List<TasksStatusBusinessModel> tasks = new List<TasksStatusBusinessModel>();
+            foreach (TasksStatus item in taskStatuses)
+            {
+                tasks.Add(new TasksStatusBusinessModel()
+                {
+                    Id = item.Id,
+                    Name = item.Name
+                });
+            }
+            cache.TasksStatus = tasks;
+            cache.FlagActual = true;
+            return cache;
+        }
+
+        public static CacheTaskWorkMyself UpdateCacheTaskWorkMyself(CacheTaskWorkMyself cache, HR hr)
+        {
+            storage = new StorageTaskWork();
+            List<TaskWork> tasks = (List<TaskWork>)storage.GetAll();
+            tasks = tasks.Where(x => x.LoginExecuter == hr.Login).ToList();
+            List<TaskWorkBusinessModel> tasksB = new List<TaskWorkBusinessModel>();
+            foreach (TaskWork item in tasks)
+            {
+                tasksB.Add(new TaskWorkBusinessModel()
+                {
+                    Id = item.Id,
+                    LoginAuthor = item.LoginAuthor,
+                    LoginExecuter = item.LoginExecuter,
+                    DateStart = item.DateStart,
+                    DateEnd = item.DateEnd,
+                    TasksStatusId = item.TasksStatusId,
+                    Text = item.Text
+                });
+            }
+            cache.TasksWork = tasksB;
+            cache.FlagActual = true;
+            return cache;
+        }
+
+        public static CacheTaskWorkForSlavesCombineByExecuter UpdateCacheTaskWorkForSlaves(CacheTaskWorkForSlavesCombineByExecuter cache, HR hr)//???хзшка
+        {
+            storage = new StorageTaskWork();
+            List<TaskWork> taskWorks = (List<TaskWork>)storage.GetAll();
+            List<TaskWorkBusinessModel> tasksB = new List<TaskWorkBusinessModel>();
+            taskWorks = taskWorks.Where(x => x.LoginExecuter != hr.Login).ToList();
+            var taskWorkGroupedByExecuter = taskWorks.GroupBy(x => x.LoginExecuter);
+            foreach (IGrouping<string, TaskWork> item in taskWorkGroupedByExecuter)
+            {
+                foreach (var task in item)
+                {
+                    tasksB.Add(new TaskWorkBusinessModel()
+                    {
+                        Id = task.Id,
+                        LoginAuthor = task.LoginAuthor,
+                        LoginExecuter = task.LoginExecuter,
+                        DateStart = task.DateStart,
+                        DateEnd = task.DateEnd,
+                        TasksStatusId = task.TasksStatusId,
+                        Text = task.Text
+                    });
+                }
+            }
+            cache.TasksWork = tasksB;
             cache.FlagActual = true;
             return cache;
         }
