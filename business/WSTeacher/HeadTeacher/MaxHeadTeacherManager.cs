@@ -17,7 +17,7 @@ namespace business.WSTeacher.HeadTeacher
             : base(teacherManager)
         {
             _cache = teacherManager.Cache;
-            
+
         }
         public override bool AddSkillsForLead(int skillId, int LeadId)
         {
@@ -33,8 +33,9 @@ namespace business.WSTeacher.HeadTeacher
         {
             _storage = new StorageSkills();
             PublishingHouse publishingHouse = PublishingHouse.Create();
-            PublisherChangesInDB publisher =  publishingHouse.Skills;
-            IEntity skills = new Skills() { 
+            PublisherChangesInDB publisher = publishingHouse.Skills;
+            IEntity skills = new Skills()
+            {
                 NameSkills = skill.NameSkill
             };
             if (_storage.Add(ref skills))
@@ -47,30 +48,30 @@ namespace business.WSTeacher.HeadTeacher
             {
                 return null;
             }
-                
+
         }
 
         public bool AssignTeacherForGroup(int teacherId, int groupeId)
         {
             bool ok = false;
-            if(!_cache.Group.FlagActual)
+            if (!_cache.Group.FlagActual)
             {
                 ReconstructorTeacherManagerCache.UpdateCacheGroup(_cache.Group, _teacherManager.Teacher);
             }
             GroupBusinessModel group = _cache.Group.Groups.FirstOrDefault(x => x.Id == groupeId);
 
-            if(!_cache.Teachers.FlagActual)
+            if (!_cache.Teachers.FlagActual)
             {
                 ReconstructorTeacherManagerCache.UpdateCacheTeachers(_cache.Teachers, _teacherManager.Teacher);
             }
             TeacherBusinessModel teacherLocal = _cache.Teachers.Teachers.FirstOrDefault(p => p.Id == teacherId);
-            
-            if(teacherLocal != null && group != null)
+
+            if (teacherLocal != null && group != null)
             {
                 bool flag = false;
-                for (int i = 0; i<teacherLocal.Courses.Count; i++)
+                for (int i = 0; i < teacherLocal.Courses.Count; i++)
                 {
-                    if(group.Course.Id== teacherLocal.Courses[i].Id)
+                    if (group.Course.Id == teacherLocal.Courses[i].Id)
                     {
                         flag = true;
                         break;
@@ -88,7 +89,7 @@ namespace business.WSTeacher.HeadTeacher
                     StartDate = group.StartDate,
                     NameGroup = group.Name,
                     TeacherId = teacherLocal.Id
-                    
+
                 };
 
                 _storage = new StorageGroup();
@@ -123,7 +124,7 @@ namespace business.WSTeacher.HeadTeacher
             {
                 return null;
             }
-                
+
         }
         public override List<GroupBusinessModel> GetAllGroupe()
         {
@@ -137,7 +138,7 @@ namespace business.WSTeacher.HeadTeacher
 
         public override bool SetSelfTask(string task, DateTime deadLine, int tasksStatusId)
         {
-            throw new NotImplementedException();
+            return base.SetSelfTask(task, deadLine, tasksStatusId);
         }
 
         public override IModelsBusiness GetLead(int id)
@@ -153,6 +154,96 @@ namespace business.WSTeacher.HeadTeacher
         public override List<TaskWorkBusinessModel> GetMyselfTask()
         {
             return base.GetMyselfTask();
+        }
+        public int? SetTasksForSlaves(string task, DateTime deadLine, int tasksStatusId, string loginExecuter)
+        {
+            
+            PublishingHouse publishingHouse = PublishingHouse.Create();
+            _storage = new StorageTaskWork();
+            IEntity slavesTask = new TaskWork()
+            {
+                DateStart = DateTime.Now,
+                DateEnd = deadLine,
+                Text = task,
+                LoginAuthor = _teacher.Login,
+                LoginExecuter = loginExecuter,
+                TasksStatusId = tasksStatusId
+            };
+            if (_storage.Add(ref slavesTask))
+            {
+
+                publishingHouse.CombineByExecuter[loginExecuter].Notify(_teacher.Login);
+                TaskWork taskSet = (TaskWork)slavesTask;
+                return taskSet.Id;
+            }
+            else
+                return null;
+        }
+        public override List<TaskWorkBusinessModel> GetAllMyTask()
+        {
+            return base.GetAllMyTask();
+        }
+
+        public override List<TaskWorkBusinessModel> GetAllMyTask(string nameStatus)
+        {
+            return base.GetAllMyTask(nameStatus);
+        }
+
+        public override List<TaskWorkBusinessModel> GetAllMyTask(DateTime dateStart)
+        {
+            return base.GetAllMyTask(dateStart);
+        }
+
+        public List<TaskWorkBusinessModel> GetAllTasksForSlaves()
+        {
+            List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
+            
+            foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
+            {
+                if (!item.FlagActual)
+                    ReconstructorTeacherManagerCache.UpdateCacheTaskForSlaves(item, _teacher.Login);
+                if(item.TasksWork.Count>0)
+                {
+                    tasks.AddRange(item.TasksWork);
+                }
+                
+            }
+            return tasks;
+        }
+        public List<TaskWorkBusinessModel> GetAllTasksForSlaves(string nameStatus)
+        {
+            if (!_cache.TasksStatus.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheMyselfTask(_cache.TaskWorkMyself, _teacher.Login);
+            TasksStatusBusinessModel tasksStatuses = _cache.TasksStatus.TasksStatus.FirstOrDefault(x => x.Name == nameStatus);
+
+            List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
+            foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
+            {
+                if (!item.FlagActual)
+                    ReconstructorTeacherManagerCache.UpdateCacheTaskForSlaves(item, _teacher.Login);
+                if (item.TasksWork.Count > 0)
+                {
+                    tasks.AddRange(item.TasksWork.Where(x => x.TasksStatusId == tasksStatuses.Id).ToList());
+                }
+
+            }
+            return tasks;
+        }
+        public List<TaskWorkBusinessModel> GetAllTasksForSlaves(DateTime dateStart)
+        {
+            List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
+
+            foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
+            {
+                if (!item.FlagActual)
+                    ReconstructorTeacherManagerCache.UpdateCacheTaskForSlaves(item, _teacher.Login);
+                if (item.TasksWork.Count > 0)
+                {
+                    tasks.AddRange(item.TasksWork.Where(x => x.DateStart.CompareTo(dateStart) > 0).ToList());
+                }
+
+            }
+            return tasks;
         }
     }
 }

@@ -18,6 +18,10 @@ namespace business.WSTeacher
         public Teacher Teacher { get { return _teacher; } }
         public abstract List<GroupBusinessModel> GetAllGroupe();
         public abstract List<CourseBusinessModel> GetAllCourse();
+        public abstract List<TaskWorkBusinessModel> GetAllMyTask();
+        public abstract List<TaskWorkBusinessModel> GetAllMyTask(string nameStatus);
+        public abstract List<TaskWorkBusinessModel> GetAllMyTask(DateTime dateStart);
+
         public abstract bool SetAttendence(DayInLogBusinessModel dayLog);
         public abstract bool AddSkillsForLead(int skillId, int LeadId);
         public abstract bool SetSelfTask(string task, DateTime deadLine, int tasksStatusId);

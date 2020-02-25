@@ -80,6 +80,34 @@ namespace business.WSTeacher
             return groups;
         }
 
+        public override List<TaskWorkBusinessModel> GetAllMyTask()
+        {
+            if (!_cache.TaskWorkMyself.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheMyselfTask(_cache.TaskWorkMyself, _teacher.Login);
+            List<TaskWorkBusinessModel> tasks = _cache.TaskWorkMyself.TasksWork;
+            return tasks;
+        }
+
+        public override List<TaskWorkBusinessModel> GetAllMyTask(string nameStatus)
+        {
+            if(!_cache.TasksStatus.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheMyselfTask(_cache.TaskWorkMyself, _teacher.Login);
+            TasksStatusBusinessModel tasksStatuses = _cache.TasksStatus.TasksStatus.FirstOrDefault(x => x.Name == nameStatus);
+
+            if (!_cache.TaskWorkMyself.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheMyselfTask(_cache.TaskWorkMyself, _teacher.Login);
+            List<TaskWorkBusinessModel> tasks = _cache.TaskWorkMyself.TasksWork.Where(x => x.TasksStatusId == tasksStatuses.Id).ToList();
+            return tasks;
+        }
+
+        public override List<TaskWorkBusinessModel> GetAllMyTask(DateTime dateStart)
+        {
+            if (!_cache.TaskWorkMyself.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheMyselfTask(_cache.TaskWorkMyself, _teacher.Login);
+            List<TaskWorkBusinessModel> tasks = _cache.TaskWorkMyself.TasksWork.Where(x => x.DateStart.CompareTo(dateStart)>0).ToList();
+            return tasks;
+        }
+
         public override IModelsBusiness GetLead(int id)
         {
             LeadBusinessModel leadBusinesses = null;
@@ -119,8 +147,27 @@ namespace business.WSTeacher
         public override bool SetSelfTask(string task, DateTime deadLine, int tasksStatusId)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
-            publishingHouse.CombineByExecuter[_teacher.Login].Notify(_teacher.Login);
-            return true;
+           
+            _storage = new StorageTaskWork();
+            bool flag;
+            IEntity myTask = new TaskWork()
+            {
+                DateStart = DateTime.Now,
+                DateEnd = deadLine,
+                Text = task,
+                TasksStatusId = tasksStatusId,
+                LoginAuthor = _teacher.Login,
+                LoginExecuter = _teacher.Login
+            };
+            if (_storage.Add(ref myTask))
+            {
+                flag = true;
+                publishingHouse.CombineByExecuter[_teacher.Login].Notify(_teacher.Login);
+            }
+            else
+                flag = false;
+                
+            return flag;
         }
 
         private void SetCache()
