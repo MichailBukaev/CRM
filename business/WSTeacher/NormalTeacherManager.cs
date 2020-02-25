@@ -19,7 +19,7 @@ namespace business.WSTeacher
             _storage = new StorageTeacher();
             List<Teacher> teachers = (List<Teacher>)_storage.GetAll();
             _teacher = teachers.FirstOrDefault(p => p.Id == teacherId);
-            _cache = new TeacherManagerCache();
+            _cache = new TeacherManagerCache(_teacher);
             SetCache();
         }
 
@@ -86,6 +86,11 @@ namespace business.WSTeacher
             return leadBusinesses;
         }
 
+        public override List<TaskWorkBusinessModel> GetMyselfTask()
+        {
+            return _cache.TaskWorkMyself.TasksWork;
+        }
+
         public override bool SetAttendence(DayInLogBusinessModel dayLog)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
@@ -115,7 +120,7 @@ namespace business.WSTeacher
         private void SetCache()
         {
             TeacherEntityCache entityCache = new FillEntityCache(_teacher).Fill();
-            _cache = new FillTeacherManagerCache(entityCache).Fill();
+            _cache = new FillTeacherManagerCache(entityCache, _teacher).Fill();
         }
 
       
