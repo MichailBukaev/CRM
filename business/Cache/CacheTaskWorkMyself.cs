@@ -5,19 +5,21 @@ using System.Text;
 
 namespace business.Cache
 {
-    public class CacheTaskWork
+    public class CacheTaskWorkMyself
     {
         private PublishingHouse publishingHouse;
+        public string LoginExecuter { set; get; }
         public List<TaskWorkBusinessModel> TasksWork { get; set; }
         public bool FlagActual { get; set; }
-        public CacheTaskWork()
+        public CacheTaskWorkMyself(string loginExecuter)
         {
             TasksWork = new List<TaskWorkBusinessModel>();
             FlagActual = false;
             publishingHouse = PublishingHouse.Create();
-            publishingHouse.TaskWork.Event += this.ReadChange;
+            publishingHouse.CombineByExecuter[loginExecuter].Event += ReadChange;
+            this.LoginExecuter = loginExecuter;
         }
-        public void ReadChange()
+        public void ReadChange(string loginAuthor)
         {
             FlagActual = false;
         }

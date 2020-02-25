@@ -72,6 +72,7 @@ namespace business.WSAdmin
                     PublishingHouse publishingHouse = PublishingHouse.Create();
                     PublisherChangesInDB _publisher = publishingHouse.HR;
                     _publisher.Notify();
+                    publishingHouse.CombineByExecuter.Add(_hr.Login, new PublisherChangesInTasks());
                     HR result = (HR)hR;
                     return result.Id;
                 }
@@ -100,6 +101,7 @@ namespace business.WSAdmin
                     PublishingHouse publishingHouse = PublishingHouse.Create();
                     PublisherChangesInDB _publisher = publishingHouse.Teacher;
                     _publisher.Notify();
+                    publishingHouse.CombineByExecuter.Add(_teacher.Login, new PublisherChangesInTasks());
                     Teacher result = (Teacher)teacher;
                     return result.Id;
 

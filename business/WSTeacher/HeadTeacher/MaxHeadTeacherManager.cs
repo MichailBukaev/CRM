@@ -149,5 +149,10 @@ namespace business.WSTeacher.HeadTeacher
             }
             return leadBusinesses;
         }
+
+        public override List<TaskWorkBusinessModel> GetMyselfTask()
+        {
+            return base.GetMyselfTask();
+        }
     }
 }
