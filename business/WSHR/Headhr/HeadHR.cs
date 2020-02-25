@@ -1,6 +1,7 @@
 ﻿using business.Cache;
 using business.Models;
 using business.Models.CutModel;
+using business.WSHR.Cache;
 using data.Storage;
 using data.StorageEntity;
 using models;
@@ -18,30 +19,38 @@ namespace business.WSHR
             _cache = hr.Cache;
         }
 
-        #region Get
+        
         public override IEnumerable<IModelsBusiness> GetHR()
         {
+            if (!_cache.HRs.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheHRs(_cache.HRs, this._hr);
             List<HRBusinessModel> hrs = _cache.HRs.HRs;
             return hrs;
         }
 
         public IEnumerable<IModelsBusiness> GetLeadsByStatus(int statusId)
         {
-            List<CacheLeadsCombineByStatus> leads = _cache.Leads;
             List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
-            foreach (CacheLeadsCombineByStatus item in leads)
+            foreach (CacheLeadsCombineByStatus item in _cache.Leads)
             {
-                if (item.StatusId == statusId)
+                if(item.StatusId == statusId)
+                {
+                    if(!item.FlagActual)
+                        ReconstructorHRManagerCache.UpdateCacheLeads(item);
                     foreach (LeadBusinessModel itemLead in item.Leads)
                     {
                         leadBusinesses.Add(itemLead);
                     }
+                }
             }
+            
             return leadBusinesses;
         }
 
         public override IEnumerable<IModelsBusiness> GetTeacher()
         {
+            if (!_cache.Teachers.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheTeachers(_cache.Teachers);
             List<TeacherBusinessModel> teachers = _cache.Teachers.Teachers;
 
             return teachers;
@@ -49,11 +58,13 @@ namespace business.WSHR
 
         public override IEnumerable<IModelsBusiness> GetGroups()
         {
+            if (!_cache.Groups.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheGroup(_cache.Groups);
             List<GroupBusinessModel> groups = _cache.Groups.Groups;
 
             return groups;
         }
-        #endregion
+        
         public override int? CreateLead(LeadBusinessModel _model)
         {
             return defaultHR.CreateLead(_model);
@@ -187,6 +198,8 @@ namespace business.WSHR
 
         LogBusinessModel GetLog(GroupBusinessModel group)
         {
+            if (!_cache.Groups.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheGroup(_cache.Groups);
             List<GroupBusinessModel> groups = _cache.Groups.Groups;
             LogBusinessModel logBus = null;            
 
@@ -215,7 +228,9 @@ namespace business.WSHR
         }
 
         List<CutLeadBusinessModel> GetCutLead(GroupBusinessModel group)
-        {            
+        {
+            if (!_cache.Groups.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheGroup(_cache.Groups);
             List<CutLeadBusinessModel> leadsInGroupBusiness = new List<CutLeadBusinessModel>();
             
             foreach (GroupBusinessModel item in _cache.Groups.Groups)
@@ -227,13 +242,14 @@ namespace business.WSHR
             }
             return leadsInGroupBusiness;
         }
-
      
         public override IModelsBusiness GetLead(int id)
         {
             LeadBusinessModel leadBusinesses = null;
             foreach (CacheLeadsCombineByStatus item in _cache.Leads)
             {
+                if (!item.FlagActual)
+                    ReconstructorHRManagerCache.UpdateCacheLeads(item);
                 leadBusinesses = item.Leads.FirstOrDefault(x => x.Id == id);
             }
             return leadBusinesses;

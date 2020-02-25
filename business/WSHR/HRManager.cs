@@ -1,6 +1,7 @@
 ﻿using business.Cache;
 
 using business.Models;
+using business.WSHR.Cache;
 using business.WSHR.Headhr.Cache;
 using business.WSUser.interfaces;
 using data.Storage;
@@ -34,7 +35,7 @@ namespace business.WSHR
         }
 
         public IEnumerable<IModelsBusiness> GetLeadsByStatus(int statusId)
-        {
+        {            
             List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
             foreach (CacheLeadsCombineByStatus item in _cache.Leads)
             {
@@ -93,7 +94,9 @@ namespace business.WSHR
         }
 
         public override IEnumerable<IModelsBusiness> GetTeacher()
-        {            
+        {
+            if (!_cache.Teachers.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheTeachers(_cache.Teachers);
             List<TeacherBusinessModel> teachersBusiness = _cache.Teachers.Teachers;
             
             return teachersBusiness;
