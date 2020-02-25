@@ -25,15 +25,12 @@ namespace business.WSHR
             historyWriter = new HistoryWriter();
             _cache = new HRManagerCache();
             SetCache();
-        }
-
-       
+        }       
         public void SetCache()
         {
             HREntityCache entityCache = new FillEntityCache(_hr).Fill();
             _cache = new FillHRManagerCache(entityCache).Fill();
         }
-
         public IEnumerable<IModelsBusiness> GetLeadsByStatus(int statusId)
         {            
             List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
@@ -41,6 +38,8 @@ namespace business.WSHR
             {
                 if(item.StatusId == statusId)
                 {
+                    if (!item.FlagActual)
+                        ReconstructorHRManagerCache.UpdateCacheLeads(item);
                     foreach (LeadBusinessModel lead in item.Leads)
                     {
                         leadBusinesses.Add(lead);                        
@@ -50,15 +49,25 @@ namespace business.WSHR
             
             return leadBusinesses;
         }
-
         Status GetStatus(int id)
         {
-            _storage = new StorageStatus();
-            List<Status> statuses = (List<Status>)_storage.GetAll();
-            Status st = statuses.FirstOrDefault(x => x.Id == id);
+            if (!_cache.Statuses.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheStatus(_cache.Statuses);
+            Status st = null;
+            foreach (StatusBusinessModel item in _cache.Statuses.Statuses)
+            {
+                if (item.Id == id)
+                {
+                    st = new Status()
+                    {
+                        Id = item.Id,
+                        Name = item.Name
+                    };
+                }
+
+            }
             return st;
         }
-
         public override int? CreateLead(LeadBusinessModel _model)
         {
             if (InspectorLogin.CheckUniqueness(_model.Login))
@@ -92,7 +101,6 @@ namespace business.WSHR
             }
             return null;
         }
-
         public override IEnumerable<IModelsBusiness> GetTeacher()
         {
             if (!_cache.Teachers.FlagActual)
@@ -101,7 +109,6 @@ namespace business.WSHR
             
             return teachersBusiness;
         }
-
         public override bool UpdateLead(LeadBusinessModel _model)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
@@ -125,17 +132,17 @@ namespace business.WSHR
                 publisher.Notify();
             return success;
         }
-
         public override IModelsBusiness GetLead(int id)
         {
             LeadBusinessModel leadBusinesses = null;
             foreach (CacheLeadsCombineByStatus item in _cache.Leads)
             {
+                if (!item.FlagActual)
+                    ReconstructorHRManagerCache.UpdateCacheLeads(item);
                 leadBusinesses = item.Leads.FirstOrDefault(x => x.Id == id);  
             }
             return leadBusinesses;
         }
-
         public override bool ChangeStatus(int leadId, int statusId)
         {
             throw new NotImplementedException();

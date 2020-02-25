@@ -19,7 +19,6 @@ namespace business.WSHR
             _cache = hr.Cache;
         }
 
-        
         public override IEnumerable<IModelsBusiness> GetHR()
         {
             if (!_cache.HRs.FlagActual)
@@ -27,7 +26,6 @@ namespace business.WSHR
             List<HRBusinessModel> hrs = _cache.HRs.HRs;
             return hrs;
         }
-
         public IEnumerable<IModelsBusiness> GetLeadsByStatus(int statusId)
         {
             List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
@@ -46,7 +44,6 @@ namespace business.WSHR
             
             return leadBusinesses;
         }
-
         public override IEnumerable<IModelsBusiness> GetTeacher()
         {
             if (!_cache.Teachers.FlagActual)
@@ -55,7 +52,6 @@ namespace business.WSHR
 
             return teachers;
         }
-
         public override IEnumerable<IModelsBusiness> GetGroups()
         {
             if (!_cache.Groups.FlagActual)
@@ -64,12 +60,10 @@ namespace business.WSHR
 
             return groups;
         }
-        
         public override int? CreateLead(LeadBusinessModel _model)
         {
             return defaultHR.CreateLead(_model);
         }
-
         public override int? CreateGroup(GroupBusinessModel _model)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
@@ -90,7 +84,6 @@ namespace business.WSHR
             }
             return null;
         }
-
         public override bool DeleteGroup(GroupBusinessModel _model)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
@@ -110,7 +103,6 @@ namespace business.WSHR
                 publisher.Notify();
             return success;
         }
-
         public override bool DeleteLead(LeadBusinessModel _model)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
@@ -134,14 +126,14 @@ namespace business.WSHR
                 publisher.Notify();
             return success;
         }
-
         public override bool UpdateLead(LeadBusinessModel _model)
         {
             return defaultHR.UpdateLead(_model);
         }        
-
         Course GetCourse(int id)
         {
+            if (!_cache.Courses.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheCourses(_cache.Courses);
             Course course = null;
             foreach (CourseBusinessModel item in _cache.Courses.Courses)
             {
@@ -154,9 +146,10 @@ namespace business.WSHR
             
             return course;
         }
-
         Teacher GetTeacher(int id)
         {
+            if (!_cache.Teachers.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheTeachers(_cache.Teachers);
             Teacher teacher = null;
             foreach (TeacherBusinessModel item in _cache.Teachers.Teachers)
             {
@@ -177,9 +170,10 @@ namespace business.WSHR
             
             return teacher;
         }
-
         Status GetStatus(int id)
         {
+            if (!_cache.Statuses.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheStatus(_cache.Statuses);
             Status st = null;
             foreach (StatusBusinessModel item in _cache.Statuses.Statuses)
             {
@@ -195,7 +189,6 @@ namespace business.WSHR
             }
             return st;
         }
-
         LogBusinessModel GetLog(GroupBusinessModel group)
         {
             if (!_cache.Groups.FlagActual)
@@ -213,9 +206,10 @@ namespace business.WSHR
 
             return logBus;
         }
-
         int GetTeacher(GroupBusinessModel group)
         {
+            if (!_cache.Groups.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheGroup(_cache.Groups);
             int teacherId = 0;
             foreach (GroupBusinessModel item in _cache.Groups.Groups)
             {
@@ -226,7 +220,6 @@ namespace business.WSHR
             }
             return teacherId;            
         }
-
         List<CutLeadBusinessModel> GetCutLead(GroupBusinessModel group)
         {
             if (!_cache.Groups.FlagActual)
@@ -241,8 +234,7 @@ namespace business.WSHR
                 }                
             }
             return leadsInGroupBusiness;
-        }
-     
+        }     
         public override IModelsBusiness GetLead(int id)
         {
             LeadBusinessModel leadBusinesses = null;
@@ -254,7 +246,6 @@ namespace business.WSHR
             }
             return leadBusinesses;
         }
-
         public override bool ChangeStatus(int leadId, int statusId)
         {
             throw new NotImplementedException();

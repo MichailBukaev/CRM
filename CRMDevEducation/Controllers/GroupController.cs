@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using business;
 using business.Models;
 using business.WSHR;
 using business.WSTeacher;
 using business.WSTeacher.HeadTeacher;
+using CRMDevEducation.Models.Mapping;
+using CRMDevEducation.Models.Output;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,22 +41,11 @@ namespace CRMDevEducation.Controllers
             string json = "";
             _teacher = (NormalTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]))
-            {
-                string json = "";
-                foreach (GroupBusinessModel item in teacherManager.GetAllGroupe())
+            {                
+                foreach (GroupBusinessModel item in _teacher.GetAllGroupe())
                 {
                     json += JsonSerializer.Serialize<OutputGroupModel>(GroupMappingBusinessToOutput.Map(item));
-                }
-                foreach (CourseBusinessModel item in teacherManager.GetAllCourse())
-                {
-                    json += JsonSerializer.Serialize<CutCourseOutputModel>(CourseMappingBusinessToCutOutput.Map(item));
-                }
-                foreach (TaskWorkBusinessModel item in teacherManager.GetMyselfTask())
-                {
-                    TasksStatusBusinessModel tasksStatus = teacherManager.Cache.TasksStatus.TasksStatus.FirstOrDefault(p => p.Id == item.TasksStatusId);
-                    json += JsonSerializer.Serialize<OutputTaskWorkModel>(TaskWorkMappingBusinessToOutput.Map(item, tasksStatus));
-                }
-                return json;
+                }               
             }
             else
             {
