@@ -4,6 +4,7 @@ using data.StorageEntity;
 using models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 
@@ -24,8 +25,7 @@ namespace business
                 LeadId = lead.Id,
                 HistoryText = "Создан пользователь в " +
                 Convert.ToString(DateTime.UtcNow) + "c ID:" +
-                lead.Id + "с состоянием: " + JsonSerializer.Serialize<Lead>(lead),
-                Lead = lead
+                lead.Id + "с состоянием: " + JsonSerializer.Serialize<Lead>(lead) + ". "
             };
             return _storage.Add(ref history);
                 
@@ -33,8 +33,16 @@ namespace business
 
         public bool UpdateLead(Lead lead)
         {
-            List<History> histories = (List<History>)_storage.GetAll(History.Fields.LeadId.ToString(), lead.Id.ToString());
-
+            IEntity result = new History()
+            {
+               
+                LeadId = lead.Id,
+               
+                HistoryText = "Обновлен " +
+                Convert.ToString(DateTime.UtcNow) +
+                " с состоянием: " + JsonSerializer.Serialize<Lead>(lead),
+            };
+            return _storage.Add(ref result);
         }
     }
 }
