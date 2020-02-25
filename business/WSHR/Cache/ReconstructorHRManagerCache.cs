@@ -9,16 +9,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace business.WSTeacher.Cache
+namespace business.WSHR.Cache
 {
-    public static class ReconstructorTeacherManagerCache
+    public static class ReconstructorHRManagerCache
     {
         static IStorage storage;
-        public static CacheLeadsCombineByGroup UpdateCacheLeads(CacheLeadsCombineByGroup cache)
+
+        public static CacheLeadsCombineByStatus UpdateCacheLeads(CacheLeadsCombineByStatus cache)
         {
             storage = new StorageLead();
             List<LeadBusinessModel> leads = new List<LeadBusinessModel>();
-            List<Lead> leadsEntity = (List<Lead>)storage.GetAll(Lead.Fields.GroupId.ToString(), cache.GroupId.ToString());
+            List<Lead> leadsEntity = (List<Lead>)storage.GetAll(Lead.Fields.GroupId.ToString(), cache.StatusId.ToString());
             if (leadsEntity != null)
             {
                 foreach (Lead itemLead in leadsEntity)
@@ -49,7 +50,6 @@ namespace business.WSTeacher.Cache
                         }
                     }
 
-
                     leads.Add(new LeadBusinessModel()
                     {
                         Id = itemLead.Id,
@@ -74,19 +74,14 @@ namespace business.WSTeacher.Cache
             cache.FlagActual = true;
             return cache;
         }
-        public static CacheGroup UpdateCacheGroup(CacheGroup cache, Teacher teacher)
+
+        public static CacheGroup UpdateCacheGroup(CacheGroup cache)
         {
             storage = new StorageGroup();
             List<GroupBusinessModel> groups = new List<GroupBusinessModel>();
             List<Group> entityGroups = new List<Group>();
-            if (teacher.Head)
-            {
-                entityGroups = (List<Group>)storage.GetAll();
-            }
-            else
-            {
-                entityGroups = (List<Group>)storage.GetAll(Group.Fields.TeacherId.ToString(), teacher.Id.ToString());
-            }
+
+            entityGroups = (List<Group>)storage.GetAll();
 
             if (entityGroups != null)
             {
@@ -139,7 +134,6 @@ namespace business.WSTeacher.Cache
                         }
                     }
 
-                    
                     List<DayInLogBusinessModel> days = new List<DayInLogBusinessModel>();
                     if (logs != null)
                     {
@@ -165,14 +159,12 @@ namespace business.WSTeacher.Cache
                         }
                     }
 
-
                     LogBusinessModel logBusiness = new LogBusinessModel()
                     {
                         Days = days,
                         GroupName = item.NameGroup,
                         GroupId = item.Id
                     };
-
 
                     groups.Add(
                         new GroupBusinessModel()
@@ -193,25 +185,21 @@ namespace business.WSTeacher.Cache
             cache.FlagActual = true;
             return cache;
         }
-        public static CacheTeachers UpdateCacheTeachers(CacheTeachers cache, Teacher teacher)
+
+        public static CacheTeachers UpdateCacheTeachers(CacheTeachers cache)
         {
             storage = new StorageTeacher();
             List<TeacherBusinessModel> teachersCache = new List<TeacherBusinessModel>();
             List<Teacher> teachers = new List<Teacher>();
-            if (teacher.Head)
-            {
-                teachers = (List<Teacher>)storage.GetAll();  
-            }
-            else
-            {
-                teachers = (List<Teacher>)storage.GetAll(Teacher.Fields.Id.ToString(), teacher.Id.ToString());
-            }
+
+            teachers = (List<Teacher>)storage.GetAll();
+
             if (teachers != null)
             {
                 foreach (Teacher item in teachers)
                 {
                     storage = new StorageLinkTeacherCourse();
-                    List<LinkTeacherCourse> courses = (List<LinkTeacherCourse>)storage.GetAll(LinkTeacherCourse.Fields.TeacherId.ToString(), teacher.Id.ToString());
+                    List<LinkTeacherCourse> courses = (List<LinkTeacherCourse>)storage.GetAll(LinkTeacherCourse.Fields.TeacherId.ToString(), item.Id.ToString());
                     List<CutCourseBusinessModel> cutCourses = new List<CutCourseBusinessModel>();
                     foreach (LinkTeacherCourse itemCourse in courses)
                     {
@@ -223,7 +211,7 @@ namespace business.WSTeacher.Cache
                     }
 
                     storage = new StorageGroup();
-                    List<Group> groups = (List<Group>)storage.GetAll(Group.Fields.TeacherId.ToString(), teacher.Id.ToString());
+                    List<Group> groups = (List<Group>)storage.GetAll(Group.Fields.TeacherId.ToString(), item.Id.ToString());
                     List<CutGroupBusinessModel> cutGroup = new List<CutGroupBusinessModel>();
                     foreach (Group itemGroup in groups)
                     {
@@ -252,25 +240,17 @@ namespace business.WSTeacher.Cache
             cache.FlagActual = true;
             return cache;
         }
-        public static CacheCourse UpdateCacheCourses(CacheCourse cache, Teacher teacher)
+
+        public static CacheCourse UpdateCacheCourses(CacheCourse cache)
         {
             storage = new StorageCourse();
             List<Course> courses = new List<Course>();
-            
+
             courses = (List<Course>)storage.GetAll();
             List<CourseBusinessModel> resultCourses = new List<CourseBusinessModel>();
             storage = new StorageLinkTeacherCourse();
             List<LinkTeacherCourse> courseWithteacher = (List<LinkTeacherCourse>)storage.GetAll();
-            if (!teacher.Head)
-            {
-                List<Course> coursestmp = new List<Course>();
-                List<LinkTeacherCourse> courseWithCurrentteacher = (List<LinkTeacherCourse>)courseWithteacher.Where(p => p.TeacherId == teacher.Id);
-                foreach (LinkTeacherCourse item in courseWithCurrentteacher)
-                {
-                    coursestmp.Add(courses.FirstOrDefault(p => p.Id == item.CourseId));
-                }
-                courses = coursestmp;
-            }
+            
             foreach (Course item in courses)
             {
                 List<CutTeacherBusinessModel> teachers = new List<CutTeacherBusinessModel>();
@@ -295,6 +275,7 @@ namespace business.WSTeacher.Cache
             cache.FlagActual = true;
             return cache;
         }
+
         public static CacheStatus UpdateCacheStatus(CacheStatus cache)
         {
             storage = new StorageStatus();
@@ -308,6 +289,7 @@ namespace business.WSTeacher.Cache
             cache.FlagActual = true;
             return cache;
         }
+
         public static CacheSkills UpdateCacheSkills(CacheSkills cache)
         {
             storage = new StorageSkills();
@@ -322,9 +304,42 @@ namespace business.WSTeacher.Cache
                 });
             }
             cache.FlagActual = true;
-            cache.Skills= skillsB;
+            cache.Skills = skillsB;
             return cache;
         }
 
+        public static CacheHRs UpdateCacheHRs(CacheHRs cache, HR hr)
+        {
+            storage = new StorageHR();
+            List<HRBusinessModel> hrsCache = new List<HRBusinessModel>();
+            List<HR> hrs = new List<HR>();
+            if (hr.Head)
+            {
+                hrs = (List<HR>)storage.GetAll();
+            }
+            else
+            {
+                hrs = (List<HR>)storage.GetAll(HR.Fields.Id.ToString(), hr.Id.ToString());
+            }
+            if (hrs != null)
+            {
+                foreach (HR item in hrs)
+                {                    
+                    HRBusinessModel hrBusiness = new HRBusinessModel()
+                    {
+                        Id = item.Id,
+                        FName = item.FName,
+                        SName = item.SName,
+                        Head = item.Head,
+                        Login = item.Login,
+                        Password = item.Password                        
+                    };
+                    hrsCache.Add(hrBusiness);
+                }
+            }
+            cache.HRs = hrsCache;
+            cache.FlagActual = true;
+            return cache;
+        }
     }
 }
