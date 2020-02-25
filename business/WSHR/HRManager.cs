@@ -23,30 +23,30 @@ namespace business.WSHR
             List<HR> hrs = (List<HR>)_storage.GetAll();
             _hr = hrs.FirstOrDefault(p => p.Id == hrId);
             historyWriter = new HistoryWriter();
-            _cache = new HRManagerCache();
+            _cache = new HRManagerCache(this._hr);
             SetCache();
-        }       
+        }
         public void SetCache()
         {
             HREntityCache entityCache = new FillEntityCache(_hr).Fill();
-            _cache = new FillHRManagerCache(entityCache).Fill();
+            _cache = new FillHRManagerCache(entityCache, this._hr).Fill();
         }
         public IEnumerable<IModelsBusiness> GetLeadsByStatus(int statusId)
-        {            
+        {
             List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
             foreach (CacheLeadsCombineByStatus item in _cache.Leads)
             {
-                if(item.StatusId == statusId)
+                if (item.StatusId == statusId)
                 {
                     if (!item.FlagActual)
                         ReconstructorHRManagerCache.UpdateCacheLeads(item);
                     foreach (LeadBusinessModel lead in item.Leads)
                     {
-                        leadBusinesses.Add(lead);                        
+                        leadBusinesses.Add(lead);
                     }
                 }
-            }           
-            
+            }
+
             return leadBusinesses;
         }
         Status GetStatus(int id)
@@ -106,7 +106,7 @@ namespace business.WSHR
             if (!_cache.Teachers.FlagActual)
                 ReconstructorHRManagerCache.UpdateCacheTeachers(_cache.Teachers);
             List<TeacherBusinessModel> teachersBusiness = _cache.Teachers.Teachers;
-            
+
             return teachersBusiness;
         }
         public override bool UpdateLead(LeadBusinessModel _model)
@@ -139,18 +139,17 @@ namespace business.WSHR
             {
                 if (!item.FlagActual)
                     ReconstructorHRManagerCache.UpdateCacheLeads(item);
-                leadBusinesses = item.Leads.FirstOrDefault(x => x.Id == id);  
+                leadBusinesses = item.Leads.FirstOrDefault(x => x.Id == id);
             }
             return leadBusinesses;
         }
-      
         public override bool ChangeStatus(LeadBusinessModel _model, int statusId)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
             PublisherChangesInDB publisheFirst = publishingHouse.CombineByStatus[_model.Status.Id];
             PublisherChangesInDB publisheSecond = publishingHouse.CombineByStatus[statusId];
-            LeadBusinessModel leadBusiness = new LeadBusinessModel();    
-            StatusBusinessModel statusBusiness = new StatusBusinessModel();    
+            LeadBusinessModel leadBusiness = new LeadBusinessModel();
+            StatusBusinessModel statusBusiness = new StatusBusinessModel();
             _storage = new StorageLead();
             bool success = false;
             for (int i = 0; i < _cache.Leads.Count; i++)
@@ -186,6 +185,85 @@ namespace business.WSHR
             }
             return success;
 
+        }
+        public override IEnumerable<IModelsBusiness> GetTasksMyself(int taskStatusId)
+        {
+            if (!_cache.TaskWorkMyself.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheTaskWorkMyself(_cache.TaskWorkMyself, this._hr);
+            List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
+            foreach (TaskWorkBusinessModel item in _cache.TaskWorkMyself.TasksWork)
+            {
+                if (item.TasksStatusId == taskStatusId)
+                {
+                    taskBusinesses.Add(item);
+                }
+            }
+
+            return taskBusinesses;
+        }
+        public override IEnumerable<IModelsBusiness> GetTasksMyself(DateTime taskStartDate)
+        {
+            if (!_cache.TaskWorkMyself.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheTaskWorkMyself(_cache.TaskWorkMyself, this._hr);
+            List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
+            foreach (TaskWorkBusinessModel item in _cache.TaskWorkMyself.TasksWork)
+            {
+                if (item.DateStart.CompareTo(taskStartDate) <= 0)
+                {
+                    taskBusinesses.Add(item);
+                }
+            }
+
+            return taskBusinesses;
+        }
+        public override IEnumerable<IModelsBusiness> GetTasksMyself()
+        {
+            if (!_cache.TaskWorkMyself.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheTaskWorkMyself(_cache.TaskWorkMyself, this._hr);
+            List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
+            foreach (TaskWorkBusinessModel item in _cache.TaskWorkMyself.TasksWork)
+            {
+                taskBusinesses.Add(item);
+            }
+
+            return taskBusinesses;
+        }
+
+        public override int SetTaskMyself(string taskText, DateTime deadline, int statusId)
+        {
+            int id = 0;
+            TasksStatus status = null;
+            foreach (TasksStatusBusinessModel item in _cache.TasksStatus.TasksStatus)
+            {
+                if (!_cache.TasksStatus.FlagActual)
+                    ReconstructorHRManagerCache.UpdateCacheTasksStatus(_cache.TasksStatus);
+                if (item.Id == statusId)
+                    status = new TasksStatus() { Id = item.Id, Name = item.Name };
+            }
+            PublishingHouse publishingHouse = PublishingHouse.Create();
+            PublisherChangesInTasks publisher = publishingHouse.CombineByExecuter[this._hr.Login];
+            _storage = new StorageTaskWork();
+            IEntity task = new TaskWork()
+            {
+                LoginAuthor = this._hr.Login,
+                DateStart = DateTime.Now,
+                DateEnd = deadline,
+                TasksStatusId=statusId, 
+                Text = taskText,
+                LoginExecuter = this._hr.Login,
+                TasksStatus = status
+            };
+            bool success = _storage.Add(ref task);
+
+            if (success)
+            {
+                publisher.Notify(this._hr.Login);
+                TaskWork result = (TaskWork)task;
+                publishingHouse.CombineByExecuter.Add(this._hr.Login, new PublisherChangesInTasks());
+                id = result.Id;
+                return id;
+            }
+            return id;
         }
     }
 }

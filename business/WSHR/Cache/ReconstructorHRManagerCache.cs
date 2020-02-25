@@ -389,23 +389,20 @@ namespace business.WSHR.Cache
             storage = new StorageTaskWork();
             List<TaskWork> taskWorks = (List<TaskWork>)storage.GetAll();
             List<TaskWorkBusinessModel> tasksB = new List<TaskWorkBusinessModel>();
-            taskWorks = taskWorks.Where(x => x.LoginExecuter != hr.Login).ToList();
-            var taskWorkGroupedByExecuter = taskWorks.GroupBy(x => x.LoginExecuter);
-            foreach (IGrouping<string, TaskWork> item in taskWorkGroupedByExecuter)
+            taskWorks = taskWorks.Where(x => x.LoginExecuter == cache.LoginExecuter).ToList();
+
+            foreach (TaskWork item in taskWorks)
             {
-                foreach (var task in item)
+                tasksB.Add(new TaskWorkBusinessModel()
                 {
-                    tasksB.Add(new TaskWorkBusinessModel()
-                    {
-                        Id = task.Id,
-                        LoginAuthor = task.LoginAuthor,
-                        LoginExecuter = task.LoginExecuter,
-                        DateStart = task.DateStart,
-                        DateEnd = task.DateEnd,
-                        TasksStatusId = task.TasksStatusId,
-                        Text = task.Text
-                    });
-                }
+                    Id = item.Id,
+                    LoginAuthor = item.LoginAuthor,
+                    LoginExecuter = item.LoginExecuter,
+                    DateStart = item.DateStart,
+                    DateEnd = item.DateEnd,
+                    TasksStatusId = item.TasksStatusId,
+                    Text = item.Text
+                });
             }
             cache.TasksWork = tasksB;
             cache.FlagActual = true;
