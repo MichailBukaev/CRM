@@ -73,7 +73,7 @@ namespace business.WSHR
             if (InspectorLogin.CheckUniqueness(_model.Login))
             {
                 PublishingHouse publishingHouse = PublishingHouse.Create();
-                //_model.Status.Id = 1; 
+
                 PublisherChangesInDB publisher = publishingHouse.CombineByStatus[_model.Status.Id];
                 _storage = new StorageLead();
                 IEntity lead = new Lead
@@ -143,9 +143,49 @@ namespace business.WSHR
             }
             return leadBusinesses;
         }
-        public override bool ChangeStatus(int leadId, int statusId)
+      
+        public override bool ChangeStatus(LeadBusinessModel _model, int statusId)
         {
-            throw new NotImplementedException();
+            PublishingHouse publishingHouse = PublishingHouse.Create();
+            PublisherChangesInDB publisheFirst = publishingHouse.CombineByStatus[_model.Status.Id];
+            PublisherChangesInDB publisheSecond = publishingHouse.CombineByStatus[statusId];
+            LeadBusinessModel leadBusiness = new LeadBusinessModel();    
+            StatusBusinessModel statusBusiness = new StatusBusinessModel();    
+            _storage = new StorageLead();
+            bool success = false;
+            for (int i = 0; i < _cache.Leads.Count; i++)
+            {
+                leadBusiness = _cache.Leads[i].Leads.FirstOrDefault(p => p.Id == _model.Id);
+                if (leadBusiness != null)
+                {
+                    statusBusiness = _cache.Statuses.Statuses.FirstOrDefault(p => p.Id == statusId);
+                    break;
+                }
+            }
+            if (leadBusiness != null)
+            {
+                Lead lead = new Lead
+                {
+                    Id = _model.Id,
+                    FName = _model.FName,
+                    SName = _model.SName,
+                    Numder = _model.Numder,
+                    DateBirthday = _model.DateBirthday,
+                    StatusId = statusId,
+                    EMail = _model.EMail,
+                    Login = _model.Login,
+                    Password = _model.Password
+                };
+                success = _storage.Update(lead);
+                historyWriter.ChangeStatus(lead.Id, statusBusiness.Name);
+                if (success)
+                {
+                    publisheFirst.Notify();
+                    publisheSecond.Notify();
+                }
+            }
+            return success;
+
         }
     }
 }
