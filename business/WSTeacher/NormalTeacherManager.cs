@@ -118,6 +118,8 @@ namespace business.WSTeacher
 
         public override bool SetSelfTask(string task, DateTime deadLine, int tasksStatusId)
         {
+            PublishingHouse publishingHouse = PublishingHouse.Create();
+            publishingHouse.CombineByExecuter[_teacher.Login].Notify(_teacher.Login);
             return true;
         }
 
