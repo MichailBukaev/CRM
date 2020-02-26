@@ -3,6 +3,7 @@ using data.StorageEntity;
 using models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace business.WSHR.Headhr.Cache
@@ -32,6 +33,8 @@ namespace business.WSHR.Headhr.Cache
             SetEntitySkills();
             SetEntitySkillsLead();
             SetEntityStatuses();
+            SetEntityTaskWork();
+            SetEntityTaskStatus();
             return entityCache;
         }
         private void SetEntityHR()
@@ -95,6 +98,27 @@ namespace business.WSHR.Headhr.Cache
         {
             _storage = new StorageStatus();
             entityCache.Statuses = (List<Status>)_storage.GetAll();
+        }
+        private void SetEntityTaskWork()
+        {
+            _storage = new StorageTaskWork();
+            List<TaskWork> tasks = new List<TaskWork>();
+            if (!hr.Head)
+            {
+                tasks = (List<TaskWork>)_storage.GetAll(TaskWork.Fields.LoginExecuter.ToString(), hr.Login);
+            }
+            else
+            {
+                tasks = (List<TaskWork>)_storage.GetAll();
+                tasks = tasks.Where(p => p.LoginAuthor == hr.Login || p.LoginExecuter == hr.Login).ToList();
+            }
+            entityCache.TaskWorks = tasks;
+        }
+        private void SetEntityTaskStatus()
+        {
+            _storage = new StorageTasksStatus();
+            List<TasksStatus> taskStatuses = (List<TasksStatus>)_storage.GetAll();
+            entityCache.TasksStatuses = taskStatuses;
         }
     }
 }
