@@ -58,12 +58,12 @@ namespace CRMDevEducation.Controllers
             if(StorageToken.GetRole(Request.Headers["Authorization"]) == "HeadTeacher")
             {
                 MaxHeadTeacherManager manager = (MaxHeadTeacherManager)_manager;
-                // = manager.SetTasksForSlaves(model.Task, model.DeadLine, model.TasksStatusId, model.loginExecuter);
+                taskWorkId = manager.SetTasksForSlaves(model.Task, model.DeadLine, model.TasksStatusId, model.loginExecuter);
             }
             else if(StorageToken.GetRole(Request.Headers["Authorization"]) == "HeadHR")
             {
                 HeadHR manager = (HeadHR)_manager;
-                //taskWorkId = manager.SetTasksForSlaves(model.Task, model.DeadLine, model.TasksStatusId, model.loginExecuter);
+                taskWorkId = manager.SetTasksForSlaves(model.Task, model.DeadLine, model.TasksStatusId, model.loginExecuter);
             }
             return taskWorkId;
         }
