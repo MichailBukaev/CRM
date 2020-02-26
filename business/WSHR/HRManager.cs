@@ -184,7 +184,15 @@ namespace business.WSHR
                 }
             }
             return success;
+        }
 
+
+        public override IModelsBusiness GetGroup(int id)
+        {
+            if (!_cache.Groups.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheGroup(_cache.Groups);
+            GroupBusinessModel group = _cache.Groups.Groups.FirstOrDefault(x => x.Id == id);
+            return group;
         }
         public override IEnumerable<IModelsBusiness> GetTasksMyself(int taskStatusId)
         {
@@ -264,6 +272,7 @@ namespace business.WSHR
                 return id;
             }
             return id;
+>>>>>>> 4c51e7c3b90cdd783b94d8b28196ece15c1d6932
         }
     }
 }

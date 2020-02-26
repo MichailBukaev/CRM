@@ -40,8 +40,18 @@ namespace business.WSTeacher.Cache
             foreach (Teacher item in entityCache.Teachers)
             {
                 List<CutCourseBusinessModel> cutCourses = new List<CutCourseBusinessModel>();
-                foreach (Course itemCourse in entityCache.Courses)
+                List<LinkTeacherCourse> linkTeacherCourses = new List<LinkTeacherCourse>();
+                linkTeacherCourses = entityCache.LinkTeacherCourses.Where(p => p.TeacherId == item.Id).ToList();
+                List<Course> _courses = new List<Course>();
+                foreach(LinkTeacherCourse itemLink in linkTeacherCourses)
                 {
+                    Course course = entityCache.Courses.FirstOrDefault(p => p.Id == itemLink.CourseId);
+                    if (course != null)
+                        _courses.Add(course);
+                }
+                foreach (Course itemCourse in _courses)
+                {
+
                     cutCourses.Add(new CutCourseBusinessModel()
                     {
                         Id = itemCourse.Id,
@@ -49,7 +59,7 @@ namespace business.WSTeacher.Cache
                     });
                 }
                 List<CutGroupBusinessModel> cutGroup = new List<CutGroupBusinessModel>();
-                foreach (Group itemGroup in entityCache.Groups)
+                foreach (Group itemGroup in entityCache.Groups.Where(p=>p.TeacherId == item.Id))
                 {
                     cutGroup.Add(new CutGroupBusinessModel()
                     {

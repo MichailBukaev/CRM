@@ -50,15 +50,19 @@ namespace CRMDevEducation.Controllers
             return json;
         }
 
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "HeadTeacher")]
         [Route("AddSkills")]
         [HttpPut]
         public HttpResponseMessage AddSkillsForLead(int leadId, int skillId)
         {
-            NormalTeacherManager teacherManager = (NormalTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
-            if (teacherManager.AddSkillsForLead(skillId, leadId))
-                return new HttpResponseMessage(HttpStatusCode.OK);
-            else
+            if (StorageToken.Check(Request.Headers["Authorization"]))
+            {
+                NormalTeacherManager teacherManager = (NormalTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
+                if (teacherManager.AddSkillsForLead(skillId, leadId))
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                else
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }else
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
         }
 
@@ -68,9 +72,13 @@ namespace CRMDevEducation.Controllers
         public HttpResponseMessage Update([FromBody] InputLeadModel model)
         {
             DefaultHR manager = (DefaultHR)StorageToken.GetManager(Request.Headers["Authorization"]);
-            if (manager.UpdateLead(LeadMappingInputToBusness.Map((model))))
-                return new HttpResponseMessage(HttpStatusCode.OK);
-            else
+            if (StorageToken.Check(Request.Headers["Authorization"]))
+            {
+                if (manager.UpdateLead(LeadMappingInputToBusness.Map((model))))
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                else
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }else
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
         }
 
@@ -80,9 +88,14 @@ namespace CRMDevEducation.Controllers
         public HttpResponseMessage ChangeStatus([FromBody] InputLeadModel model, int statusId)
         {
             DefaultHR manager = (DefaultHR)StorageToken.GetManager(Request.Headers["Authorization"]);
-            if (manager.ChangeStatus(LeadMappingInputToBusness.Map((model)), statusId))
-                return new HttpResponseMessage(HttpStatusCode.OK);
-            else
+            if (StorageToken.Check(Request.Headers["Authorization"]))
+            {
+                if (manager.ChangeStatus(LeadMappingInputToBusness.Map((model)), statusId))
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                else
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+
+            }else
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
         }
     } 

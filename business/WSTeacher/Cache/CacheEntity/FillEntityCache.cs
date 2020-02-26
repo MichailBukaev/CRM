@@ -42,8 +42,8 @@ namespace business.WSTeacher.Cache.CacheEntity
             _storage = new StorageTeacher();
             if (teacher.Head)
                 entityCache.Teachers = (List<Teacher>)_storage.GetAll();
-            entityCache.Teachers.Add(teacher);
-           
+            else
+                entityCache.Teachers.Add(teacher);
         }
         private void SetEntityGroup()
         {

@@ -25,7 +25,7 @@ namespace business
                 LeadId = lead.Id,
                 HistoryText = "Создан пользователь в " +
                 Convert.ToString(DateTime.UtcNow) + "c ID:" +
-                lead.Id + "с состоянием: " + JsonSerializer.Serialize<Lead>(lead) + ". "
+                lead.Id + ". "
             };
             return _storage.Add(ref history);
                 
@@ -37,8 +37,7 @@ namespace business
             {      
                 LeadId = lead.Id,
                 HistoryText = "Обновлен " +
-                Convert.ToString(DateTime.UtcNow) +
-                " с состоянием: " + JsonSerializer.Serialize<Lead>(lead),
+                Convert.ToString(DateTime.UtcNow) 
             };
             return _storage.Add(ref result);
         }

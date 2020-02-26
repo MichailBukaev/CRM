@@ -29,7 +29,8 @@ namespace CRMDevEducation.Models.Mapping
                 Teacher = teacher,
                 Course = course,
                 StartData = model.StartDate,
-                Leads = leads
+                Leads = leads,
+                Log = LogMappingBusinessToOutput.Map(model.LogOfGroup)
             };
         }
     }
