@@ -26,6 +26,12 @@ namespace business.WSHR
             List<HRBusinessModel> hrs = _cache.HRs.HRs;
             return hrs;
         }
+
+        public HRBusinessModel GetHR(object hrId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IModelsBusiness> GetLeadsByStatus(int statusId)
         {
             List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
@@ -190,6 +196,20 @@ namespace business.WSHR
             }
             return st;
         }
+        public int GetStatusId(string nameStatus)
+        {
+            if (!_cache.Statuses.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheStatus(_cache.Statuses);
+            int idStatus = 0;
+            foreach (StatusBusinessModel item in _cache.Statuses.Statuses)
+            {
+                if (item.Name == nameStatus)
+                {
+                    idStatus = item.Id;
+                }
+            }
+            return idStatus;
+        }
         LogBusinessModel GetLog(GroupBusinessModel group)
         {
             if (!_cache.Groups.FlagActual)
@@ -344,9 +364,9 @@ namespace business.WSHR
 
             return taskBusinesses;
         }
-        public int SetTasksForSlaves(string taskText, DateTime deadLine, int tasksStatusId, string loginExecuter) 
+        public int? SetTasksForSlaves(string taskText, DateTime deadLine, int tasksStatusId, string loginExecuter) 
         {
-            int id = 0;
+            int? id = null;
             TasksStatus status = GetTasksStatus(tasksStatusId);
             
             PublishingHouse publishingHouse = PublishingHouse.Create();
@@ -375,7 +395,7 @@ namespace business.WSHR
             return id;
         }
 
-        public override int SetTaskMyself(string taskText, DateTime deadline, int statusId)
+        public override int? SetTaskMyself(string taskText, DateTime deadline, int statusId)
         {
             return defaultHR.SetTaskMyself(taskText, deadline, statusId);
         }
