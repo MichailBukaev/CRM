@@ -288,14 +288,22 @@ namespace business.WSHR
             return taskBusinesses;
         }
 
-        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(HRBusinessModel hrExecutor) //для конкретного hr
+        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(int hrExecutorId) //для конкретного hr
         {
+            if (!_cache.HRs.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheHRs(_cache.HRs, this._hr);
+            string loginExecutor = "";
+            foreach (HRBusinessModel item in _cache.HRs.HRs)
+            {
+                if (item.Id == hrExecutorId)
+                    loginExecutor = item.Login;
+            }
             List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
             foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
             {
                 if (!item.FlagActual)
                     ReconstructorHRManagerCache.UpdateCacheTaskWorkForSlaves(item, this._hr);
-                if (item.LoginExecuter == hrExecutor.Login)
+                if (item.LoginExecuter == loginExecutor)
                 {
                     foreach (TaskWorkBusinessModel task in item.TasksWork)
                     {
@@ -306,14 +314,22 @@ namespace business.WSHR
 
             return taskBusinesses;
         }
-        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(HRBusinessModel hrExecutor, int taskStatusId) //для конкретного hr
+        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(int hrExecutorId, int taskStatusId) //для конкретного hr
         {
+            if (!_cache.HRs.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheHRs(_cache.HRs, this._hr);
+            string loginExecutor = "";
+            foreach (HRBusinessModel item in _cache.HRs.HRs)
+            {
+                if (item.Id == hrExecutorId)
+                    loginExecutor = item.Login;
+            }
             List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
             foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
             {
                 if (!item.FlagActual)
                     ReconstructorHRManagerCache.UpdateCacheTaskWorkForSlaves(item, this._hr);
-                if (item.LoginExecuter == hrExecutor.Login)
+                if (item.LoginExecuter == loginExecutor)
                 {
                     foreach (TaskWorkBusinessModel task in item.TasksWork)
                     {
@@ -325,14 +341,22 @@ namespace business.WSHR
 
             return taskBusinesses;
         }
-        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(HRBusinessModel hrExecutor, DateTime taskStartDate) //для конкретного hr
+        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(int hrExecutorId, DateTime taskStartDate) //для конкретного hr
         {
+            if (!_cache.HRs.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheHRs(_cache.HRs, this._hr);
+            string loginExecutor = "";
+            foreach (HRBusinessModel item in _cache.HRs.HRs)
+            {
+                if (item.Id == hrExecutorId)
+                    loginExecutor = item.Login;
+            }
             List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
             foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
             {
                 if (!item.FlagActual)
                     ReconstructorHRManagerCache.UpdateCacheTaskWorkForSlaves(item, this._hr);
-                if (item.LoginExecuter == hrExecutor.Login)
+                if (item.LoginExecuter == loginExecutor)
                 {
                     foreach (TaskWorkBusinessModel task in item.TasksWork)
                     {
