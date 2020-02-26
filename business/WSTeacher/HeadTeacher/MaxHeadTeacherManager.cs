@@ -186,11 +186,12 @@ namespace business.WSTeacher.HeadTeacher
             return tasks;
         }
         
-        public List<TaskWorkBusinessModel> GetAllTasksForSlaves(string nameStatus)
+        public List<TaskWorkBusinessModel> GetAllTasksForSlaves(int idStatusTask)
         {
+            
             if (!_cache.TasksStatus.FlagActual)
                 ReconstructorTeacherManagerCache.UpdateCacheMyselfTask(_cache.TaskWorkMyself, _teacher.Login);
-            TasksStatusBusinessModel tasksStatuses = _cache.TasksStatus.TasksStatus.FirstOrDefault(x => x.Name == nameStatus);
+            TasksStatusBusinessModel tasksStatuses = _cache.TasksStatus.TasksStatus.FirstOrDefault(x => x.Id == idStatusTask);
 
             List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
             foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
@@ -224,17 +225,56 @@ namespace business.WSTeacher.HeadTeacher
 
         }
 
-       /* public List<TaskWorkBusinessModel> GetAllTasksForSlaves(int idExecuter)
+        public List<TaskWorkBusinessModel> GetAllTasksForSlaves(string loginExecuter)
         {
+            List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
+            foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
+            {
+                if (!item.FlagActual)
+                    ReconstructorTeacherManagerCache.UpdateCacheTaskForSlaves(item, _teacher.Login);
+                if (item.TasksWork.Count > 0)
+                {
+                    tasks.AddRange(item.TasksWork.Where(x => x.LoginExecuter == loginExecuter).ToList());
+                }
 
+            }
+            return tasks;
         }
-        public List<TaskWorkBusinessModel> GetAllTasksForSlaves(string nameStatus, string loginExecuter)
+        public List<TaskWorkBusinessModel> GetAllTasksForSlaves(string loginExecuter, int idStatusTask)
         {
+            if (!_cache.TasksStatus.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheMyselfTask(_cache.TaskWorkMyself, _teacher.Login);
+            TasksStatusBusinessModel tasksStatuses = _cache.TasksStatus.TasksStatus.FirstOrDefault(x => x.Id == idStatusTask);
 
+            List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
+            foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
+            {
+                if (!item.FlagActual)
+                    ReconstructorTeacherManagerCache.UpdateCacheTaskForSlaves(item, _teacher.Login);
+                if (item.TasksWork.Count > 0)
+                {
+                    tasks.AddRange(item.TasksWork.Where(x => x.TasksStatusId == tasksStatuses.Id && x.LoginExecuter == loginExecuter).ToList());
+                }
+
+            }
+            return tasks;
         }
-        public List<TaskWorkBusinessModel> GetAllTasksForSlaves(DateTime dateStart, string loginExecuter)
-        { 
-        }*/
+        public List<TaskWorkBusinessModel> GetAllTasksForSlaves(string loginExecuter, DateTime dateStart)
+        {
+            List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
+
+            foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
+            {
+                if (!item.FlagActual)
+                    ReconstructorTeacherManagerCache.UpdateCacheTaskForSlaves(item, _teacher.Login);
+                if (item.TasksWork.Count > 0)
+                {
+                    tasks.AddRange(item.TasksWork.Where(x => x.DateStart.CompareTo(dateStart) > 0 && x.LoginExecuter == loginExecuter).ToList());
+                }
+
+            }
+            return tasks;
+        }
 
         public override IModelsBusiness GetGroup(int id)
         {
@@ -243,6 +283,13 @@ namespace business.WSTeacher.HeadTeacher
             GroupBusinessModel group = _cache.Group.Groups.FirstOrDefault(x => x.Id == id);
             return group;
 
+        }
+        public int GetIdStatusTask(string nameStatus)
+        {
+            if (!_cache.TasksStatus.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheMyselfTask(_cache.TaskWorkMyself, _teacher.Login);
+            int tasksStatusesId = _cache.TasksStatus.TasksStatus.FirstOrDefault(x => x.Name == nameStatus).Id;
+            return tasksStatusesId;
         }
     }
 }
