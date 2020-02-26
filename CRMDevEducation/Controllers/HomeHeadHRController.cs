@@ -29,7 +29,7 @@ namespace CRMDevEducation.Controllers
         [HttpGet]
         public string Get()
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
                 string json = "";
