@@ -15,8 +15,11 @@ namespace business.WSHR
         public CacheSkills Skills { get; set; }
         public CacheStatus Statuses { get; set; }
         public CacheTeachers Teachers { get; set; }
+        public CacheTaskWorkMyself TaskWorkMyself { get; set; }
+        public List<CacheTaskWorkForSlavesCombineByExecuter> TaskWorkForSlavesCombineByExecuters { get; set; }
+        public CacheTasksStatus TasksStatus { get; set; }
 
-        public HRManagerCache()
+        public HRManagerCache(HR _hr)
 
         {
             Statuses = new CacheStatus();
@@ -26,6 +29,8 @@ namespace business.WSHR
             HRs = new CacheHRs();
             Skills = new CacheSkills();            
             Teachers = new CacheTeachers();
+            TaskWorkMyself = new CacheTaskWorkMyself(_hr.Login);
+            TaskWorkForSlavesCombineByExecuters = new List<CacheTaskWorkForSlavesCombineByExecuter>();
         }
     }
 }

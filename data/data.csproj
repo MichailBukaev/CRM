@@ -21,6 +21,16 @@
     <Compile Remove="Migrations\20200224225152_TesetReferenceHistoryWithLead2.Designer.cs" />
     <Compile Remove="Migrations\20200224230738_Testhistory.cs" />
     <Compile Remove="Migrations\20200224230738_Testhistory.Designer.cs" />
+    <Compile Remove="Migrations\20200225225628_AddPKForLog.cs" />
+    <Compile Remove="Migrations\20200225225628_AddPKForLog.Designer.cs" />
+    <Compile Remove="Migrations\20200225225853_AddPKForLog.cs" />
+    <Compile Remove="Migrations\20200225225853_AddPKForLog.Designer.cs" />
+    <Compile Remove="Migrations\20200225230017_AddPKForLog.cs" />
+    <Compile Remove="Migrations\20200225230017_AddPKForLog.Designer.cs" />
+    <Compile Remove="Migrations\20200225230221_test.cs" />
+    <Compile Remove="Migrations\20200225230221_test.Designer.cs" />
+    <Compile Remove="Migrations\20200225230253_AddPKLog.cs" />
+    <Compile Remove="Migrations\20200225230253_AddPKLog.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

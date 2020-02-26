@@ -252,5 +252,145 @@ namespace business.WSHR
         {
             return defaultHR.ChangeStatus(lead, statusId);
         }
+
+        public override IModelsBusiness GetGroup(int id)
+        {
+            return defaultHR.GetGroup(id);
+        }
+        public override IEnumerable<IModelsBusiness> GetTasksMyself(int taskStatusId)
+        {
+            return defaultHR.GetTasksMyself(taskStatusId);
+        }
+
+        public override IEnumerable<IModelsBusiness> GetTasksMyself(DateTime taskStartDate)
+        {
+            return defaultHR.GetTasksMyself(taskStartDate);
+        }
+
+        public override IEnumerable<IModelsBusiness> GetTasksMyself()
+        {
+            return defaultHR.GetTasksMyself();
+        }
+
+        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves() //для всех hrs
+        {            
+            List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
+            foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
+            {
+                if (!item.FlagActual)
+                    ReconstructorHRManagerCache.UpdateCacheTaskWorkForSlaves(item, this._hr);
+                foreach (TaskWorkBusinessModel task in item.TasksWork)
+                {
+                    taskBusinesses.Add(task);
+                }
+            }
+
+            return taskBusinesses;
+        }
+
+        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(HRBusinessModel hrExecutor) //для конкретного hr
+        {
+            List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
+            foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
+            {
+                if (!item.FlagActual)
+                    ReconstructorHRManagerCache.UpdateCacheTaskWorkForSlaves(item, this._hr);
+                if (item.LoginExecuter == hrExecutor.Login)
+                {
+                    foreach (TaskWorkBusinessModel task in item.TasksWork)
+                    {
+                        taskBusinesses.Add(task);
+                    }
+                }
+            }
+
+            return taskBusinesses;
+        }
+        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(HRBusinessModel hrExecutor, int taskStatusId) //для конкретного hr
+        {
+            List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
+            foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
+            {
+                if (!item.FlagActual)
+                    ReconstructorHRManagerCache.UpdateCacheTaskWorkForSlaves(item, this._hr);
+                if (item.LoginExecuter == hrExecutor.Login)
+                {
+                    foreach (TaskWorkBusinessModel task in item.TasksWork)
+                    {
+                        if(task.TasksStatusId == taskStatusId)
+                            taskBusinesses.Add(task);
+                    }
+                }
+            }
+
+            return taskBusinesses;
+        }
+        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(HRBusinessModel hrExecutor, DateTime taskStartDate) //для конкретного hr
+        {
+            List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
+            foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
+            {
+                if (!item.FlagActual)
+                    ReconstructorHRManagerCache.UpdateCacheTaskWorkForSlaves(item, this._hr);
+                if (item.LoginExecuter == hrExecutor.Login)
+                {
+                    foreach (TaskWorkBusinessModel task in item.TasksWork)
+                    {
+                        if(task.DateStart.CompareTo(taskStartDate) <= 0)
+                            taskBusinesses.Add(task);
+                    }
+                }
+            }
+
+            return taskBusinesses;
+        }
+        public int SetTasksForSlaves(string taskText, DateTime deadLine, int tasksStatusId, string loginExecuter) 
+        {
+            int id = 0;
+            TasksStatus status = GetTasksStatus(tasksStatusId);
+            
+            PublishingHouse publishingHouse = PublishingHouse.Create();
+            PublisherChangesInTasks publisher = publishingHouse.CombineByExecuter[this._hr.Login];
+            _storage = new StorageTaskWork();
+            IEntity task = new TaskWork()
+            {
+                LoginAuthor = this._hr.Login,
+                DateStart = DateTime.Now,
+                DateEnd = deadLine,
+                TasksStatusId = tasksStatusId,
+                Text = taskText,
+                LoginExecuter = loginExecuter,
+                TasksStatus = status
+            };
+            bool success = _storage.Add(ref task);
+
+            if (success)
+            {
+                publisher.Notify(this._hr.Login);
+                TaskWork result = (TaskWork)task;
+                publishingHouse.CombineByExecuter.Add(this._hr.Login, new PublisherChangesInTasks());
+                id = result.Id;
+                return id;
+            }
+            return id;
+        }
+
+        public override int SetTaskMyself(string taskText, DateTime deadline, int statusId)
+        {
+            return defaultHR.SetTaskMyself(taskText, deadline, statusId);
+        }
+        private TasksStatus GetTasksStatus(int taskStatusId)
+        {
+            TasksStatus status = null;
+            foreach (TasksStatusBusinessModel item in _cache.TasksStatus.TasksStatus)
+            {
+                if (!_cache.TasksStatus.FlagActual)
+                    ReconstructorHRManagerCache.UpdateCacheTasksStatus(_cache.TasksStatus);
+                if (item.Id == taskStatusId)
+                    status = new TasksStatus() { Id = item.Id, Name = item.Name };
+            }
+            return status;
+
+        }
     }
 }
