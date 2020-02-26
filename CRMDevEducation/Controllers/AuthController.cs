@@ -58,7 +58,7 @@ namespace CRMDevEducation.Controllers
 
         private IUserManager CreateManager(ClaimsIdentity identity)
         {
-            if (identity == null) throw new NullReferenceException("User is not existed");
+            if (identity == null) return null;
             IUserManager manager = null;
             if (identity.Claims.ToArray()[2].Value == "Admin") manager = new AdminManager();
             else if (identity.Claims.ToArray()[2].Value == "HR") manager = new HRManager(Convert.ToInt32(identity.Claims.ToArray()[0].Value));

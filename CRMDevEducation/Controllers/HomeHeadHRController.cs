@@ -28,7 +28,7 @@ namespace CRMDevEducation.Controllers
         [HttpPost]
         public string CreateLead(InputLeadModel model)
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
                 if (manager.CreateLead(LeadMappingInputToBusness.Map(model)) != null)
