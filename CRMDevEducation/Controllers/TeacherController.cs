@@ -41,6 +41,10 @@ namespace CRMDevEducation.Controllers
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
                 json += JsonSerializer.Serialize<OutputTeacherModel>(TeacherMappingBusinessToOutput.Map((TeacherBusinessModel)_manager.GetTacher(teacherId)));
+                if (StorageToken.GetRole(Request.Headers["Authorization"]) == "HeadTeacher")
+                {
+                    MaxHeadTeacherManager maxHeadTeacher = (MaxHeadTeacherManager)
+                }
             }
             else
             {
@@ -89,6 +93,10 @@ namespace CRMDevEducation.Controllers
             else
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
         }
+        [Authorize(Roles = "HeadTeacher, HeadHR")]
+        [Route("GetTaskWork")]
+        [HttpPost]
+       
 
 
     }
