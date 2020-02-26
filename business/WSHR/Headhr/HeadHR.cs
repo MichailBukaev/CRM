@@ -288,22 +288,14 @@ namespace business.WSHR
             return taskBusinesses;
         }
 
-        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(int hrExecutorId) //для конкретного hr
-        {
-            if (!_cache.HRs.FlagActual)
-                ReconstructorHRManagerCache.UpdateCacheHRs(_cache.HRs, this._hr);
-            string loginExecutor = "";
-            foreach (HRBusinessModel item in _cache.HRs.HRs)
-            {
-                if (item.Id == hrExecutorId)
-                    loginExecutor = item.Login;
-            }
+        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(string ExecutorLogin) //для конкретного hr,teacher
+        {     
             List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
             foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
             {
                 if (!item.FlagActual)
                     ReconstructorHRManagerCache.UpdateCacheTaskWorkForSlaves(item, this._hr);
-                if (item.LoginExecuter == loginExecutor)
+                if (item.LoginExecuter == ExecutorLogin)
                 {
                     foreach (TaskWorkBusinessModel task in item.TasksWork)
                     {
@@ -314,22 +306,14 @@ namespace business.WSHR
 
             return taskBusinesses;
         }
-        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(int hrExecutorId, int taskStatusId) //для конкретного hr
-        {
-            if (!_cache.HRs.FlagActual)
-                ReconstructorHRManagerCache.UpdateCacheHRs(_cache.HRs, this._hr);
-            string loginExecutor = "";
-            foreach (HRBusinessModel item in _cache.HRs.HRs)
-            {
-                if (item.Id == hrExecutorId)
-                    loginExecutor = item.Login;
-            }
+        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(string ExecutorLogin, int taskStatusId) //для конкретного hr,teacher
+        {            
             List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
             foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
             {
                 if (!item.FlagActual)
                     ReconstructorHRManagerCache.UpdateCacheTaskWorkForSlaves(item, this._hr);
-                if (item.LoginExecuter == loginExecutor)
+                if (item.LoginExecuter == ExecutorLogin)
                 {
                     foreach (TaskWorkBusinessModel task in item.TasksWork)
                     {
@@ -341,22 +325,14 @@ namespace business.WSHR
 
             return taskBusinesses;
         }
-        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(int hrExecutorId, DateTime taskStartDate) //для конкретного hr
-        {
-            if (!_cache.HRs.FlagActual)
-                ReconstructorHRManagerCache.UpdateCacheHRs(_cache.HRs, this._hr);
-            string loginExecutor = "";
-            foreach (HRBusinessModel item in _cache.HRs.HRs)
-            {
-                if (item.Id == hrExecutorId)
-                    loginExecutor = item.Login;
-            }
+        public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves(string ExecutorLogin, DateTime taskStartDate) //для конкретного hr
+        {            
             List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
             foreach (CacheTaskWorkForSlavesCombineByExecuter item in _cache.TaskWorkForSlavesCombineByExecuters)
             {
                 if (!item.FlagActual)
                     ReconstructorHRManagerCache.UpdateCacheTaskWorkForSlaves(item, this._hr);
-                if (item.LoginExecuter == loginExecutor)
+                if (item.LoginExecuter == ExecutorLogin)
                 {
                     foreach (TaskWorkBusinessModel task in item.TasksWork)
                     {
@@ -415,10 +391,30 @@ namespace business.WSHR
             }
             return status;
         }
-
         public override IModelsBusiness GetTacher(int teacherId)
         {
-            throw new NotImplementedException();
+            TeacherBusinessModel teacher = null;
+            if (!_cache.Teachers.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheTeachers(_cache.Teachers);
+            foreach (TeacherBusinessModel item in _cache.Teachers.Teachers)
+            {
+                if (item.Id == teacherId)
+                    teacher = item;
+            }           
+
+            return teacher;
+        }
+        public int GetIdStatusTasks(string StatusName)
+        {
+            int taskStatusId = 0;
+            if (!_cache.TasksStatus.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheTasksStatus(_cache.TasksStatus);
+            foreach  (TasksStatusBusinessModel item in _cache.TasksStatus.TasksStatus)
+            {
+                if (item.Name == StatusName)
+                    taskStatusId = item.Id;
+            }
+            return taskStatusId;
         }
     }
 }
