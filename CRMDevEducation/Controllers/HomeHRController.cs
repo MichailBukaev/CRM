@@ -46,6 +46,25 @@ namespace CRMDevEducation.Controllers
                 return "Bad Login";
             }
         }
+
+        [Route("Filtr")]
+        [HttpGet]
+        public string GetByFiltr(InputFiltrLeadModel lead)
+        {
+            if (StorageToken.Check(Request.Headers["Authorization"]))
+            {
+                manager = (HRManager)StorageToken.GetManager(Request.Headers["Authorization"]);
+                string json = "";
+                foreach (LeadBusinessModel model in manager.GetByFiltr(FiltrLeadMappingInputToBusiness.Map(lead)))
+                {
+                    json += JsonSerializer.Serialize<OutputLeadModel>(LeadMappingBusinessToOutput.Map(model));
+                }
+                return json;
+            }
+            else
+                return "Bad Login";
+        }
+
         [Route("CreateLead")]
         [HttpPost]
         public int? CreateLead(InputLeadModel model)
@@ -54,19 +73,14 @@ namespace CRMDevEducation.Controllers
             {
                 manager = (HRManager)StorageToken.GetManager(Request.Headers["Authorization"]);
                 int? id = manager.CreateLead(LeadMappingInputToBusness.Map((model)));
-                if (id != null)
-                {
+                if (id != null)        
                     return id;
-                }
-                else
-                {
+                else         
                     return null;
-                }
             }
             else
-            {
                 return null;
-            }
+            
         }
     }
 }

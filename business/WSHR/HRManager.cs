@@ -74,6 +74,29 @@ namespace business.WSHR
             }
             return st;
         }
+
+
+        public IEnumerable<LeadBusinessModel> GetByFiltr(FiltrLeadBusinessModel model)
+        {
+            List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
+         
+            foreach (CacheLeadsCombineByStatus item in _cache.Leads)
+            {
+                leadBusinesses.AddRange(item.Leads);
+            }
+      
+            foreach (LeadBusinessModel lead in leadBusinesses)
+            {
+                if (model.SName != null && model.SName != lead.SName)
+                {
+                    leadBusinesses.Remove(lead);
+                }
+            }
+            return leadBusinesses;
+        }
+       
+
+
         public int? CreateLead(LeadBusinessModel _model)
         {
             if (InspectorLogin.CheckUniqueness(_model.Login))
@@ -146,6 +169,10 @@ namespace business.WSHR
                 if (!item.FlagActual)
                     ReconstructorHRManagerCache.UpdateCacheLeads(item);
                 leadBusinesses = item.Leads.FirstOrDefault(x => x.Id == id);
+                if (leadBusinesses != null)
+                {
+                    break;
+                }
             }
             return leadBusinesses;
         }
