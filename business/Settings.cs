@@ -9,9 +9,9 @@ namespace business
 {
     public class Settings
     {
-        IStorage storage = new StorageTasksStatus();
-        List<TasksStatus> modelsInDB;
-        IEntity modelAdd;
+        static IStorage storage = new StorageTasksStatus();
+        static List<TasksStatus> modelsInDB;
+        static IEntity modelAdd;
         public static void SetStatusInDB()
         {
             bool flagContain = false;
