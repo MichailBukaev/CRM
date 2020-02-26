@@ -276,7 +276,16 @@ namespace business.WSHR
 
         public override IModelsBusiness GetTacher(int teacherId)
         {
-            throw new NotImplementedException();
+            TeacherBusinessModel teacher = null;
+            if (!_cache.Teachers.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheTeachers(_cache.Teachers);
+            foreach (TeacherBusinessModel item in _cache.Teachers.Teachers)
+            {
+                if (item.Id == teacherId)
+                    teacher = item;
+            }
+
+            return teacher;
         }
     }
 }
