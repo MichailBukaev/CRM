@@ -391,5 +391,10 @@ namespace business.WSHR
             }
             return status;
         }
+
+        public override IModelsBusiness GetTacher(int teacherId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

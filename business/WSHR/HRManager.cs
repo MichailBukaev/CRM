@@ -272,7 +272,11 @@ namespace business.WSHR
                 return id;
             }
             return id;
->>>>>>> 4c51e7c3b90cdd783b94d8b28196ece15c1d6932
+        }
+
+        public override IModelsBusiness GetTacher(int teacherId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
