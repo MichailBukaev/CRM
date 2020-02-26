@@ -79,18 +79,53 @@ namespace business.WSHR
         public IEnumerable<LeadBusinessModel> GetByFiltr(FiltrLeadBusinessModel model)
         {
             List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
-         
+            
+
             foreach (CacheLeadsCombineByStatus item in _cache.Leads)
             {
                 leadBusinesses.AddRange(item.Leads);
             }
-      
-            foreach (LeadBusinessModel lead in leadBusinesses)
+            int count = leadBusinesses.Count;
+            for (int i = 0; i <= count; i++)
             {
-                if (model.SName != null && model.SName != lead.SName)
+                if (model.SName != null && model.SName != leadBusinesses[i].SName)
                 {
-                    leadBusinesses.Remove(lead);
+                    leadBusinesses.Remove(leadBusinesses[i]);
+                    
+                    continue;
                 }
+                if (model.FName != null && model.FName != leadBusinesses[i].FName)
+                {
+                    leadBusinesses.Remove(leadBusinesses[i]);
+                    
+                    continue;
+                }
+                if (model.DateBirthday != null && model.DateBirthday != leadBusinesses[i].DateBirthday)
+                {
+                    leadBusinesses.Remove(leadBusinesses[i]);
+                    
+                    continue;
+                }
+                if (model.EMail != null && model.EMail != leadBusinesses[i].EMail)
+                {
+                    leadBusinesses.Remove(leadBusinesses[i]);
+                    
+                    continue;
+                }
+                if (model.Skills != null && !model.Skills.SequenceEqual(_cache.Skills.Skills))
+                {
+                    leadBusinesses.Remove(leadBusinesses[i]);
+                    
+                    continue;
+                }
+                if (model.Numder > 0 && model.Numder != leadBusinesses[i].Numder)
+                {
+                    leadBusinesses.Remove(leadBusinesses[i]);
+                    
+                    continue;
+                }
+                
+                
             }
             return leadBusinesses;
         }
