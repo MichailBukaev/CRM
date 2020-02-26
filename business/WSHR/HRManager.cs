@@ -237,7 +237,7 @@ namespace business.WSHR
             return taskBusinesses;
         }
 
-        public override int SetTaskMyself(string taskText, DateTime deadline, int statusId)
+        public override int? SetTaskMyself(string taskText, DateTime deadline, int statusId)
         {
             int id = 0;
             TasksStatus status = null;

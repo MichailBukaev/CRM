@@ -25,6 +25,6 @@ namespace business.WSHR
         public abstract IEnumerable<IModelsBusiness> GetTasksMyself(int taskStatusId);
         public abstract IEnumerable<IModelsBusiness> GetTasksMyself(DateTime taskStartDate);
         public abstract IEnumerable<IModelsBusiness> GetTasksMyself();
-        public abstract int SetTaskMyself(string taskText, DateTime deadline, int statusId);
+        public abstract int? SetTaskMyself(string taskText, DateTime deadline, int statusId);
     }
 }
