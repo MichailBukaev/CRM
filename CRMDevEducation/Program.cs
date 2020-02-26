@@ -13,7 +13,8 @@ namespace CRMDevEducation
     {
         public static void Main(string[] args)
         {
-            business.Settings.SetStatusInDB();
+            business.Settings.SetStatusTaskInDB();
+            business.Settings.SetStatusLeadInDB();
             CreateHostBuilder(args).Build().Run();
         }
 

@@ -9,12 +9,15 @@ namespace business
 {
     public class Settings
     {
-        static IStorage storage = new StorageTasksStatus();
-        static List<TasksStatus> modelsInDB;
+        static IStorage storage;
         static IEntity modelAdd;
-        public static void SetStatusInDB()
+        static bool flagContain;
+        public static void SetStatusTaskInDB()
         {
-            bool flagContain = false;
+            List<TasksStatus> modelsInDB;
+            storage = new StorageTasksStatus();
+            flagContain = false;
+
 
 
             modelsInDB = (List<TasksStatus>)storage.GetAll();
@@ -97,7 +100,168 @@ namespace business
                 storage.Add(ref modelAdd);
             }
         }
+        public static void SetStatusLeadInDB()
+        {
+            List<Status> modelsInDB;
+            storage = new StorageStatus();
+            modelsInDB = (List<Status>)storage.GetAll();
 
+            flagContain = false;
+            modelAdd = new Status()
+            {
+                Name = "Новый лид"
+            };
+
+            foreach(Status item in modelsInDB)
+            {
+                if(item.Name == ((Status)modelAdd).Name)
+                {
+                    flagContain = true;
+                    break;
+                }
+            }
+            if(!flagContain)
+            {
+                storage.Add(ref modelAdd);
+            }
+
+
+            flagContain = false;
+            modelAdd = new Status()
+            {
+                Name = "Интервью назначено"
+            };
+
+            foreach (Status item in modelsInDB)
+            {
+                if (item.Name == ((Status)modelAdd).Name)
+                {
+                    flagContain = true;
+                    break;
+                }
+            }
+            if (!flagContain)
+            {
+                storage.Add(ref modelAdd);
+            }
+
+
+            flagContain = false;
+            modelAdd = new Status()
+            {
+                Name = "Интервью пройдено"
+            };
+
+            foreach (Status item in modelsInDB)
+            {
+                if (item.Name == ((Status)modelAdd).Name)
+                {
+                    flagContain = true;
+                    break;
+                }
+            }
+            if (!flagContain)
+            {
+                storage.Add(ref modelAdd);
+            }
+
+
+            flagContain = false;
+            modelAdd = new Status()
+            {
+                Name = "Интервью не пройдено"
+            };
+
+            foreach (Status item in modelsInDB)
+            {
+                if (item.Name == ((Status)modelAdd).Name)
+                {
+                    flagContain = true;
+                    break;
+                }
+            }
+            if (!flagContain)
+            {
+                storage.Add(ref modelAdd);
+            }
+
+            flagContain = false;
+            modelAdd = new Status()
+            {
+                Name = "Готов начать обучение"
+            };
+
+            foreach (Status item in modelsInDB)
+            {
+                if (item.Name == ((Status)modelAdd).Name)
+                {
+                    flagContain = true;
+                    break;
+                }
+            }
+            if (!flagContain)
+            {
+                storage.Add(ref modelAdd);
+            }
+
+            flagContain = false;
+            modelAdd = new Status()
+            {
+                Name = "Студент"
+            };
+
+            foreach (Status item in modelsInDB)
+            {
+                if (item.Name == ((Status)modelAdd).Name)
+                {
+                    flagContain = true;
+                    break;
+                }
+            }
+            if (!flagContain)
+            {
+                storage.Add(ref modelAdd);
+            }
+
+            flagContain = false;
+            modelAdd = new Status()
+            {
+                Name = "Закончил обучение"
+            };
+
+            foreach (Status item in modelsInDB)
+            {
+                if (item.Name == ((Status)modelAdd).Name)
+                {
+                    flagContain = true;
+                    break;
+                }
+            }
+            if (!flagContain)
+            {
+                storage.Add(ref modelAdd);
+            }
+
+
+            flagContain = false;
+            modelAdd = new Status()
+            {
+                Name = "Отчислен"
+            };
+
+            foreach (Status item in modelsInDB)
+            {
+                if (item.Name == ((Status)modelAdd).Name)
+                {
+                    flagContain = true;
+                    break;
+                }
+            }
+            if (!flagContain)
+            {
+                storage.Add(ref modelAdd);
+            }
+        }
         
        
     }
