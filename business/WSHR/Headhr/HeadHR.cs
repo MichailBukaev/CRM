@@ -26,9 +26,18 @@ namespace business.WSHR
             return hrs;
         }
 
-        public HRBusinessModel GetHR(object hrId)
+        public HRBusinessModel GetHR(int hrId)
         {
-            throw new NotImplementedException();
+            if (!_cache.HRs.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheHRs(_cache.HRs, this._hr);
+            HRBusinessModel hr = null;
+            foreach (HRBusinessModel item in _cache.HRs.HRs)
+            {
+                if (item.Id == hrId)
+                    hr = item;
+            }
+            
+            return hr;
         }
 
         public IEnumerable<IModelsBusiness> GetTeacher()
@@ -317,9 +326,7 @@ namespace business.WSHR
         }
         public int? SetTasksForSlaves(string taskText, DateTime deadLine, int tasksStatusId, string loginExecuter) 
         {
-            int? id = null;
-            TasksStatus status = GetTasksStatus(tasksStatusId);
-            
+            int? id = null;           
             PublishingHouse publishingHouse = PublishingHouse.Create();
             PublisherChangesInTasks publisher = publishingHouse.CombineByExecuter[this._hr.Login];
             _storage = new StorageTaskWork();
@@ -330,16 +337,14 @@ namespace business.WSHR
                 DateEnd = deadLine,
                 TasksStatusId = tasksStatusId,
                 Text = taskText,
-                LoginExecuter = loginExecuter,
-                TasksStatus = status
+                LoginExecuter = loginExecuter               
             };
             bool success = _storage.Add(ref task);
 
             if (success)
             {
-                publisher.Notify(this._hr.Login);
-                TaskWork result = (TaskWork)task;
-                publishingHouse.CombineByExecuter.Add(this._hr.Login, new PublisherChangesInTasks());
+                publishingHouse.CombineByExecuter[loginExecuter].Notify(this._hr.Login);
+                TaskWork result = (TaskWork)task;                 
                 id = result.Id;
                 return id;
             }

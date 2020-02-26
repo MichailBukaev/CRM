@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using business;
+using business.Cache;
 using business.Models;
 using business.WSHR;
 using business.WSHR.Cache;
@@ -25,21 +26,32 @@ namespace CRMDevEducation.Controllers
         private HeadHR _manager;
 
         [HttpGet]
+
         public string Get(int hrId)
         {
-            _manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             string json = "";
-            HRBusinessModel hr = (HRBusinessModel)_manager.GetHR(hrId);
+            
+            _manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
+                HRBusinessModel hr = _manager.GetHR(hrId);
+
                 json += JsonSerializer.Serialize<OutputHRModel>(HRMappingBusinessToOutput.Map(hr));
 
+                foreach (CacheTaskWorkForSlavesCombineByExecuter item in _manager.Cache.TaskWorkForSlavesCombineByExecuters)
+                {
+                    if (!item.FlagActual)
+                        ReconstructorHRManagerCache.UpdateCacheTaskWorkForSlaves(item, _manager.hR);
+                }
+                
                 List<TaskWorkBusinessModel> tasks = (List<TaskWorkBusinessModel>)_manager.GetTaskWorkForSlaves(hr.Login, DateTime.Now.AddDays(-30));
                 foreach (TaskWorkBusinessModel item in tasks)
                 {
                     TasksStatusBusinessModel tasksStatus = _manager.Cache.TasksStatus.TasksStatus.FirstOrDefault(p => p.Id == item.TasksStatusId);
                     json += JsonSerializer.Serialize<OutputTaskWorkModel>(TaskWorkMappingBusinessToOutput.Map(item, tasksStatus));
                 }
+                if (!_manager.Cache.TasksStatus.FlagActual)
+                    ReconstructorHRManagerCache.UpdateCacheTasksStatus(_manager.Cache.TasksStatus);
                 List<TasksStatusBusinessModel> tasksStatuses = _manager.Cache.TasksStatus.TasksStatus;
                 foreach (TasksStatusBusinessModel item in tasksStatuses)
                 {
@@ -53,14 +65,16 @@ namespace CRMDevEducation.Controllers
             }            
         }
 
+        [Route("TasksByStatus")]
         [HttpGet]
-        public string Get(int hrId, string nameTaskStatus)
+        public string Get1(int hrId, string nameTaskStatus)
         {
             _manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             string json = "";
-            HRBusinessModel hr = (HRBusinessModel)_manager.GetHR(hrId);
+           
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
+                HRBusinessModel hr = (HRBusinessModel)_manager.GetHR(hrId);
                 json += JsonSerializer.Serialize<OutputHRModel>(HRMappingBusinessToOutput.Map(hr));
 
                 int statusId = _manager.GetIdStatusTasks(nameTaskStatus);

@@ -245,15 +245,7 @@ namespace business.WSHR
 
         public int? SetTaskMyself(string taskText, DateTime deadline, int statusId)
         {
-            int id = 0;
-            TasksStatus status = null;
-            foreach (TasksStatusBusinessModel item in _cache.TasksStatus.TasksStatus)
-            {
-                if (!_cache.TasksStatus.FlagActual)
-                    ReconstructorHRManagerCache.UpdateCacheTasksStatus(_cache.TasksStatus);
-                if (item.Id == statusId)
-                    status = new TasksStatus() { Id = item.Id, Name = item.Name };
-            }
+            int? id = null;           
             PublishingHouse publishingHouse = PublishingHouse.Create();
             PublisherChangesInTasks publisher = publishingHouse.CombineByExecuter[this._hr.Login];
             _storage = new StorageTaskWork();
@@ -265,15 +257,14 @@ namespace business.WSHR
                 TasksStatusId=statusId, 
                 Text = taskText,
                 LoginExecuter = this._hr.Login,
-                TasksStatus = status
+                
             };
             bool success = _storage.Add(ref task);
 
             if (success)
             {
-                publisher.Notify(this._hr.Login);
-                TaskWork result = (TaskWork)task;
-                publishingHouse.CombineByExecuter.Add(this._hr.Login, new PublisherChangesInTasks());
+                publishingHouse.CombineByExecuter[this._hr.Login].Notify(this._hr.Login);
+                TaskWork result = (TaskWork)task;                
                 id = result.Id;
                 return id;
             }
