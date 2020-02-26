@@ -14,9 +14,15 @@ using System.Text;
 
 namespace business.WSHR
 {
-    public class HRManager : DefaultHR
+    public class HRManager : IUserManager
     {
         HistoryWriter historyWriter;
+
+        protected IStorage _storage;
+        protected HRManagerCache _cache;
+        protected HR _hr;
+        public HRManagerCache Cache { get { return _cache; } }
+        public HR hR { get { return _hr; } }
         public HRManager(int hrId)
         {
             _storage = new StorageHR();
@@ -68,7 +74,7 @@ namespace business.WSHR
             }
             return st;
         }
-        public override int? CreateLead(LeadBusinessModel _model)
+        public int? CreateLead(LeadBusinessModel _model)
         {
             if (InspectorLogin.CheckUniqueness(_model.Login))
             {
@@ -101,7 +107,7 @@ namespace business.WSHR
             }
             return null;
         }
-        public override IEnumerable<IModelsBusiness> GetTeacher()
+        public IEnumerable<IModelsBusiness> GetTeacher()
         {
             if (!_cache.Teachers.FlagActual)
                 ReconstructorHRManagerCache.UpdateCacheTeachers(_cache.Teachers);
@@ -109,7 +115,7 @@ namespace business.WSHR
 
             return teachersBusiness;
         }
-        public override bool UpdateLead(LeadBusinessModel _model)
+        public bool UpdateLead(LeadBusinessModel _model)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
             PublisherChangesInDB publisher = publishingHouse.CombineByStatus[_model.Status.Id];
@@ -143,7 +149,7 @@ namespace business.WSHR
             }
             return leadBusinesses;
         }
-        public override bool ChangeStatus(LeadBusinessModel _model, int statusId)
+        public bool ChangeStatus(LeadBusinessModel _model, int statusId)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
             PublisherChangesInDB publisheFirst = publishingHouse.CombineByStatus[_model.Status.Id];
@@ -194,7 +200,7 @@ namespace business.WSHR
             GroupBusinessModel group = _cache.Groups.Groups.FirstOrDefault(x => x.Id == id);
             return group;
         }
-        public override IEnumerable<IModelsBusiness> GetTasksMyself(int taskStatusId)
+        public IEnumerable<IModelsBusiness> GetTasksMyself(int taskStatusId)
         {
             if (!_cache.TaskWorkMyself.FlagActual)
                 ReconstructorHRManagerCache.UpdateCacheTaskWorkMyself(_cache.TaskWorkMyself, this._hr);
@@ -209,7 +215,7 @@ namespace business.WSHR
 
             return taskBusinesses;
         }
-        public override IEnumerable<IModelsBusiness> GetTasksMyself(DateTime taskStartDate)
+        public IEnumerable<IModelsBusiness> GetTasksMyself(DateTime taskStartDate)
         {
             if (!_cache.TaskWorkMyself.FlagActual)
                 ReconstructorHRManagerCache.UpdateCacheTaskWorkMyself(_cache.TaskWorkMyself, this._hr);
@@ -224,7 +230,7 @@ namespace business.WSHR
 
             return taskBusinesses;
         }
-        public override IEnumerable<IModelsBusiness> GetTasksMyself()
+        public IEnumerable<IModelsBusiness> GetTasksMyself()
         {
             if (!_cache.TaskWorkMyself.FlagActual)
                 ReconstructorHRManagerCache.UpdateCacheTaskWorkMyself(_cache.TaskWorkMyself, this._hr);
@@ -237,7 +243,7 @@ namespace business.WSHR
             return taskBusinesses;
         }
 
-        public override int? SetTaskMyself(string taskText, DateTime deadline, int statusId)
+        public int? SetTaskMyself(string taskText, DateTime deadline, int statusId)
         {
             int id = 0;
             TasksStatus status = null;

@@ -71,7 +71,7 @@ namespace CRMDevEducation.Controllers
         [HttpPut]
         public HttpResponseMessage Update([FromBody] InputLeadModel model)
         {
-            DefaultHR manager = (DefaultHR)StorageToken.GetManager(Request.Headers["Authorization"]);
+            HRManager manager = (HRManager)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
                 if (manager.UpdateLead(LeadMappingInputToBusness.Map((model))))
@@ -87,7 +87,7 @@ namespace CRMDevEducation.Controllers
         [HttpPut]
         public HttpResponseMessage ChangeStatus([FromBody] InputLeadModel model, int statusId)
         {
-            DefaultHR manager = (DefaultHR)StorageToken.GetManager(Request.Headers["Authorization"]);
+            HRManager manager = (HRManager)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
                 if (manager.ChangeStatus(LeadMappingInputToBusness.Map((model)), statusId))

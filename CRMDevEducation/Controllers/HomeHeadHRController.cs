@@ -56,11 +56,12 @@ namespace CRMDevEducation.Controllers
         [HttpPost]
         public string CreateLead([FromBody]InputLeadModel model)
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
-                if (manager.CreateLead(LeadMappingInputToBusness.Map(model)) != null)                
-                    return manager.CreateLead(LeadMappingInputToBusness.Map(model)).ToString();                
+                int? id = manager.CreateLead(LeadMappingInputToBusness.Map(model));
+                if (id != null)
+                    return $"{id}" ;                
                 else                
                     return "false";               
             }

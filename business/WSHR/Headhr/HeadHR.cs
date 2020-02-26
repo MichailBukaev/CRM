@@ -12,14 +12,13 @@ using System.Text;
 
 namespace business.WSHR
 {
-    public class HeadHR : HeadHRDecorator
+    public class HeadHR : HRManager
     {
-        public HeadHR(DefaultHR hr) : base(hr)
+        public HeadHR(int hrId):base(hrId)
         {
-            _cache = hr.Cache;
         }
 
-        public override IEnumerable<IModelsBusiness> GetHR()
+        public IEnumerable<IModelsBusiness> GetHR()
         {
             if (!_cache.HRs.FlagActual)
                 ReconstructorHRManagerCache.UpdateCacheHRs(_cache.HRs, this._hr);
@@ -32,25 +31,7 @@ namespace business.WSHR
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IModelsBusiness> GetLeadsByStatus(int statusId)
-        {
-            List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
-            foreach (CacheLeadsCombineByStatus item in _cache.Leads)
-            {
-                if(item.StatusId == statusId)
-                {
-                    if(!item.FlagActual)
-                        ReconstructorHRManagerCache.UpdateCacheLeads(item);
-                    foreach (LeadBusinessModel itemLead in item.Leads)
-                    {
-                        leadBusinesses.Add(itemLead);
-                    }
-                }
-            }
-            
-            return leadBusinesses;
-        }
-        public override IEnumerable<IModelsBusiness> GetTeacher()
+        public IEnumerable<IModelsBusiness> GetTeacher()
         {
             if (!_cache.Teachers.FlagActual)
                 ReconstructorHRManagerCache.UpdateCacheTeachers(_cache.Teachers);
@@ -58,7 +39,7 @@ namespace business.WSHR
 
             return teachers;
         }
-        public override IEnumerable<IModelsBusiness> GetGroups()
+        public IEnumerable<IModelsBusiness> GetGroups()
         {
             if (!_cache.Groups.FlagActual)
                 ReconstructorHRManagerCache.UpdateCacheGroup(_cache.Groups);
@@ -66,11 +47,8 @@ namespace business.WSHR
 
             return groups;
         }
-        public override int? CreateLead(LeadBusinessModel _model)
-        {
-            return defaultHR.CreateLead(_model);
-        }
-        public override int? CreateGroup(GroupBusinessModel _model)
+        
+        public int? CreateGroup(GroupBusinessModel _model)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
             PublisherChangesInDB publisher = publishingHouse.Group;
@@ -91,7 +69,7 @@ namespace business.WSHR
             }
             return null;
         }
-        public override bool DeleteGroup(GroupBusinessModel _model)
+        public bool DeleteGroup(GroupBusinessModel _model)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
             PublisherChangesInDB publisher = publishingHouse.Group;
@@ -110,7 +88,7 @@ namespace business.WSHR
                 publisher.Notify();
             return success;
         }
-        public override bool DeleteLead(LeadBusinessModel _model)
+        public bool DeleteLead(LeadBusinessModel _model)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
             PublisherChangesInDB publisher = publishingHouse.CombineByStatus[_model.Status.Id];
@@ -133,10 +111,7 @@ namespace business.WSHR
                 publisher.Notify();
             return success;
         }
-        public override bool UpdateLead(LeadBusinessModel _model)
-        {
-            return defaultHR.UpdateLead(_model);
-        }        
+            
         Course GetCourse(int id)
         {
             if (!_cache.Courses.FlagActual)
@@ -268,30 +243,6 @@ namespace business.WSHR
             return leadBusinesses;
         }
 
-        public override bool ChangeStatus(LeadBusinessModel lead, int statusId)
-        {
-            return defaultHR.ChangeStatus(lead, statusId);
-        }
-
-        public override IModelsBusiness GetGroup(int id)
-        {
-            return defaultHR.GetGroup(id);
-        }
-        public override IEnumerable<IModelsBusiness> GetTasksMyself(int taskStatusId)
-        {
-            return defaultHR.GetTasksMyself(taskStatusId);
-        }
-
-        public override IEnumerable<IModelsBusiness> GetTasksMyself(DateTime taskStartDate)
-        {
-            return defaultHR.GetTasksMyself(taskStartDate);
-        }
-
-        public override IEnumerable<IModelsBusiness> GetTasksMyself()
-        {
-            return defaultHR.GetTasksMyself();
-        }
-
         public IEnumerable<IModelsBusiness> GetTaskWorkForSlaves() //для всех hrs
         {            
             List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
@@ -395,10 +346,7 @@ namespace business.WSHR
             return id;
         }
 
-        public override int? SetTaskMyself(string taskText, DateTime deadline, int statusId)
-        {
-            return defaultHR.SetTaskMyself(taskText, deadline, statusId);
-        }
+        
         private TasksStatus GetTasksStatus(int taskStatusId)
         {
             TasksStatus status = null;
