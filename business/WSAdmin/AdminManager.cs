@@ -1,4 +1,5 @@
 ﻿using business.Models;
+using business.Models.CutModel;
 using business.WSHR;
 using business.WSUser.interfaces;
 using data.Storage;
@@ -154,6 +155,44 @@ namespace business.WSAdmin
         public override IModelsBusiness GetTacher(int teacherId)
         {
             throw new NotImplementedException();
+        }
+        public override IModelsBusiness GetGroup(int id)
+        {
+            _storage = new StorageGroup();
+            List<Group> groups = (List<Group>)_storage.GetAll();
+            Group group = groups.FirstOrDefault(x => x.Id == id);
+            List<CutLeadBusinessModel> cutLeads = new List<CutLeadBusinessModel>();
+            _storage = new StorageLead();
+            List<Lead> leads = (List<Lead>)_storage.GetAll(Lead.Fields.GroupId.ToString(), id.ToString());
+            
+            foreach (Lead item in leads)
+            {
+                cutLeads.Add(new CutLeadBusinessModel()
+                {
+                    Id = item.Id,
+                    FName = item.FName,
+                    SName = item.SName
+                });
+            }
+            GroupBusinessModel result = new GroupBusinessModel()
+            {
+                Id = group.Id,
+                Name = group.NameGroup,
+                Course = new CutCourseBusinessModel()
+                {
+                    Id = group.CourseId,
+                    Name = group.Course.Name
+                },
+                Teacher = new CutTeacherBusinessModel()
+                {
+                    Id = group.TeacherId,
+                    FName = group.Teacher.FName,
+                    SName = group.Teacher.SName
+                },
+                Leads = cutLeads,
+                StartDate = group.StartDate
+            };
+            return result;
         }
     }
 }

@@ -9,6 +9,6 @@ namespace CRMDevEducation.Models.Input
     {
         public DateTime Date { get; set; } 
         public int GroupId { set; get; }
-        public Dictionary<int, bool> LeadsVisit { get; set; }
+        public List<InputLeadInLogModel> LeadsVisit { get; set; }
     }
 }

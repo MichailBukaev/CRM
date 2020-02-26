@@ -5,9 +5,9 @@ namespace models
 {
     public class History: IEntity
     {
-       
+        [Key]
         public int Id { get; set; }
-        public int LeadId { get; set; }
+        public int? LeadId { get; set; }
         public Lead Lead { get; set; }
         public string HistoryText { get; set; }
 

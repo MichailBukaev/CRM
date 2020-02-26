@@ -17,8 +17,8 @@ namespace CRMDevEducation.Models.Mapping
             {
                 students.Add(new StudentInLogBusinessModel
                 {
-                    Lead = new CutLeadBusinessModel(){ Id = item.Key },
-                    Visit = item.Value
+                    Lead = new CutLeadBusinessModel(){ Id = item.IdLead },
+                    Visit = item.Visit
                 });
             }
             return new DayInLogBusinessModel()

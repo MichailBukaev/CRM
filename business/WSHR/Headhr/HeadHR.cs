@@ -253,6 +253,10 @@ namespace business.WSHR
             return defaultHR.ChangeStatus(lead, statusId);
         }
 
+        public override IModelsBusiness GetGroup(int id)
+        {
+            return defaultHR.GetGroup(id);
+        }
         public override IEnumerable<IModelsBusiness> GetTasksMyself(int taskStatusId)
         {
             return defaultHR.GetTasksMyself(taskStatusId);
@@ -386,7 +390,6 @@ namespace business.WSHR
                     status = new TasksStatus() { Id = item.Id, Name = item.Name };
             }
             return status;
->>>>>>> 4c51e7c3b90cdd783b94d8b28196ece15c1d6932
         }
     }
 }

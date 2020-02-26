@@ -80,6 +80,14 @@ namespace business.WSTeacher
             return groups;
         }
 
+        public override IModelsBusiness GetGroup(int id)
+        {
+            if (!_cache.Group.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheGroup(_cache.Group, _teacher);
+            GroupBusinessModel group = _cache.Group.Groups.FirstOrDefault(x => x.Id == id);
+            return group;
+        }
+
         public override IModelsBusiness GetLead(int id)
         {
             LeadBusinessModel leadBusinesses = null;
@@ -115,7 +123,8 @@ namespace business.WSTeacher
                 IEntity log = new Log()
                 {
                     Date = dayLog.Date,
-                    LeadId = dayLog.StudentsInLog[i].Lead.Id
+                    LeadId = dayLog.StudentsInLog[i].Lead.Id,
+                    Visit = dayLog.StudentsInLog[i].Visit
                 };
                 if (!_storage.Add(ref log))
                     ok = false;
