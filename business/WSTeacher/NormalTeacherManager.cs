@@ -3,6 +3,7 @@ using business.Models;
 using business.WSTeacher.Cache;
 using business.WSTeacher.Cache.CacheEntity;
 using business.WSUser.interfaces;
+using data.Storage;
 using data.StorageEntity;
 using models;
 using System;
@@ -12,10 +13,14 @@ using System.Text;
 
 namespace business.WSTeacher
 {
-    public class NormalTeacherManager : TeacherManager
+    public class NormalTeacherManager : IUserManager
     {
         HistoryWriter historyWriter;
-
+        protected IStorage _storage;
+        protected TeacherManagerCache _cache;
+        protected Teacher _teacher;
+        public TeacherManagerCache Cache { get { return _cache; } }
+        public Teacher Teacher { get { return _teacher; } }
         public NormalTeacherManager(int teacherId)
         {
             _storage = new StorageTeacher();
@@ -26,7 +31,7 @@ namespace business.WSTeacher
             SetCache();
         }
 
-        public override bool AddSkillsForLead(int skillId, int LeadId)
+        public  bool AddSkillsForLead(int skillId, int LeadId)
         {
             bool ok = false;
 
@@ -64,7 +69,7 @@ namespace business.WSTeacher
             return ok;
         }
 
-        public override List<CourseBusinessModel> GetAllCourse()
+        public  List<CourseBusinessModel> GetAllCourse()
         {
             if (!_cache.Course.FlagActual)
                 ReconstructorTeacherManagerCache.UpdateCacheCourses(_cache.Course, _teacher);
@@ -72,7 +77,7 @@ namespace business.WSTeacher
             return courses;
         }
 
-        public override List<GroupBusinessModel> GetAllGroupe()
+        public  List<GroupBusinessModel> GetAllGroupe()
         {
             if (!_cache.Group.FlagActual)
                 ReconstructorTeacherManagerCache.UpdateCacheGroup(_cache.Group, _teacher);
@@ -81,7 +86,7 @@ namespace business.WSTeacher
         }
 
 
-        public override List<TaskWorkBusinessModel> GetAllMyTask()
+        public  List<TaskWorkBusinessModel> GetAllMyTask()
         {
             if (!_cache.TaskWorkMyself.FlagActual)
                 ReconstructorTeacherManagerCache.UpdateCacheMyselfTask(_cache.TaskWorkMyself, _teacher.Login);
@@ -89,7 +94,7 @@ namespace business.WSTeacher
             return tasks;
         }
 
-        public override List<TaskWorkBusinessModel> GetAllMyTask(string nameStatus)
+        public  List<TaskWorkBusinessModel> GetAllMyTask(string nameStatus)
         {
             if(!_cache.TasksStatus.FlagActual)
                 ReconstructorTeacherManagerCache.UpdateCacheMyselfTask(_cache.TaskWorkMyself, _teacher.Login);
@@ -101,7 +106,7 @@ namespace business.WSTeacher
             return tasks;
         }
 
-        public override List<TaskWorkBusinessModel> GetAllMyTask(DateTime dateStart)
+        public  List<TaskWorkBusinessModel> GetAllMyTask(DateTime dateStart)
         {
             if (!_cache.TaskWorkMyself.FlagActual)
                 ReconstructorTeacherManagerCache.UpdateCacheMyselfTask(_cache.TaskWorkMyself, _teacher.Login);
@@ -129,7 +134,7 @@ namespace business.WSTeacher
             return leadBusinesses;
         }
 
-        public override List<TaskWorkBusinessModel> GetMyselfTask()
+        public  List<TaskWorkBusinessModel> GetMyselfTask()
         {
             return _cache.TaskWorkMyself.TasksWork;
         }
@@ -141,7 +146,7 @@ namespace business.WSTeacher
             return _cache.Teachers.Teachers.FirstOrDefault(p => p.Id == teacherId);
         }
 
-        public override bool SetAttendence(DayInLogBusinessModel dayLog)
+        public  bool SetAttendence(DayInLogBusinessModel dayLog)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
             PublisherChangesInDB publisher = publishingHouse.Group;
@@ -163,7 +168,7 @@ namespace business.WSTeacher
             return ok;
         }
 
-        public override bool SetSelfTask(string task, DateTime deadLine, int tasksStatusId)
+        public  bool SetSelfTask(string task, DateTime deadLine, int tasksStatusId)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
            

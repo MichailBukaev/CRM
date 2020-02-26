@@ -11,23 +11,17 @@ using System.Text;
 
 namespace business.WSTeacher.HeadTeacher
 {
-    public class MaxHeadTeacherManager : TeacherManagerDecorater
+    public class MaxHeadTeacherManager : NormalTeacherManager
     {
-        public MaxHeadTeacherManager(TeacherManager teacherManager)
-            : base(teacherManager)
+        public MaxHeadTeacherManager(int teacherId)
+            : base(teacherId)
         {
-            _cache = teacherManager.Cache;
+            
 
         }
-        public override bool AddSkillsForLead(int skillId, int LeadId)
-        {
-            return base.AddSkillsForLead(skillId, LeadId);
-        }
+        
 
-        public override bool SetAttendence(DayInLogBusinessModel dayLog)
-        {
-            return base.SetAttendence(dayLog);
-        }
+       
 
         public int? AddNewSkill(SkillBusinessModel skill)
         {
@@ -56,13 +50,13 @@ namespace business.WSTeacher.HeadTeacher
             bool ok = false;
             if (!_cache.Group.FlagActual)
             {
-                ReconstructorTeacherManagerCache.UpdateCacheGroup(_cache.Group, _teacherManager.Teacher);
+                ReconstructorTeacherManagerCache.UpdateCacheGroup(_cache.Group, _teacher);
             }
             GroupBusinessModel group = _cache.Group.Groups.FirstOrDefault(x => x.Id == groupeId);
 
             if (!_cache.Teachers.FlagActual)
             {
-                ReconstructorTeacherManagerCache.UpdateCacheTeachers(_cache.Teachers, _teacherManager.Teacher);
+                ReconstructorTeacherManagerCache.UpdateCacheTeachers(_cache.Teachers, _teacher);
             }
             TeacherBusinessModel teacherLocal = _cache.Teachers.Teachers.FirstOrDefault(p => p.Id == teacherId);
 
@@ -126,34 +120,6 @@ namespace business.WSTeacher.HeadTeacher
             }
 
         }
-        public override List<GroupBusinessModel> GetAllGroupe()
-        {
-            return base.GetAllGroupe();
-        }
-
-        public override List<CourseBusinessModel> GetAllCourse()
-        {
-            return base.GetAllCourse();
-        }
-
-        public override bool SetSelfTask(string task, DateTime deadLine, int tasksStatusId)
-        {
-            return base.SetSelfTask(task, deadLine, tasksStatusId);
-        }
-
-        public override IModelsBusiness GetLead(int id)
-        {
-            return base.GetLead(id);
-        }
-
-        public override List<TaskWorkBusinessModel> GetMyselfTask()
-        {
-            return base.GetMyselfTask();
-        }
-        public override IModelsBusiness GetTacher(int teacherId)
-        {
-            return base.GetTacher(teacherId);
-        }
         public bool AssignTeacherForCourse(int teacherId, int courseId)
         {
             bool result = false;
@@ -201,20 +167,7 @@ namespace business.WSTeacher.HeadTeacher
             else
                 return null;
         }
-        public override List<TaskWorkBusinessModel> GetAllMyTask()
-        {
-            return base.GetAllMyTask();
-        }
-
-        public override List<TaskWorkBusinessModel> GetAllMyTask(string nameStatus)
-        {
-            return base.GetAllMyTask(nameStatus);
-        }
-
-        public override List<TaskWorkBusinessModel> GetAllMyTask(DateTime dateStart)
-        {
-            return base.GetAllMyTask(dateStart);
-        }
+       
 
         public List<TaskWorkBusinessModel> GetAllTasksForSlaves()
         {
@@ -232,6 +185,7 @@ namespace business.WSTeacher.HeadTeacher
             }
             return tasks;
         }
+        
         public List<TaskWorkBusinessModel> GetAllTasksForSlaves(string nameStatus)
         {
             if (!_cache.TasksStatus.FlagActual)
@@ -251,6 +205,7 @@ namespace business.WSTeacher.HeadTeacher
             }
             return tasks;
         }
+        
         public List<TaskWorkBusinessModel> GetAllTasksForSlaves(DateTime dateStart)
         {
             List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
@@ -268,6 +223,19 @@ namespace business.WSTeacher.HeadTeacher
             return tasks;
 
         }
+
+       /* public List<TaskWorkBusinessModel> GetAllTasksForSlaves(int idExecuter)
+        {
+
+        }
+        public List<TaskWorkBusinessModel> GetAllTasksForSlaves(string nameStatus, string loginExecuter)
+        {
+
+        }
+        public List<TaskWorkBusinessModel> GetAllTasksForSlaves(DateTime dateStart, string loginExecuter)
+        { 
+        }*/
+
         public override IModelsBusiness GetGroup(int id)
         {
             if (!_cache.Group.FlagActual)
