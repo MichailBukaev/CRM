@@ -338,11 +338,16 @@ namespace business.WSTeacher.Cache
         }
         private void SetTaskWorkForSlaves()
         {
+            foreach (Teacher item in entityCache.Teachers)
+            {
+                CacheTaskWorkForSlavesCombineByExecuter TasksForSlaves = new CacheTaskWorkForSlavesCombineByExecuter(item.Login, teacher.Login);
+                cache.TaskWorkForSlavesCombineByExecuters.Add(TasksForSlaves);
+            }
             List<TaskWork> taskWorks = entityCache.TaskWorks.Where(x => x.LoginExecuter != teacher.Login).ToList();
             var taskWorkGroupedByExecuter = taskWorks.GroupBy(x => x.LoginExecuter);
             foreach (IGrouping<string, TaskWork> item in taskWorkGroupedByExecuter)
             {
-                CacheTaskWorkForSlavesCombineByExecuter TasksForSlaves = new CacheTaskWorkForSlavesCombineByExecuter(item.Key, teacher.Login);
+                CacheTaskWorkForSlavesCombineByExecuter TasksForSlaves = cache.TaskWorkForSlavesCombineByExecuters.FirstOrDefault(p => p.LoginExecuter == item.Key);
                 foreach (var task in item)
                 {
                     TasksForSlaves.TasksWork.Add(new TaskWorkBusinessModel()
@@ -357,7 +362,7 @@ namespace business.WSTeacher.Cache
                     });
                 }
                 TasksForSlaves.FlagActual = true;
-                cache.TaskWorkForSlavesCombineByExecuters.Add(TasksForSlaves);
+                
             }
             
         }
