@@ -325,6 +325,54 @@ namespace business.WSTeacher.Cache
             cache.Skills= skillsB;
             return cache;
         }
+        public static CacheTaskWorkMyself UpdateCacheMyselfTask(CacheTaskWorkMyself cache, string loginExecuter)
+        {
+            storage = new StorageTaskWork();
+            List<TaskWork> tasks = (List<TaskWork>)storage.GetAll(TaskWork.Fields.LoginExecuter.ToString(), loginExecuter); 
+            List<TaskWorkBusinessModel> taskBM = new List<TaskWorkBusinessModel>();
+            foreach(TaskWork item in tasks)
+            { 
+                taskBM.Add(new TaskWorkBusinessModel()
+                {
+                    Id = item.Id,
+                    DateStart = item.DateStart,
+                    DateEnd = item.DateEnd,
+                    LoginAuthor = item.LoginAuthor,
+                    LoginExecuter = item.LoginExecuter,
+                    TasksStatusId = item.TasksStatusId,
+                    Text = item.Text
+                    
+                });
+            }
+            cache.FlagActual = true;
+            cache.TasksWork = taskBM;
+            return cache;
+
+        }
+        public static CacheTaskWorkForSlavesCombineByExecuter UpdateCacheTaskForSlaves(CacheTaskWorkForSlavesCombineByExecuter cache, string loginAuthor)
+        {
+            storage = new StorageTaskWork();
+            List<TaskWork> tasks = (List<TaskWork>)storage.GetAll(TaskWork.Fields.LoginAuthor.ToString(), loginAuthor);
+            List<TaskWorkBusinessModel> taskBM = new List<TaskWorkBusinessModel>();
+            foreach (TaskWork item in tasks)
+            {
+                taskBM.Add(new TaskWorkBusinessModel()
+                {
+                    Id = item.Id,
+                    DateStart = item.DateStart,
+                    DateEnd = item.DateEnd,
+                    LoginAuthor = item.LoginAuthor,
+                    LoginExecuter = item.LoginExecuter,
+                    TasksStatusId = item.TasksStatusId,
+                    Text = item.Text
+
+                });
+            }
+            cache.FlagActual = true;
+            cache.TasksWork = taskBM;
+            return cache;
+
+        }
 
     }
 }

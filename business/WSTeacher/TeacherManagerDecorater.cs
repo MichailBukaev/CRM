@@ -34,6 +34,7 @@ namespace business.WSTeacher
         {
             return _teacherManager.GetMyselfTask();
         }
+
         public override IModelsBusiness GetLead(int id)
         {
             return _teacherManager.GetLead(id);
@@ -42,5 +43,27 @@ namespace business.WSTeacher
         {
             return _teacherManager.GetTacher(teacherId);
         }
+
+            
+        public override  bool SetSelfTask(string task, DateTime deadLine, int tasksStatusId)
+        {
+            return _teacherManager.SetSelfTask(task, deadLine, tasksStatusId);
+        }
+        public override List<TaskWorkBusinessModel> GetAllMyTask()
+        {
+            return _teacherManager.GetAllMyTask();
+        }
+
+        public override List<TaskWorkBusinessModel> GetAllMyTask(string nameStatus)
+        {
+            return _teacherManager.GetAllMyTask(nameStatus);
+        }
+
+        public override List<TaskWorkBusinessModel> GetAllMyTask(DateTime dateStart)
+        {
+            return _teacherManager.GetAllMyTask(dateStart);
+        }
+
+
     }
 }
