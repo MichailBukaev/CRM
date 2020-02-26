@@ -52,7 +52,7 @@ namespace CRMDevEducation.Controllers
         [HttpPost]
         public HttpResponseMessage AddLog([FromBody] InputDayInLogModel log)
         {
-            TeacherManager manager = (TeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
+            NormalTeacherManager manager = (NormalTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]))
             {
                 if (manager.SetAttendence(DayInLogMappingInputToBusiness.Map(log)))
