@@ -80,6 +80,7 @@ namespace business.WSTeacher
             return groups;
         }
 
+
         public override List<TaskWorkBusinessModel> GetAllMyTask()
         {
             if (!_cache.TaskWorkMyself.FlagActual)
@@ -104,8 +105,16 @@ namespace business.WSTeacher
         {
             if (!_cache.TaskWorkMyself.FlagActual)
                 ReconstructorTeacherManagerCache.UpdateCacheMyselfTask(_cache.TaskWorkMyself, _teacher.Login);
-            List<TaskWorkBusinessModel> tasks = _cache.TaskWorkMyself.TasksWork.Where(x => x.DateStart.CompareTo(dateStart)>0).ToList();
+            List<TaskWorkBusinessModel> tasks = _cache.TaskWorkMyself.TasksWork.Where(x => x.DateStart.CompareTo(dateStart) > 0).ToList();
             return tasks;
+        }
+        public override IModelsBusiness GetGroup(int id)
+        {
+            if (!_cache.Group.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheGroup(_cache.Group, _teacher);
+            GroupBusinessModel group = _cache.Group.Groups.FirstOrDefault(x => x.Id == id);
+            return group;
+
         }
 
         public override IModelsBusiness GetLead(int id)
@@ -134,7 +143,8 @@ namespace business.WSTeacher
                 IEntity log = new Log()
                 {
                     Date = dayLog.Date,
-                    LeadId = dayLog.StudentsInLog[i].Lead.Id
+                    LeadId = dayLog.StudentsInLog[i].Lead.Id,
+                    Visit = dayLog.StudentsInLog[i].Visit
                 };
                 if (!_storage.Add(ref log))
                     ok = false;

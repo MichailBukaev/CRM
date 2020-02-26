@@ -155,6 +155,7 @@ namespace business.WSTeacher.HeadTeacher
         {
             return base.GetMyselfTask();
         }
+
         public int? SetTasksForSlaves(string task, DateTime deadLine, int tasksStatusId, string loginExecuter)
         {
             
@@ -244,6 +245,15 @@ namespace business.WSTeacher.HeadTeacher
 
             }
             return tasks;
+
+        }
+        public override IModelsBusiness GetGroup(int id)
+        {
+            if (!_cache.Group.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheGroup(_cache.Group, _teacher);
+            GroupBusinessModel group = _cache.Group.Groups.FirstOrDefault(x => x.Id == id);
+            return group;
+
         }
     }
 }
