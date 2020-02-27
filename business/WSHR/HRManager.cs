@@ -241,6 +241,16 @@ namespace business.WSHR
         {
             if (InspectorLogin.CheckUniqueness(_model.Login))
             {
+                Status status = new Status() { Id = 1, Name = "NewLead" };
+                if (_model.Status.Id > 0)
+                {
+                    status = new Status()
+                    {
+                        Id = _model.Status.Id,
+                        Name = _model.Status.Name
+                    };
+                        
+                };
                 PublishingHouse publishingHouse = PublishingHouse.Create();
 
                 PublisherChangesInDB publisher = publishingHouse.CombineByStatus[_model.Status.Id];
@@ -251,7 +261,7 @@ namespace business.WSHR
                     SName = _model.SName,
                     Numder = _model.Numder,
                     DateBirthday = _model.DateBirthday,
-                    StatusId = _model.Status.Id,
+                    StatusId = status.Id,
                     EMail = _model.EMail,
                     AccessStatus = true,
                     DateRegistration = Convert.ToString(DateTime.UtcNow),
@@ -263,7 +273,7 @@ namespace business.WSHR
                 Lead result = (Lead)lead;
                 if (success)
                 {
-                    historyWriter.CreateLead(ref result);
+                    historyWriter.CreateLead(ref result, status.Name);
                     publisher.Notify();
                     return result.Id;
                 }

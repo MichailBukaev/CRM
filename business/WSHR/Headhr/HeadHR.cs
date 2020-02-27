@@ -79,7 +79,7 @@ namespace business.WSHR
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
             PublisherChangesInDB publisher = publishingHouse.Group;
-            _storage = new StorageGroup();
+           
             Group group = new Group()
             {
                 NameGroup = _model.Name,
@@ -89,11 +89,18 @@ namespace business.WSHR
                 TeacherId = _model.Teacher.Id,
                 Teacher = GetTeacher(Convert.ToInt32(_model.Teacher.Id))
             };
+            _storage = new StorageHistoryGroup();
+            List<HistoryGroup> historyGroups = (List<HistoryGroup>)_storage.GetAll(HistoryGroup.Fields.GroupId.ToString(), group.Id.ToString());
+            foreach (var item in historyGroups)
+            {
+                _storage.Delete(item);
+            }
+            _storage = new StorageGroup();
             bool success = _storage.Delete(group);
             if (success)
             {
                 publisher.Notify();
-                historyWriter.DeleteGroup(group.Id);
+                
             }
             return success;
         }
@@ -101,7 +108,7 @@ namespace business.WSHR
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
             PublisherChangesInDB publisher = publishingHouse.CombineByStatus[_model.Status.Id];
-            _storage = new StorageLead();
+            
             Lead lead = new Lead()
             {
                 Id = _model.Id,
@@ -115,12 +122,19 @@ namespace business.WSHR
                 Login = _model.Login,
                 Password = _model.Password
 
-            };
+            }; 
+            _storage = new StorageHistory();
+            List<History> history = (List<History>)_storage.GetAll(History.Fields.LeadId.ToString(), lead.Id.ToString());
+            foreach (History item in history)
+            {
+                _storage.Delete(item);
+            }
+            _storage = new StorageLead();
             bool success = _storage.Delete(lead);
             if (success)
             {
                 publisher.Notify();
-                historyWriter.DeleteLead(lead.Id);
+                
             }
             return success;
         }
