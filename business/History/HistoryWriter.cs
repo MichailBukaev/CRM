@@ -19,7 +19,7 @@ namespace business
             _storageHistory = new StorageHistory();
             _storageHistoryGroup = new StorageHistoryGroup();
         }
-        public bool CreateLead(ref Lead lead)
+        public bool CreateLead(ref Lead lead, string status)
         {
            
             IEntity history = new History
@@ -27,7 +27,7 @@ namespace business
                 LeadId = lead.Id,
                 HistoryText = "Add User at " +
                 Convert.ToString(DateTime.UtcNow) + "with ID:" +
-                lead.Id + "Status: " + lead.Status.Name
+                lead.Id + "Status: " + status + ". "
             };
             return _storageHistory.Add(ref history);
                 
@@ -39,7 +39,7 @@ namespace business
             {      
                 LeadId = lead.Id,
                 HistoryText = "Update user " +
-                Convert.ToString(DateTime.UtcNow) 
+                Convert.ToString(DateTime.UtcNow) + ". " 
             };
             return _storageHistory.Add(ref result);
         }
@@ -61,7 +61,7 @@ namespace business
             IEntity result = new History()
             {
                 LeadId = idLead,
-                HistoryText = "Chenge status " + status  + 
+                HistoryText = "Change status " + status  + " " +
                 Convert.ToString(DateTime.UtcNow)
             };
             return _storageHistory.Add(ref result);
@@ -79,27 +79,6 @@ namespace business
             return _storageHistoryGroup.Add(ref result);
         }
 
-        public bool DeleteGroup(int id)
-        {
-            IEntity result = new HistoryGroup()
-            {
-                GroupId = id,
-                HistoryText = "Delete group " +
-                 Convert.ToString(DateTime.UtcNow) 
-            };
-            return _storageHistoryGroup.Add(ref result);
-        }
-
-        public bool DeleteLead(int id)
-        {
-            IEntity history = new History
-            {
-                LeadId = id,
-                HistoryText = "Delete user " +
-               Convert.ToString(DateTime.UtcNow) 
-            };
-            return _storageHistory.Add(ref history);
-        }
 
         public bool AddTeacherToGroup(int groupId, int teacherId)
         {
@@ -108,7 +87,7 @@ namespace business
                 GroupId = groupId,
                 HistoryText = "Teacher added to group " +
                  Convert.ToString(DateTime.UtcNow) + " with ID:" +
-                 teacherId
+                 teacherId  + ". "
             };
             return _storageHistoryGroup.Add(ref result);
         }
@@ -119,7 +98,7 @@ namespace business
             {
                 GroupId = groupId,
                 HistoryText =  $"Teacher with ID: {teacherId} removed " +
-                 Convert.ToString(DateTime.UtcNow)                  
+                 Convert.ToString(DateTime.UtcNow) +  ". "   
             };
             return _storageHistoryGroup.Add(ref result);
         }
