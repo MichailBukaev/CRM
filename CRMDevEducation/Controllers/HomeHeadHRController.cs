@@ -73,7 +73,7 @@ namespace CRMDevEducation.Controllers
         [HttpGet]        
         public string GetMyTask(DateTime startDate)
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";                
@@ -95,7 +95,7 @@ namespace CRMDevEducation.Controllers
         [HttpGet]        
         public string GetTasksForExecutors() 
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";
@@ -117,7 +117,7 @@ namespace CRMDevEducation.Controllers
         [HttpGet]        
         public string GetMyTask(string nameTaskStatus)
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";
@@ -140,7 +140,7 @@ namespace CRMDevEducation.Controllers
         [HttpPost]
         public string CreateGroup([FromBody]InputGroupModel model)
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 int? id = manager.CreateGroup(GroupMappingInputToBusiness.Map(model));
@@ -159,7 +159,7 @@ namespace CRMDevEducation.Controllers
         [HttpPost]
         public string SetMyTask([FromBody]InputTaskModel task)
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 if (manager.SetTaskMyself(task.Task, task.DeadLine, task.TasksStatusId) != 0)
@@ -176,7 +176,7 @@ namespace CRMDevEducation.Controllers
         [HttpPost]
         public string SetTaskToExecutor([FromBody]InputTaskModel task)
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 if (manager.SetTasksForSlaves(task.Task, task.DeadLine, task.TasksStatusId, task.loginExecuter) != 0)
@@ -193,7 +193,7 @@ namespace CRMDevEducation.Controllers
         [HttpGet]
         public string GetLeadsByStatus([FromBody]InputStatusModel status)
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";
@@ -236,7 +236,7 @@ namespace CRMDevEducation.Controllers
         [HttpGet]
         public string GetTeachers()
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";
