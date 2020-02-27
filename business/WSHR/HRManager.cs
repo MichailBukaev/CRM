@@ -402,7 +402,7 @@ namespace business.WSHR
             List<TaskWorkBusinessModel> taskBusinesses = new List<TaskWorkBusinessModel>();
             foreach (TaskWorkBusinessModel item in _cache.TaskWorkMyself.TasksWork)
             {
-                if (item.DateStart.CompareTo(taskStartDate) <= 0)
+                if (DateTime.Compare(item.DateStart,taskStartDate) <= 0)
                 {
                     taskBusinesses.Add(item);
                 }

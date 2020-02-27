@@ -71,7 +71,7 @@ namespace CRMDevEducation.Controllers
 
         [Route("MyTasks/InTheTimeRange")]
         [HttpGet]        
-        public string GetMyTask(DateTime startDate)
+        public string GetMyTask([FromBody]DateTime startDate)
         {
             manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
@@ -113,7 +113,7 @@ namespace CRMDevEducation.Controllers
             }
         }
 
-        [Route("MyTasks/{nameTaskStatus}")]
+        [Route("MyTasks/NameTaskStatus")]
         [HttpGet]        
         public string GetMyTask(string nameTaskStatus)
         {
@@ -162,8 +162,9 @@ namespace CRMDevEducation.Controllers
             manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
-                if (manager.SetTaskMyself(task.Task, task.DeadLine, task.TasksStatusId) != 0)
-                    return manager.SetTaskMyself(task.Task, task.DeadLine, task.TasksStatusId).ToString();
+                int? id = manager.SetTaskMyself(task.Task, task.DeadLine, task.TasksStatusId);
+                if (id != null)
+                    return id.ToString();
                 else
                     return "false";
             }
@@ -179,8 +180,9 @@ namespace CRMDevEducation.Controllers
             manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
-                if (manager.SetTasksForSlaves(task.Task, task.DeadLine, task.TasksStatusId, task.loginExecuter) != 0)
-                    return manager.SetTasksForSlaves(task.Task, task.DeadLine, task.TasksStatusId, task.loginExecuter).ToString();
+                int? id = manager.SetTasksForSlaves(task.Task, task.DeadLine, task.TasksStatusId, task.loginExecuter);
+                if (id != null)
+                    return id.ToString();
                 else
                     return "false";
             }
