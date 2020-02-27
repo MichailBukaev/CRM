@@ -14,8 +14,10 @@ namespace business.WSHR
 {
     public class HeadHR : HRManager
     {
+        HistoryWriter historyWriter;
         public HeadHR(int hrId):base(hrId)
         {
+            historyWriter = new HistoryWriter();
         }
 
         public IEnumerable<IModelsBusiness> GetHR()
@@ -40,14 +42,6 @@ namespace business.WSHR
             return hr;
         }
 
-        public IEnumerable<IModelsBusiness> GetTeacher()
-        {
-            if (!_cache.Teachers.FlagActual)
-                ReconstructorHRManagerCache.UpdateCacheTeachers(_cache.Teachers);
-            List<TeacherBusinessModel> teachers = _cache.Teachers.Teachers;
-
-            return teachers;
-        }
         public IEnumerable<IModelsBusiness> GetGroups()
         {
             if (!_cache.Groups.FlagActual)
@@ -73,6 +67,7 @@ namespace business.WSHR
             {
                 publisher.Notify();
                 Group result = (Group)group;
+                historyWriter.CreateGroup(result.Id);
                 publishingHouse.CombineByGroup.Add(result.Id, new PublisherChangesInDB());
                 return result.Id;
             }
@@ -94,7 +89,10 @@ namespace business.WSHR
             };
             bool success = _storage.Delete(group);
             if (success)
+            {
                 publisher.Notify();
+                historyWriter.DeleteGroup(group.Id);
+            }
             return success;
         }
         public bool DeleteLead(LeadBusinessModel _model)
@@ -117,7 +115,10 @@ namespace business.WSHR
             };
             bool success = _storage.Delete(lead);
             if (success)
+            {
                 publisher.Notify();
+                historyWriter.DeleteLead(lead.Id);
+            }
             return success;
         }
             

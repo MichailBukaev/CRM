@@ -34,7 +34,7 @@ namespace CRMDevEducation.Controllers
         {
             string json = "";
             _manager = StorageToken.GetManager(Request.Headers["Authorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && _manager != null)
             {
                 GroupBusinessModel item = (GroupBusinessModel)_manager.GetGroup(groupId);
                 json += JsonSerializer.Serialize<OutputGroupModel>(GroupMappingBusinessToOutput.Map(item));
@@ -47,13 +47,13 @@ namespace CRMDevEducation.Controllers
             return json;
         }
 
-        //добавить препода в группу
+      
         [Authorize(Roles ="Teacher, HeadTeacher")]
         [HttpPost]
         public HttpResponseMessage AddLog([FromBody] InputDayInLogModel log)
         {
             NormalTeacherManager manager = (NormalTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 if (manager.SetAttendence(DayInLogMappingInputToBusiness.Map(log)))
                     return new HttpResponseMessage(HttpStatusCode.OK);
@@ -64,6 +64,54 @@ namespace CRMDevEducation.Controllers
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
         }
 
-       
+        [Authorize(Roles = "HR, HeadHR")]
+        [HttpPut]
+        public HttpResponseMessage AddTeacher(int groupId, int teacherId)
+        {
+            HRManager manager = (HRManager)StorageToken.GetManager(Request.Headers["Authorization"]);
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
+            {
+                if (manager.SetTeacherToGroup(groupId, teacherId))
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                else
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+            else
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+        }
+        [Authorize(Roles ="HeadHR")]
+        [Route("DeleteGroup")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteGroup([FromBody]InputGroupModel model)
+        {
+            HeadHR manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
+            {
+                if (manager.DeleteGroup(GroupMappingInputToBusiness.Map(model)))
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                else
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+            else
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+
+        }
+
+        [Authorize(Roles = "HR, HeadHR")]
+        [HttpPut]
+        [Route("UnsetTeacher")]
+        public HttpResponseMessage DeleteTeacher(int groupId, int teacherId)
+        {
+            HRManager manager = (HRManager)StorageToken.GetManager(Request.Headers["Authorization"]);
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
+            {
+                if (manager.UnSetTeacherToGroup(groupId, teacherId))
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                else
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+            else
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+        }
     }
 }

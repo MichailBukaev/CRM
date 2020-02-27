@@ -38,7 +38,7 @@ namespace CRMDevEducation.Controllers
         {
             _manager = StorageToken.GetManager(Request.Headers["Authorization"]);
             string json = "";
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && _manager != null)
             {
                 json += JsonSerializer.Serialize<OutputLeadModel>(LeadMappingBusinessToOutput.Map((LeadBusinessModel)_manager.GetLead(id)));
             }
@@ -54,9 +54,9 @@ namespace CRMDevEducation.Controllers
         [HttpPut]
         public HttpResponseMessage AddSkillsForLead(int leadId, int skillId)
         {
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            NormalTeacherManager teacherManager = (NormalTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
+            if (StorageToken.Check(Request.Headers["Authorization"]) && teacherManager != null)
             {
-                NormalTeacherManager teacherManager = (NormalTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
                 if (teacherManager.AddSkillsForLead(skillId, leadId))
                     return new HttpResponseMessage(HttpStatusCode.OK);
                 else
@@ -71,7 +71,7 @@ namespace CRMDevEducation.Controllers
         public HttpResponseMessage Update([FromBody] InputLeadModel model)
         {
             HRManager manager = (HRManager)StorageToken.GetManager(Request.Headers["Authorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 if (manager.UpdateLead(LeadMappingInputToBusness.Map((model))))
                     return new HttpResponseMessage(HttpStatusCode.OK);
@@ -87,7 +87,7 @@ namespace CRMDevEducation.Controllers
         public HttpResponseMessage ChangeStatus([FromBody] InputLeadModel model, int statusId)
         {
             HRManager manager = (HRManager)StorageToken.GetManager(Request.Headers["Authorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 if (manager.ChangeStatus(LeadMappingInputToBusness.Map((model)), statusId))
                     return new HttpResponseMessage(HttpStatusCode.OK);

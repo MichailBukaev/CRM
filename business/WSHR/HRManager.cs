@@ -3,6 +3,7 @@
 using business.Models;
 using business.WSHR.Cache;
 using business.WSHR.Headhr.Cache;
+using business.WSTeacher.Cache;
 using business.WSUser.interfaces;
 using data.Storage;
 using data.StorageEntity;
@@ -94,8 +95,109 @@ namespace business.WSHR
             }
             return leadBusinesses;
         }
-       
 
+        public bool SetTeacherToGroup(int groupId, int teacherId)
+        {
+            bool ok = false;
+            if (!_cache.Groups.FlagActual)
+            {
+                ReconstructorHRManagerCache.UpdateCacheGroup(_cache.Groups);
+            }
+            GroupBusinessModel group = _cache.Groups.Groups.FirstOrDefault(x => x.Id == groupId);
+
+            if (!_cache.Teachers.FlagActual)
+            {
+                ReconstructorHRManagerCache.UpdateCacheTeachers(_cache.Teachers);
+            }
+            TeacherBusinessModel teacherLocal = _cache.Teachers.Teachers.FirstOrDefault(p => p.Id == teacherId);
+
+            if (teacherLocal != null && group != null)
+            {
+                bool flag = false;
+                for (int i = 0; i < teacherLocal.Courses.Count; i++)
+                {
+                    if (group.Course.Id == teacherLocal.Courses[i].Id)
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag)
+                {
+                    return false;
+                }
+
+                Group currentGroup = new Group()
+                {
+                    Id = group.Id,
+                    CourseId = group.Course.Id,
+                    StartDate = group.StartDate,
+                    NameGroup = group.Name,
+                    TeacherId = teacherLocal.Id
+
+                };
+
+                _storage = new StorageGroup();
+                ok = _storage.Update(currentGroup);
+                PublishingHouse publishingHouse = PublishingHouse.Create();
+
+                PublisherChangesInDB publisherGroupe = publishingHouse.Group,
+                                     publisherTeacher = publishingHouse.Teacher;
+                if (ok)
+                {
+                    historyWriter.AddTeacherToGroup(group.Id, teacherLocal.Id);
+                    publisherGroupe.Notify();
+                    publisherTeacher.Notify();
+
+                }
+            }
+            return ok;
+        }
+        public bool UnSetTeacherToGroup(int groupId, int teacherId)
+        {
+            bool ok = false;
+            if (!_cache.Groups.FlagActual)
+            {
+                ReconstructorHRManagerCache.UpdateCacheGroup(_cache.Groups);
+            }
+            GroupBusinessModel group = _cache.Groups.Groups.FirstOrDefault(x => x.Id == groupId);
+
+            if (!_cache.Teachers.FlagActual)
+            {
+                ReconstructorHRManagerCache.UpdateCacheTeachers(_cache.Teachers);
+            }
+            TeacherBusinessModel teacherLocal = _cache.Teachers.Teachers.FirstOrDefault(p => p.Id == teacherId);
+
+            if (teacherLocal != null && group != null)
+            {
+            
+
+                Group currentGroup = new Group()
+                {
+                    Id = group.Id,
+                    CourseId = group.Course.Id,
+                    StartDate = group.StartDate,
+                    NameGroup = group.Name,
+                    TeacherId = null
+
+                };
+
+                _storage = new StorageGroup();
+                ok = _storage.Update(currentGroup);
+                PublishingHouse publishingHouse = PublishingHouse.Create();
+
+                PublisherChangesInDB publisherGroupe = publishingHouse.Group,
+                                     publisherTeacher = publishingHouse.Teacher;
+                if (ok)
+                {
+                    historyWriter.DeleteTeacherToGroup(group.Id, teacherLocal.Id);
+                    publisherGroupe.Notify();
+                    publisherTeacher.Notify();
+
+                }
+            }
+            return ok;
+        }
 
         public int? CreateLead(LeadBusinessModel _model)
         {
@@ -121,9 +223,9 @@ namespace business.WSHR
 
                 bool success = _storage.Add(ref lead);
                 Lead result = (Lead)lead;
-                historyWriter.CreateLead(ref result);
                 if (success)
                 {
+                    historyWriter.CreateLead(ref result);
                     publisher.Notify();
                     return result.Id;
                 }
@@ -156,9 +258,12 @@ namespace business.WSHR
                 Password = _model.Password
             };
             bool success = _storage.Update(lead);
-            historyWriter.UpdateLead(lead);
             if (success)
+            {
+                historyWriter.UpdateLead(lead);
                 publisher.Notify();
+
+            }
             return success;
         }
         public override IModelsBusiness GetLead(int id)
@@ -209,9 +314,9 @@ namespace business.WSHR
                     Password = _model.Password
                 };
                 success = _storage.Update(lead);
-                historyWriter.ChangeStatus(lead.Id, statusBusiness.Name);
                 if (success)
                 {
+                    historyWriter.ChangeStatus(lead.Id, statusBusiness.Name);
                     publisheFirst.Notify();
                     publisheSecond.Notify();
                 }

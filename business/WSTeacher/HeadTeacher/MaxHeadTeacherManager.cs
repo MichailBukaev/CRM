@@ -13,10 +13,11 @@ namespace business.WSTeacher.HeadTeacher
 {
     public class MaxHeadTeacherManager : NormalTeacherManager
     {
+        HistoryWriter historyWriter;
         public MaxHeadTeacherManager(int teacherId)
             : base(teacherId)
         {
-            
+            historyWriter = new HistoryWriter();
 
         }
         
@@ -92,8 +93,13 @@ namespace business.WSTeacher.HeadTeacher
 
                 PublisherChangesInDB publisherGroupe = publishingHouse.Group,
                                      publisherTeacher = publishingHouse.Teacher;
-                publisherGroupe.Notify();
-                publisherTeacher.Notify();
+                if (ok)
+                {
+                    historyWriter.AddTeacherToGroup(group.Id, teacherLocal.Id);
+                    publisherGroupe.Notify();
+                    publisherTeacher.Notify();
+
+                }
             }
             return ok;
         }

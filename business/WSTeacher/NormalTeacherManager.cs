@@ -146,7 +146,7 @@ namespace business.WSTeacher
             return _cache.Teachers.Teachers.FirstOrDefault(p => p.Id == teacherId);
         }
 
-        public  bool SetAttendence(DayInLogBusinessModel dayLog)
+        public bool SetAttendence(DayInLogBusinessModel dayLog)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
             PublisherChangesInDB publisher = publishingHouse.Group;

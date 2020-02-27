@@ -32,7 +32,7 @@ namespace CRMDevEducation.Controllers
             string json = "";
             
             _manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && _manager != null)
             {
                 HRBusinessModel hr = _manager.GetHR(hrId);
 
@@ -67,12 +67,12 @@ namespace CRMDevEducation.Controllers
 
         [Route("TasksByStatus")]
         [HttpGet]
-        public string Get1(int hrId, string nameTaskStatus)
+        public string TasksByStatus(int hrId, string nameTaskStatus)
         {
             _manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             string json = "";
            
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && _manager != null)
             {
                 HRBusinessModel hr = (HRBusinessModel)_manager.GetHR(hrId);
                 json += JsonSerializer.Serialize<OutputHRModel>(HRMappingBusinessToOutput.Map(hr));
@@ -102,7 +102,7 @@ namespace CRMDevEducation.Controllers
         {
             int? taskWorkId = null;
             _manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && _manager != null)
             {
                 taskWorkId = _manager.SetTasksForSlaves(model.Task, model.DeadLine, model.TasksStatusId, model.loginExecuter);
             }

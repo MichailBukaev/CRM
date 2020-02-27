@@ -31,6 +31,18 @@
     <Compile Remove="Migrations\20200225230221_test.Designer.cs" />
     <Compile Remove="Migrations\20200225230253_AddPKLog.cs" />
     <Compile Remove="Migrations\20200225230253_AddPKLog.Designer.cs" />
+    <Compile Remove="Migrations\20200227012250_AddPKHistoryGroup.cs" />
+    <Compile Remove="Migrations\20200227012250_AddPKHistoryGroup.Designer.cs" />
+    <Compile Remove="Migrations\20200227012514_AddPKHistoryGroup_2.cs" />
+    <Compile Remove="Migrations\20200227012514_AddPKHistoryGroup_2.Designer.cs" />
+    <Compile Remove="Migrations\20200227012611_AddPKHistoryGroup.cs" />
+    <Compile Remove="Migrations\20200227012611_AddPKHistoryGroup.Designer.cs" />
+    <Compile Remove="Migrations\20200227012805_AddPKHistoryGroup_2.cs" />
+    <Compile Remove="Migrations\20200227012805_AddPKHistoryGroup_2.Designer.cs" />
+    <Compile Remove="Migrations\20200227013249_AddPKHistoryGroup_2.cs" />
+    <Compile Remove="Migrations\20200227013249_AddPKHistoryGroup_2.Designer.cs" />
+    <Compile Remove="Migrations\20200227013501_AddHistoryGroup.cs" />
+    <Compile Remove="Migrations\20200227013501_AddHistoryGroup.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
