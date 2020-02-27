@@ -15,7 +15,5 @@ namespace CRMDevEducation.Models.Output
         public string Status { get; set; }
         public string EMail { get; set; }
         public string History { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
     }
 }

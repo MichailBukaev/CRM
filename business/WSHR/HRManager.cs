@@ -79,21 +79,59 @@ namespace business.WSHR
 
         public IEnumerable<LeadBusinessModel> GetByFiltr(FiltrLeadBusinessModel model)
         {
+           
             List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
-         
+            List<LeadBusinessModel> leads = new List<LeadBusinessModel>();
+            
+
             foreach (CacheLeadsCombineByStatus item in _cache.Leads)
             {
-                leadBusinesses.AddRange(item.Leads);
+                if (!item.FlagActual)
+                    ReconstructorHRManagerCache.UpdateCacheLeads(item);
+                
             }
-      
-            foreach (LeadBusinessModel lead in leadBusinesses)
+            foreach (CacheLeadsCombineByStatus item in _cache.Leads)
             {
-                if (model.SName != null && model.SName != lead.SName)
-                {
-                    leadBusinesses.Remove(lead);
-                }
+                
+                leadBusinesses.AddRange(item.Leads);
+                leads.AddRange(item.Leads);
             }
-            return leadBusinesses;
+            int count = leadBusinesses.Count;
+            foreach (LeadBusinessModel item in leadBusinesses)
+            {
+                if (model.SName != null && model.SName != item.SName)
+                {
+                    leads.Remove(item);
+                    continue;
+                }
+                if (model.FName != null && model.FName != item.FName)
+                {
+                    leads.Remove(item);
+                    continue;
+                }
+                if (model.DateBirthday != null && model.DateBirthday != item.DateBirthday)
+                {
+                    leads.Remove(item);
+                    continue;
+                }
+                if (model.EMail != null && model.EMail != item.EMail)
+                {
+                    leads.Remove(item);
+                    continue;
+                }
+                if (model.Skills.Count > 0 && !model.Skills.SequenceEqual(_cache.Skills.Skills))
+                {
+                    leads.Remove(item);
+                    continue;
+                }
+                if (model.Numder > 0 && model.Numder != item.Numder)
+                {
+                    leads.Remove(item);
+                    continue;
+                }
+                
+            }
+            return leads;
         }
 
         public bool SetTeacherToGroup(int groupId, int teacherId)
