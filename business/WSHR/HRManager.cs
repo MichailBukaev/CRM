@@ -78,56 +78,59 @@ namespace business.WSHR
 
         public IEnumerable<LeadBusinessModel> GetByFiltr(FiltrLeadBusinessModel model)
         {
+           
             List<LeadBusinessModel> leadBusinesses = new List<LeadBusinessModel>();
+            List<LeadBusinessModel> leads = new List<LeadBusinessModel>();
             
 
             foreach (CacheLeadsCombineByStatus item in _cache.Leads)
             {
+                if (!item.FlagActual)
+                    ReconstructorHRManagerCache.UpdateCacheLeads(item);
+                
+            }
+            foreach (CacheLeadsCombineByStatus item in _cache.Leads)
+            {
+                
                 leadBusinesses.AddRange(item.Leads);
+                leads.AddRange(item.Leads);
             }
             int count = leadBusinesses.Count;
-            for (int i = 0; i <= count; i++)
+            foreach (LeadBusinessModel item in leadBusinesses)
             {
-                if (model.SName != null && model.SName != leadBusinesses[i].SName)
+                if (model.SName != null && model.SName != item.SName)
                 {
-                    leadBusinesses.Remove(leadBusinesses[i]);
-                    
+                    leads.Remove(item);
                     continue;
                 }
-                if (model.FName != null && model.FName != leadBusinesses[i].FName)
+                if (model.FName != null && model.FName != item.FName)
                 {
-                    leadBusinesses.Remove(leadBusinesses[i]);
-                    
+                    leads.Remove(item);
                     continue;
                 }
-                if (model.DateBirthday != null && model.DateBirthday != leadBusinesses[i].DateBirthday)
+                if (model.DateBirthday != null && model.DateBirthday != item.DateBirthday)
                 {
-                    leadBusinesses.Remove(leadBusinesses[i]);
-                    
+                    leads.Remove(item);
                     continue;
                 }
-                if (model.EMail != null && model.EMail != leadBusinesses[i].EMail)
+                if (model.EMail != null && model.EMail != item.EMail)
                 {
-                    leadBusinesses.Remove(leadBusinesses[i]);
-                    
+                    leads.Remove(item);
                     continue;
                 }
-                if (model.Skills != null && !model.Skills.SequenceEqual(_cache.Skills.Skills))
+                if (model.Skills.Count > 0 && !model.Skills.SequenceEqual(_cache.Skills.Skills))
                 {
-                    leadBusinesses.Remove(leadBusinesses[i]);
-                    
+                    leads.Remove(item);
                     continue;
                 }
-                if (model.Numder > 0 && model.Numder != leadBusinesses[i].Numder)
+                if (model.Numder > 0 && model.Numder != item.Numder)
                 {
-                    leadBusinesses.Remove(leadBusinesses[i]);
-                    
+                    leads.Remove(item);
                     continue;
                 }
-                
                 
             }
-            return leadBusinesses;
+            return leads;
         }
        
 
