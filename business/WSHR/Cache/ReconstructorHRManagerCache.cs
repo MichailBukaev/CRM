@@ -19,7 +19,7 @@ namespace business.WSHR.Cache
         {
             storage = new StorageLead();
             List<LeadBusinessModel> leads = new List<LeadBusinessModel>();
-            List<Lead> leadsEntity = (List<Lead>)storage.GetAll(Lead.Fields.GroupId.ToString(), cache.StatusId.ToString());
+            List<Lead> leadsEntity = (List<Lead>)storage.GetAll(Lead.Fields.StatusId.ToString(), cache.StatusId.ToString());
             if (leadsEntity != null)
             {
                 foreach (Lead itemLead in leadsEntity)

@@ -14,9 +14,13 @@ namespace CRMDevEducation.Models.Mapping
         public static GroupBusinessModel Map(InputGroupModel model)
         {
             List<CutLeadBusinessModel> leads = new List<CutLeadBusinessModel>();
-            foreach (CutLeadInputModel item in model.Leads)
+            if (model.Leads != null)
             {
-                leads.Add(CutLeadMappingInputToBusiness.Map(item));
+                foreach (CutLeadInputModel item in model.Leads)
+                {
+                    leads.Add(CutLeadMappingInputToBusiness.Map(item));
+                }
+
             }
             List<string> history = new List<string>();
             history.Add(model.History);

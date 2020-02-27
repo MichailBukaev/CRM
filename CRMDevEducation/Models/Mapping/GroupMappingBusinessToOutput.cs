@@ -14,6 +14,11 @@ namespace CRMDevEducation.Models.Mapping
         public static OutputGroupModel Map(GroupBusinessModel model)
         {
             List<CutLeadOutputModel> leads = new List<CutLeadOutputModel>();
+            string history = "";
+            foreach (string item in model.HistoryGroup)
+            {
+                history += item;
+            }
             foreach (CutLeadBusinessModel item in model.Leads)
             {
                 leads.Add(CutLeadMappingBusinessToOutput.Map(item));
@@ -33,7 +38,8 @@ namespace CRMDevEducation.Models.Mapping
                 Course = course,
                 StartData = model.StartDate,
                 Leads = leads,
-                Log = LogMappingBusinessToOutput.Map(model.LogOfGroup)
+                Log = LogMappingBusinessToOutput.Map(model.LogOfGroup),
+                History = history
             };
         }
     }

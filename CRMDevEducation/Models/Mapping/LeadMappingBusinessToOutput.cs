@@ -10,9 +10,14 @@ namespace CRMDevEducation.Models.Mapping
 {
     public class LeadMappingBusinessToOutput
     {
+       
         public static OutputLeadModel Map(LeadBusinessModel models)
         {
             string history = "";
+            foreach (string item in models.History)
+            {
+                history += JsonSerializer.Serialize<string>(item);
+            }
             return new OutputLeadModel
             {
                 Id = models.Id,

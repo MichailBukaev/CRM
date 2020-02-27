@@ -59,7 +59,9 @@ namespace business.WSHR
             IEntity group = new Group()
             {
                 NameGroup = _model.Name,
-                StartDate = _model.StartDate
+                StartDate = _model.StartDate,
+                CourseId = _model.Course.Id,
+                TeacherId = _model.Teacher.Id
             };
             bool success = _storage.Add(ref group);
 
@@ -102,6 +104,7 @@ namespace business.WSHR
             _storage = new StorageLead();
             Lead lead = new Lead()
             {
+                Id = _model.Id,
                 FName = _model.FName,
                 SName = _model.SName,
                 DateBirthday = _model.DateBirthday,

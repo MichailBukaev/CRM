@@ -14,5 +14,6 @@ namespace CRMDevEducation.Models.Output
         public string StartData { get; set; }
         public List<CutLeadOutputModel> Leads { get; set; }
         public OutputLogModel Log { get; set; }
+        public string History { get; set; }
     }
 }
