@@ -12,5 +12,6 @@ namespace business.WSUser.interfaces
         public abstract IModelsBusiness GetLead(int id);
         public abstract IModelsBusiness GetTacher(int teacherId);
         public abstract IModelsBusiness GetGroup(int id);
+        public abstract IModelsBusiness GetCourse(int id);
     }
 }

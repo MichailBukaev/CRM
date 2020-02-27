@@ -449,10 +449,30 @@ namespace business.WSHR
             foreach (TeacherBusinessModel item in _cache.Teachers.Teachers)
             {
                 if (item.Id == teacherId)
+                {
                     teacher = item;
+                    break;
+                }
             }
 
             return teacher;
+        }
+
+        public override IModelsBusiness GetCourse(int id)
+        {
+            CourseBusinessModel course = null;
+            if (!_cache.Courses.FlagActual)
+                ReconstructorHRManagerCache.UpdateCacheCourses(_cache.Courses);
+            foreach (CourseBusinessModel item in _cache.Courses.Courses)
+            {
+                if (item.Id == id)
+                {
+                    course = item;
+                    break;
+                }
+            }
+            return course;
+
         }
     }
 }

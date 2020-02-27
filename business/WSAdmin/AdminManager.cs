@@ -152,10 +152,7 @@ namespace business.WSAdmin
             };
         }
 
-        public override IModelsBusiness GetTacher(int teacherId)
-        {
-            throw new NotImplementedException();
-        }
+     
         public override IModelsBusiness GetGroup(int id)
         {
             _storage = new StorageGroup();
@@ -193,6 +190,15 @@ namespace business.WSAdmin
                 StartDate = group.StartDate
             };
             return result;
+        }
+
+        public override IModelsBusiness GetCourse(int id)
+        {
+            throw new NotImplementedException();
+        }
+        public override IModelsBusiness GetTacher(int teacherId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

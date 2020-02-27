@@ -193,6 +193,21 @@ namespace business.WSTeacher
             TeacherEntityCache entityCache = new FillEntityCache(_teacher).Fill();
             _cache = new FillTeacherManagerCache(entityCache, _teacher).Fill();
         }
-      
+
+        public override IModelsBusiness GetCourse(int id)
+        {
+            CourseBusinessModel course = null;
+            if (!_cache.Course.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheCourses(_cache.Course, _teacher);
+            foreach (CourseBusinessModel item in _cache.Course.Courses)
+            {
+                if (item.Id == id)
+                {
+                    course = item;
+                    break;
+                }
+            }
+            return course;
+        }
     }
 }

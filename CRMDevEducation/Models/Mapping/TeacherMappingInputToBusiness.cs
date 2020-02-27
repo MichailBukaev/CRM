@@ -14,15 +14,21 @@ namespace CRMDevEducation.Models.Mapping
         public static TeacherBusinessModel Map(InputTeacherModel model)
         {
             List<CutGroupBusinessModel> groups = new List<CutGroupBusinessModel>();
-            foreach (var item in model.Groups)
+            if (model.Groups != null)
             {
-                groups.Add(CutGroupMappingInputToBusiness.Map(item));
+                foreach (var item in model.Groups)
+                {
+                    groups.Add(CutGroupMappingInputToBusiness.Map(item));
+                }
             }
 
             List<CutCourseBusinessModel> courses = new List<CutCourseBusinessModel>();
-            foreach (var item in model.Courses)
+            if (model.Groups != null)
             {
+                foreach (var item in model.Courses)
+                {
                 courses.Add(CutCourseMappingInputToBusiness.Map(item));
+                }
             }
 
             return new TeacherBusinessModel()
