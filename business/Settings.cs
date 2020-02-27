@@ -46,162 +46,30 @@ namespace business
         {
             List<Status> modelsInDB;
             storage = new StorageStatus();
+            flagContain = false;
+
             modelsInDB = (List<Status>)storage.GetAll();
 
-            flagContain = false;
-            modelAdd = new Status()
+            foreach (string value in Enum.GetNames(typeof(StatusLead)))
             {
-                Name = "Новый лид"
-            };
-
-            foreach(Status item in modelsInDB)
-            {
-                if(item.Name == ((Status)modelAdd).Name)
+                flagContain = false;
+                modelAdd = new Status()
                 {
-                    flagContain = true;
-                    break;
-                }
-            }
-            if(!flagContain)
-            {
-                storage.Add(ref modelAdd);
-            }
-
-
-            flagContain = false;
-            modelAdd = new Status()
-            {
-                Name = "Интервью назначено"
-            };
-
-            foreach (Status item in modelsInDB)
-            {
-                if (item.Name == ((Status)modelAdd).Name)
+                    Name = value
+                };
+                foreach (Status item in modelsInDB)
                 {
-                    flagContain = true;
-                    break;
+                    if (item.Name == ((Status)modelAdd).Name)
+                    {
+                        flagContain = true;
+                        break;
+                    }
+
                 }
-            }
-            if (!flagContain)
-            {
-                storage.Add(ref modelAdd);
-            }
-
-
-            flagContain = false;
-            modelAdd = new Status()
-            {
-                Name = "Интервью пройдено"
-            };
-
-            foreach (Status item in modelsInDB)
-            {
-                if (item.Name == ((Status)modelAdd).Name)
+                if (!flagContain)
                 {
-                    flagContain = true;
-                    break;
+                    storage.Add(ref modelAdd);
                 }
-            }
-            if (!flagContain)
-            {
-                storage.Add(ref modelAdd);
-            }
-
-
-            flagContain = false;
-            modelAdd = new Status()
-            {
-                Name = "Интервью не пройдено"
-            };
-
-            foreach (Status item in modelsInDB)
-            {
-                if (item.Name == ((Status)modelAdd).Name)
-                {
-                    flagContain = true;
-                    break;
-                }
-            }
-            if (!flagContain)
-            {
-                storage.Add(ref modelAdd);
-            }
-
-            flagContain = false;
-            modelAdd = new Status()
-            {
-                Name = "Готов начать обучение"
-            };
-
-            foreach (Status item in modelsInDB)
-            {
-                if (item.Name == ((Status)modelAdd).Name)
-                {
-                    flagContain = true;
-                    break;
-                }
-            }
-            if (!flagContain)
-            {
-                storage.Add(ref modelAdd);
-            }
-
-            flagContain = false;
-            modelAdd = new Status()
-            {
-                Name = "Студент"
-            };
-
-            foreach (Status item in modelsInDB)
-            {
-                if (item.Name == ((Status)modelAdd).Name)
-                {
-                    flagContain = true;
-                    break;
-                }
-            }
-            if (!flagContain)
-            {
-                storage.Add(ref modelAdd);
-            }
-
-            flagContain = false;
-            modelAdd = new Status()
-            {
-                Name = "Закончил обучение"
-            };
-
-            foreach (Status item in modelsInDB)
-            {
-                if (item.Name == ((Status)modelAdd).Name)
-                {
-                    flagContain = true;
-                    break;
-                }
-            }
-            if (!flagContain)
-            {
-                storage.Add(ref modelAdd);
-            }
-
-
-            flagContain = false;
-            modelAdd = new Status()
-            {
-                Name = "Отчислен"
-            };
-
-            foreach (Status item in modelsInDB)
-            {
-                if (item.Name == ((Status)modelAdd).Name)
-                {
-                    flagContain = true;
-                    break;
-                }
-            }
-            if (!flagContain)
-            {
-                storage.Add(ref modelAdd);
             }
         }
         public enum StatusTask
