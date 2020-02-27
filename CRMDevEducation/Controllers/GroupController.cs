@@ -84,7 +84,7 @@ namespace CRMDevEducation.Controllers
         [HttpDelete]
         public HttpResponseMessage DeleteGroup([FromBody]InputGroupModel model)
         {
-            HeadHR manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            HeadHR manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 if (manager.DeleteGroup(GroupMappingInputToBusiness.Map(model)))
