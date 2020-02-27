@@ -20,10 +20,6 @@ namespace business.WSTeacher.HeadTeacher
             historyWriter = new HistoryWriter();
 
         }
-        
-
-       
-
         public int? AddNewSkill(SkillBusinessModel skill)
         {
             _storage = new StorageSkills();
@@ -148,7 +144,6 @@ namespace business.WSTeacher.HeadTeacher
             return result;
         }
 
-
         public int? SetTasksForSlaves(string task, DateTime deadLine, int tasksStatusId, string loginExecuter)
         {
             
@@ -174,7 +169,6 @@ namespace business.WSTeacher.HeadTeacher
                 return null;
         }
        
-
         public List<TaskWorkBusinessModel> GetAllTasksForSlaves()
         {
             List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
@@ -282,14 +276,6 @@ namespace business.WSTeacher.HeadTeacher
             return tasks;
         }
 
-        public override IModelsBusiness GetGroup(int id)
-        {
-            if (!_cache.Group.FlagActual)
-                ReconstructorTeacherManagerCache.UpdateCacheGroup(_cache.Group, _teacher);
-            GroupBusinessModel group = _cache.Group.Groups.FirstOrDefault(x => x.Id == id);
-            return group;
-
-        }
         public int GetIdStatusTask(string nameStatus)
         {
             if (!_cache.TasksStatus.FlagActual)

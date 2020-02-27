@@ -145,7 +145,7 @@ namespace business.WSHR.Headhr.Cache
                 CutTeacherBusinessModel cutTeacher = null;
                 CutCourseBusinessModel cutCourse = null;
                 if (item.Teacher != null)
-                    cutTeacher = new CutTeacherBusinessModel() { Id = item.TeacherId, FName = item.Teacher.FName, SName = item.Teacher.SName };
+                    cutTeacher = new CutTeacherBusinessModel() { Id = item.TeacherId, FName = item.Teacher.FName, SName = item.Teacher.SName, Login = item.Teacher.Login };
                 if (item.Course != null)
                     cutCourse = new CutCourseBusinessModel() { Id = item.CourseId, Name = item.Course.Name };
 

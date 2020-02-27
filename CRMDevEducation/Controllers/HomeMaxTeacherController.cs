@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using business;
+using business.Cache;
 using business.Models;
 using business.WSTeacher;
+using business.WSTeacher.Cache;
 using business.WSTeacher.HeadTeacher;
 using CRMDevEducation.Models.Input;
 using CRMDevEducation.Models.Mapping;
@@ -23,10 +25,7 @@ namespace CRMDevEducation.Controllers
     public class HomeMaxTeacherController : ControllerBase
     {
         MaxHeadTeacherManager teacher;
-        public HomeMaxTeacherController()
-        {
-
-        }
+       
         [HttpGet]
         public string Get()
         {
@@ -41,69 +40,76 @@ namespace CRMDevEducation.Controllers
             {
                 json += JsonSerializer.Serialize<CutCourseOutputModel>(CourseMappingBusinessToCutOutput.Map(item));
             }
-            foreach (TaskWorkBusinessModel item in teacher.GetMyselfTask())
+            if (!teacher.Cache.Teachers.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheTeachers(teacher.Cache.Teachers, teacher.Teacher);
+            foreach (TeacherBusinessModel item in teacher.Cache.Teachers.Teachers.Where(p => p.Id != teacher.Teacher.Id))
+            {
+                json += JsonSerializer.Serialize<CutTeacherOutputModel>(TeacherMappingBusinessToCutOutput.Map(item));
+            }
+            List<string> tasksStatusesName = new List<string>() 
+            {
+                Settings.StatusTask.ToDo.ToString(),
+                Settings.StatusTask.InProgress.ToString(),
+                Settings.StatusTask.Urgently.ToString()
+            };
+            foreach(string itemStatus in tasksStatusesName)
+            {
+                foreach (TaskWorkBusinessModel item in teacher.GetAllMyTask(itemStatus))
+                {
+                    TasksStatusBusinessModel tasksStatus = teacher.Cache.TasksStatus.TasksStatus.FirstOrDefault(p => p.Id == item.TasksStatusId);
+                    json += JsonSerializer.Serialize<OutputTaskWorkModel>(TaskWorkMappingBusinessToOutput.Map(item, tasksStatus));
+                }
+            }
+            foreach (TaskWorkBusinessModel item in teacher.GetAllTasksForSlaves(DateTime.Now.AddDays(-7)))
             {
                 TasksStatusBusinessModel tasksStatus = teacher.Cache.TasksStatus.TasksStatus.FirstOrDefault(p => p.Id == item.TasksStatusId);
                 json += JsonSerializer.Serialize<OutputTaskWorkModel>(TaskWorkMappingBusinessToOutput.Map(item, tasksStatus));
             }
+
+            if (!teacher.Cache.Status.FlagActual)
+                ReconstructorTeacherManagerCache.UpdateCacheStatus(teacher.Cache.Status);
+            foreach (TasksStatusBusinessModel item in teacher.Cache.TasksStatus.TasksStatus)
+            {
+                json += JsonSerializer.Serialize<OutputTaskStatusModel>(TasksStatusMappingBusinessToOutput.Map(item));
+            }
             return json;
         }
-
-       /* [HttpPost]
-        public IActionResult CreateLog([FromBody] InputDayInLogModel model)
+           
+        [Route("AddNewSkill")]
+        [HttpPost]
+        public int? CreateNewSkill([FromBody] InputSkillModel model)
         {
-            if (StorageToken.Check(Request.Headers["Authorization"]))
-            {
-                bool flag = teacher.SetAttendence(DayInLogMappingInputToBusiness.Map(model)); // изменить возвращаемое значение чтобы можно было вывести то что мы заполнили
-                if (flag)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            else
-                return BadRequest();
+            teacher = (MaxHeadTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
+            int? idNewskill = teacher.AddNewSkill(SkillMappingInputToBusiness.Map(model)); 
+            return idNewskill;
         }
 
-        [HttpPost]
-        public IActionResult CreateNewSkill([FromBody] InputSkillModel model)
-        {
-            if (StorageToken.Check(Request.Headers["Authorization"]))
-            {
-                int? flag = teacher.AddNewSkill(SkillMappingInputToBusiness.Map(model)); // изменить возвращаемое значение чтобы можно было вывести то что мы заполнили
-                if (flag != null)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            else
-                return BadRequest();
-        }*/
 
+        [Route("AddNewCourse")]
         [HttpPost]
-        public IActionResult CreateNewCourse([FromBody] InputCourseModel model)
+        public int? CreateNewCourse([FromBody] InputCourseModel model)
         {
-            if (StorageToken.Check(Request.Headers["Authorization"]))
-            {
-                int? flag = teacher.AddNewCourse(CourseMappingInputToBusiness.Map(model)); // изменить возвращаемое значение чтобы можно было вывести то что мы заполнили
-                if (flag != null)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            else
-                return BadRequest();
+            teacher = (MaxHeadTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
+            int? courseId = teacher.AddNewCourse(CourseMappingInputToBusiness.Map(model)); 
+            return courseId;
+        }
+
+        [Route("SetSelfTask")]
+        [HttpPost]
+        public int? SetSelfTaskWork([FromBody] InputSelfTaskModel model)
+        {
+            teacher = (MaxHeadTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
+            int? taskId = teacher.SetSelfTask(task: model.Task, deadLine: model.DeadLine, tasksStatusId: model.TasksStatusId);
+            return taskId;
+        }
+
+        [Route("SetTaskForTeacher")]
+        [HttpPost]
+        public int? SetTaskWork([FromBody] InputTaskModel model)
+        {
+            teacher = (MaxHeadTeacherManager)StorageToken.GetManager(Request.Headers["Authorization"]);
+            int? taskWorkId = teacher.SetTasksForSlaves(model.Task, model.DeadLine, model.TasksStatusId, model.loginExecuter);
+            return taskWorkId;
         }
 
     }

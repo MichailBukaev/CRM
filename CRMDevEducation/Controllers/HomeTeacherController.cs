@@ -47,7 +47,7 @@ namespace CRMDevEducation.Controllers
                 {
                     json += JsonSerializer.Serialize<CutCourseOutputModel>(CourseMappingBusinessToCutOutput.Map(item));
                 }
-                foreach(TaskWorkBusinessModel item in teacherManager.GetMyselfTask())
+                foreach(TaskWorkBusinessModel item in teacherManager.GetAllMyTask())
                 {
                     TasksStatusBusinessModel tasksStatus = teacherManager.Cache.TasksStatus.TasksStatus.FirstOrDefault(p => p.Id == item.TasksStatusId);
                     json += JsonSerializer.Serialize<OutputTaskWorkModel>(TaskWorkMappingBusinessToOutput.Map(item, tasksStatus));

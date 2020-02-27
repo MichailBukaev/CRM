@@ -60,7 +60,7 @@ namespace data.StorageEntity
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                var logs = db.Logs.Include(p => p.Lead).ToList();
+                var logs = db.Logs.Include(p=>p.Lead).ToList();
                 return _reader.Read(null, null, logs);
             }
         }

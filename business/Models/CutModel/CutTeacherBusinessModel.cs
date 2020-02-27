@@ -9,5 +9,6 @@ namespace business.Models
         public int? Id { get; set; }
         public string FName { get; set; }
         public string SName { get; set; }
+        public string Login { get; set; }
     }
 }
