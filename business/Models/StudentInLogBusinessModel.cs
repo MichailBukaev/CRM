@@ -2,7 +2,7 @@
 
 namespace business.Models
 {
-    public class StudentInLogBusinessModel
+    public class StudentInLogBusinessModel : IModelsBusiness
     {
         public CutLeadBusinessModel Lead { get; set; }
         public bool Visit { get; set; }

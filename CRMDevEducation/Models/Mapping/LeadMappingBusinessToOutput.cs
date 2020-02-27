@@ -13,10 +13,6 @@ namespace CRMDevEducation.Models.Mapping
         public static OutputLeadModel Map(LeadBusinessModel models)
         {
             string history = "";
-            foreach (string item in models.History)
-            {
-                history += JsonSerializer.Deserialize<OutputLeadModel>(item);
-            }
             return new OutputLeadModel
             {
                 Id = models.Id,
@@ -26,9 +22,7 @@ namespace CRMDevEducation.Models.Mapping
                 Numder = models.Numder,
                 EMail = models.EMail,
                 Status = models.Status.Name,
-                History = history,
-                Login = models.Login,
-                Password = models.Password
+                History = history
             };         
         }
     }
