@@ -2,25 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using business;
+using business.WSUser.interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRMDevEducation.Controllers
 {
-    
     [Authorize]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class ExitController : ControllerBase
+    public class CourseController : ControllerBase
     {
+        IUserManager _manager;
+        
+        [Authorize(Roles = "HR, HeadHR, Teacher, HeadTeacher")]
         [HttpGet]
-        public IActionResult Get()
+        public void Get()
         {
-            StorageToken.Delete(Request.Headers["Authorization"]);
-
-            return RedirectToRoute("Get", "HomeAdmin");
-        }
+           
+        }      
     }
 }

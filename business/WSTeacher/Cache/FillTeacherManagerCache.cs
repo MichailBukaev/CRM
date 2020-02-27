@@ -95,7 +95,7 @@ namespace business.WSTeacher.Cache
                         CutTeacherBusinessModel cutTeacher = null;
                         CutCourseBusinessModel cutCourse = null;
                         if (item.Teacher != null)
-                            cutTeacher = new CutTeacherBusinessModel() { Id = item.TeacherId, FName = item.Teacher.FName, SName = item.Teacher.SName };
+                            cutTeacher = new CutTeacherBusinessModel() { Id = item.TeacherId, FName = item.Teacher.FName, SName = item.Teacher.SName, Login = item.Teacher.Login };
                         if (item.Course != null)
                             cutCourse = new CutCourseBusinessModel() { Id = item.CourseId, Name = item.Course.Name };
 
@@ -338,7 +338,7 @@ namespace business.WSTeacher.Cache
         }
         private void SetTaskWorkForSlaves()
         {
-            foreach (Teacher item in entityCache.Teachers)
+            foreach (Teacher item in entityCache.Teachers.Where(p=>p.Login!=teacher.Login))
             {
                 CacheTaskWorkForSlavesCombineByExecuter TasksForSlaves = new CacheTaskWorkForSlavesCombineByExecuter(item.Login, teacher.Login);
                 cache.TaskWorkForSlavesCombineByExecuters.Add(TasksForSlaves);
@@ -348,23 +348,24 @@ namespace business.WSTeacher.Cache
             foreach (IGrouping<string, TaskWork> item in taskWorkGroupedByExecuter)
             {
                 CacheTaskWorkForSlavesCombineByExecuter TasksForSlaves = cache.TaskWorkForSlavesCombineByExecuters.FirstOrDefault(p => p.LoginExecuter == item.Key);
-                foreach (var task in item)
+                if (TasksForSlaves != null)
                 {
-                    TasksForSlaves.TasksWork.Add(new TaskWorkBusinessModel()
+                    foreach (var task in item)
                     {
-                        Id = task.Id,
-                        LoginAuthor = task.LoginAuthor,
-                        LoginExecuter = task.LoginExecuter,
-                        DateStart = task.DateStart,
-                        DateEnd = task.DateEnd,
-                        TasksStatusId = task.TasksStatusId,
-                        Text = task.Text
-                    });
+                        TasksForSlaves.TasksWork.Add(new TaskWorkBusinessModel()
+                        {
+                            Id = task.Id,
+                            LoginAuthor = task.LoginAuthor,
+                            LoginExecuter = task.LoginExecuter,
+                            DateStart = task.DateStart,
+                            DateEnd = task.DateEnd,
+                            TasksStatusId = task.TasksStatusId,
+                            Text = task.Text
+                        });
+                    }
+                    TasksForSlaves.FlagActual = true;
                 }
-                TasksForSlaves.FlagActual = true;
-                
             }
-            
         }
         private void SetTasksStatus()
         {

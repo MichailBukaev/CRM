@@ -353,6 +353,7 @@ namespace business.WSTeacher.Cache
         {
             storage = new StorageTaskWork();
             List<TaskWork> tasks = (List<TaskWork>)storage.GetAll(TaskWork.Fields.LoginAuthor.ToString(), loginAuthor);
+            tasks = tasks.Where(p => p.LoginExecuter == cache.LoginExecuter).ToList();
             List<TaskWorkBusinessModel> taskBM = new List<TaskWorkBusinessModel>();
             foreach (TaskWork item in tasks)
             {

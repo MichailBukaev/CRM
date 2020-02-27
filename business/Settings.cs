@@ -23,7 +23,7 @@ namespace business
             modelsInDB = (List<TasksStatus>)storage.GetAll();
             modelAdd = new TasksStatus()
             {
-                Name = "To do"
+                Name = StatusTask.ToDo.ToString()
             };
             foreach(TasksStatus item in modelsInDB)
             {
@@ -44,7 +44,7 @@ namespace business
             flagContain = false;
             modelAdd = new TasksStatus()
             {
-                Name = "In progress"
+                Name = StatusTask.InProgress.ToString()
             };
             foreach (TasksStatus item in modelsInDB)
             {
@@ -64,7 +64,7 @@ namespace business
             flagContain = false;
             modelAdd = new TasksStatus()
             {
-                Name = "Urgently"
+                Name = StatusTask.Urgently.ToString()
             };
             foreach (TasksStatus item in modelsInDB)
             {
@@ -84,7 +84,7 @@ namespace business
             flagContain = false;
             modelAdd = new TasksStatus()
             {
-                Name = "Done"
+                Name = StatusTask.Done.ToString()
             };
             foreach (TasksStatus item in modelsInDB)
             {
@@ -262,7 +262,14 @@ namespace business
                 storage.Add(ref modelAdd);
             }
         }
-        
-       
+        public enum StatusTask
+        {
+            ToDo,
+            Urgently,
+            InProgress,
+            Done
+        }
+
+
     }
 }

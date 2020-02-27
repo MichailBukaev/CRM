@@ -35,10 +35,8 @@ namespace data
         }   
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<HistoryGroup>().HasNoKey();
+            //modelBuilder.Entity<HistoryGroup>().HasNoKey();
             //modelBuilder.Entity<History>().HasNoKey();
-            //modelBuilder.Entity<Log>().HasNoKey();
-           
             //base.OnModelCreating(modelBuilder);
 
         }

@@ -31,6 +31,7 @@ namespace business.WSHR
             Teachers = new CacheTeachers();
             TaskWorkMyself = new CacheTaskWorkMyself(_hr.Login);
             TaskWorkForSlavesCombineByExecuters = new List<CacheTaskWorkForSlavesCombineByExecuter>();
+            TasksStatus = new CacheTasksStatus();
         }
     }
 }

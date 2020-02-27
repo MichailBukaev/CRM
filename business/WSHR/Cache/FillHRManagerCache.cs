@@ -145,7 +145,7 @@ namespace business.WSHR.Headhr.Cache
                 CutTeacherBusinessModel cutTeacher = null;
                 CutCourseBusinessModel cutCourse = null;
                 if (item.Teacher != null)
-                    cutTeacher = new CutTeacherBusinessModel() { Id = item.TeacherId, FName = item.Teacher.FName, SName = item.Teacher.SName };
+                    cutTeacher = new CutTeacherBusinessModel() { Id = item.TeacherId, FName = item.Teacher.FName, SName = item.Teacher.SName, Login = item.Teacher.Login };
                 if (item.Course != null)
                     cutCourse = new CutCourseBusinessModel() { Id = item.CourseId, Name = item.Course.Name };
 
@@ -288,26 +288,39 @@ namespace business.WSHR.Headhr.Cache
         }
         private void SetTaskWorkForSlaves()
         {
+            foreach (HR item in entityCache.HRs.Where(p => p.Login != hr.Login))
+            {
+                CacheTaskWorkForSlavesCombineByExecuter TasksForSlaves = new CacheTaskWorkForSlavesCombineByExecuter(item.Login, hr.Login);
+                cache.TaskWorkForSlavesCombineByExecuters.Add(TasksForSlaves);
+            }
+            foreach (Teacher item in entityCache.Teachers)
+            {
+                CacheTaskWorkForSlavesCombineByExecuter TasksForSlaves = new CacheTaskWorkForSlavesCombineByExecuter(item.Login, hr.Login);
+                cache.TaskWorkForSlavesCombineByExecuters.Add(TasksForSlaves);
+            }
+
             List<TaskWork> taskWorks = entityCache.TaskWorks.Where(x => x.LoginExecuter != hr.Login).ToList();
             var taskWorkGroupedByExecuter = taskWorks.GroupBy(x => x.LoginExecuter);
             foreach (IGrouping<string, TaskWork> item in taskWorkGroupedByExecuter)
             {
-                CacheTaskWorkForSlavesCombineByExecuter TasksForSlaves = new CacheTaskWorkForSlavesCombineByExecuter(item.Key, hr.Login);
-                foreach (var task in item)
+                CacheTaskWorkForSlavesCombineByExecuter TasksForSlaves = cache.TaskWorkForSlavesCombineByExecuters.FirstOrDefault(p => p.LoginExecuter == item.Key);
+                if (TasksForSlaves != null)
                 {
-                    TasksForSlaves.TasksWork.Add(new TaskWorkBusinessModel()
+                    foreach (var task in item)
                     {
-                        Id = task.Id,
-                        LoginAuthor = task.LoginAuthor,
-                        LoginExecuter = task.LoginExecuter,
-                        DateStart = task.DateStart,
-                        DateEnd = task.DateEnd,
-                        TasksStatusId = task.TasksStatusId,
-                        Text = task.Text
-                    });
+                        TasksForSlaves.TasksWork.Add(new TaskWorkBusinessModel()
+                        {
+                            Id = task.Id,
+                            LoginAuthor = task.LoginAuthor,
+                            LoginExecuter = task.LoginExecuter,
+                            DateStart = task.DateStart,
+                            DateEnd = task.DateEnd,
+                            TasksStatusId = task.TasksStatusId,
+                            Text = task.Text
+                        });
+                    }
+                    TasksForSlaves.FlagActual = true;
                 }
-                TasksForSlaves.FlagActual = true;
-                cache.TaskWorkForSlavesCombineByExecuters.Add(TasksForSlaves);
             }
         }
         private void SetTasksStatus()

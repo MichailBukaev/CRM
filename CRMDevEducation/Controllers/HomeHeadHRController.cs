@@ -29,8 +29,8 @@ namespace CRMDevEducation.Controllers
         [HttpGet]
         public string Get()
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";
                 foreach (HRBusinessModel model in manager.GetHR())
@@ -56,11 +56,12 @@ namespace CRMDevEducation.Controllers
         [HttpPost]
         public string CreateLead([FromBody]InputLeadModel model)
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
-                if (manager.CreateLead(LeadMappingInputToBusness.Map(model)) != null)                
-                    return manager.CreateLead(LeadMappingInputToBusness.Map(model)).ToString();                
+                int? id = manager.CreateLead(LeadMappingInputToBusness.Map(model));
+                if (id != null)
+                    return $"{id}" ;                
                 else                
                     return "false";               
             }
@@ -68,46 +69,12 @@ namespace CRMDevEducation.Controllers
                 return "Bad Login";            
         }
 
-        [Route("UpdateLead")]
-        [HttpPut]
-        public HttpResponseMessage UpdateLead([FromBody]InputLeadModel model)
-        {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
-            {
-                if (manager.UpdateLead(LeadMappingInputToBusness.Map(model)))                
-                    return new HttpResponseMessage(HttpStatusCode.OK);                
-                else                
-                    return new HttpResponseMessage(HttpStatusCode.BadRequest);                
-            }
-            else            
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);            
-        }
-
-        [Route("DeleteLead")]
-        [HttpDelete]
-        public HttpResponseMessage DeleteLead([FromBody]InputLeadModel model)
-        {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
-            {
-                if (manager.DeleteLead(LeadMappingInputToBusness.Map((model))))                
-                    return new HttpResponseMessage(HttpStatusCode.OK);
-                
-                else                
-                    return new HttpResponseMessage(HttpStatusCode.BadRequest);                
-            }
-            else            
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            
-        }
-        
         [Route("MyTasks/InTheTimeRange")]
         [HttpGet]        
         public string GetMyTask(DateTime startDate)
         {
             manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";                
                 foreach (TaskWorkBusinessModel model in manager.GetTasksMyself(startDate))
@@ -129,7 +96,7 @@ namespace CRMDevEducation.Controllers
         public string GetTasksForExecutors() 
         {
             manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";
                 foreach (TaskWorkBusinessModel model in manager.GetTaskWorkForSlaves())
@@ -151,7 +118,7 @@ namespace CRMDevEducation.Controllers
         public string GetMyTask(string nameTaskStatus)
         {
             manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";
                 int statusId = manager.GetIdStatusTasks(nameTaskStatus);
@@ -174,10 +141,11 @@ namespace CRMDevEducation.Controllers
         public string CreateGroup([FromBody]InputGroupModel model)
         {
             manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
-                if (manager.CreateGroup(GroupMappingInputToBusiness.Map(model)) != null)                
-                    return manager.CreateGroup(GroupMappingInputToBusiness.Map(model)).ToString();                
+                int? id = manager.CreateGroup(GroupMappingInputToBusiness.Map(model));
+                if (id != null)                
+                    return $"{id}";                
                 else                
                     return "false";                
             }
@@ -185,29 +153,14 @@ namespace CRMDevEducation.Controllers
                 return "Bad Login";            
         }
 
-        [Route("DeleteGroup")]
-        [HttpDelete]
-        public HttpResponseMessage DeleteGroup([FromBody]InputGroupModel model)
-        {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
-            {
-                if (manager.DeleteGroup(GroupMappingInputToBusiness.Map(model)))                
-                    return new HttpResponseMessage(HttpStatusCode.OK);                
-                else                
-                    return new HttpResponseMessage(HttpStatusCode.BadRequest);                
-            }
-            else            
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            
-        }
+        
 
         [Route("SetMyTask")]
         [HttpPost]
         public string SetMyTask([FromBody]InputTaskModel task)
         {
             manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 if (manager.SetTaskMyself(task.Task, task.DeadLine, task.TasksStatusId) != 0)
                     return manager.SetTaskMyself(task.Task, task.DeadLine, task.TasksStatusId).ToString();
@@ -224,7 +177,7 @@ namespace CRMDevEducation.Controllers
         public string SetTaskToExecutor([FromBody]InputTaskModel task)
         {
             manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 if (manager.SetTasksForSlaves(task.Task, task.DeadLine, task.TasksStatusId, task.loginExecuter) != 0)
                     return manager.SetTasksForSlaves(task.Task, task.DeadLine, task.TasksStatusId, task.loginExecuter).ToString();
@@ -241,7 +194,7 @@ namespace CRMDevEducation.Controllers
         public string GetLeadsByStatus([FromBody]InputStatusModel status)
         {
             manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";
                 int idStatus = manager.GetStatusId(status.Name);
@@ -263,7 +216,7 @@ namespace CRMDevEducation.Controllers
         public string GetGroups()
         {
             manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";                
                 foreach (GroupBusinessModel model in manager.GetGroups())
@@ -284,7 +237,7 @@ namespace CRMDevEducation.Controllers
         public string GetTeachers()
         {
             manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
-            if (StorageToken.Check(Request.Headers["Authorization"]))
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";
                 foreach (TeacherBusinessModel model in manager.GetTeacher())
