@@ -316,7 +316,7 @@ namespace business.WSHR
                 {
                     foreach (TaskWorkBusinessModel task in item.TasksWork)
                     {
-                        if(task.DateStart.CompareTo(taskStartDate) <= 0)
+                        if(task.DateStart.CompareTo(taskStartDate) >= 0)
                             taskBusinesses.Add(task);
                     }
                 }

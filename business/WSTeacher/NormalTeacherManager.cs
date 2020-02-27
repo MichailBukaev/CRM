@@ -134,11 +134,6 @@ namespace business.WSTeacher
             return leadBusinesses;
         }
 
-        public  List<TaskWorkBusinessModel> GetMyselfTask()
-        {
-            return _cache.TaskWorkMyself.TasksWork;
-        }
-
         public override IModelsBusiness GetTacher(int teacherId)
         {
             if (!_cache.Teachers.FlagActual)
@@ -168,12 +163,11 @@ namespace business.WSTeacher
             return ok;
         }
 
-        public  bool SetSelfTask(string task, DateTime deadLine, int tasksStatusId)
+        public  int? SetSelfTask(string task, DateTime deadLine, int tasksStatusId)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
            
             _storage = new StorageTaskWork();
-            bool flag;
             IEntity myTask = new TaskWork()
             {
                 DateStart = DateTime.Now,
@@ -185,13 +179,13 @@ namespace business.WSTeacher
             };
             if (_storage.Add(ref myTask))
             {
-                flag = true;
                 publishingHouse.CombineByExecuter[_teacher.Login].Notify(_teacher.Login);
+                TaskWork taskWork = (TaskWork)myTask;
+                return taskWork.Id;
             }
             else
-                flag = false;
+                return null;
                 
-            return flag;
         }
 
         private void SetCache()
@@ -199,7 +193,6 @@ namespace business.WSTeacher
             TeacherEntityCache entityCache = new FillEntityCache(_teacher).Fill();
             _cache = new FillTeacherManagerCache(entityCache, _teacher).Fill();
         }
-
       
     }
 }

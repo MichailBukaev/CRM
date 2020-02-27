@@ -15,13 +15,8 @@ namespace business.WSTeacher.HeadTeacher
     {
         public MaxHeadTeacherManager(int teacherId)
             : base(teacherId)
-        {
-            
-
-        }
+        { }
         
-
-       
 
         public int? AddNewSkill(SkillBusinessModel skill)
         {
@@ -43,7 +38,7 @@ namespace business.WSTeacher.HeadTeacher
                 return null;
             }
 
-        }
+        }//+
 
         public bool AssignTeacherForGroup(int teacherId, int groupeId)
         {
@@ -96,7 +91,7 @@ namespace business.WSTeacher.HeadTeacher
                 publisherTeacher.Notify();
             }
             return ok;
-        }
+        }//+
         public int? AddNewCourse(CourseBusinessModel model)
         {
             PublishingHouse publishingHouse = PublishingHouse.Create();
@@ -119,7 +114,7 @@ namespace business.WSTeacher.HeadTeacher
                 return null;
             }
 
-        }
+        }//+
         public bool AssignTeacherForCourse(int teacherId, int courseId)
         {
             bool result = false;
@@ -140,8 +135,7 @@ namespace business.WSTeacher.HeadTeacher
                 publishingHouse.Courses.Notify();
             }
             return result;
-        }
-
+        }//+
 
         public int? SetTasksForSlaves(string task, DateTime deadLine, int tasksStatusId, string loginExecuter)
         {
@@ -166,9 +160,8 @@ namespace business.WSTeacher.HeadTeacher
             }
             else
                 return null;
-        }
+        }//+/-
        
-
         public List<TaskWorkBusinessModel> GetAllTasksForSlaves()
         {
             List<TaskWorkBusinessModel> tasks = new List<TaskWorkBusinessModel>();
@@ -276,14 +269,6 @@ namespace business.WSTeacher.HeadTeacher
             return tasks;
         }
 
-        public override IModelsBusiness GetGroup(int id)
-        {
-            if (!_cache.Group.FlagActual)
-                ReconstructorTeacherManagerCache.UpdateCacheGroup(_cache.Group, _teacher);
-            GroupBusinessModel group = _cache.Group.Groups.FirstOrDefault(x => x.Id == id);
-            return group;
-
-        }
         public int GetIdStatusTask(string nameStatus)
         {
             if (!_cache.TasksStatus.FlagActual)

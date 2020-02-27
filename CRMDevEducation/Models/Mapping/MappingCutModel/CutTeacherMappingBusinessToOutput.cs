@@ -16,6 +16,7 @@ namespace CRMDevEducation.Models.Mapping.MappingCutModel
                 Id = Convert.ToInt32(model.Id),
                 FName = model.FName,
                 SName = model.SName,
+                Login = model.Login
             };
         }
     }
