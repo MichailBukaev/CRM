@@ -18,7 +18,8 @@ namespace business
 
         public void Notify()
         {
-            observers.Invoke();
+            if (observers != null)
+                observers.Invoke();
         }
     }
 }

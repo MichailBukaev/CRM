@@ -17,7 +17,8 @@ namespace business
 
         public void Notify(string loginAuthor)
         {
-            observers.Invoke(loginAuthor);
+            if (observers != null)
+                observers.Invoke(loginAuthor);
         }
 
     }

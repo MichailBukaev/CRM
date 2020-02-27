@@ -215,7 +215,7 @@ namespace CRMDevEducation.Controllers
         [HttpGet]
         public string GetGroups()
         {
-            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Autorization"]);
+            manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
             if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
             {
                 string json = "";                
