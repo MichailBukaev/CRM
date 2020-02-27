@@ -97,5 +97,23 @@ namespace CRMDevEducation.Controllers
             }else
                 return new HttpResponseMessage(HttpStatusCode.BadRequest);
         }
+
+        [Authorize(Roles = "HeadHR")]
+        [Route("Delete")]
+        [HttpDelete]
+        public HttpResponseMessage Delete(InputLeadModel model)
+        {
+            HeadHR manager = (HeadHR)StorageToken.GetManager(Request.Headers["Authorization"]);
+            if (StorageToken.Check(Request.Headers["Authorization"]) && manager != null)
+            {
+                if (manager.DeleteLead(LeadMappingInputToBusness.Map((model))))
+                    return new HttpResponseMessage(HttpStatusCode.OK);
+                else
+                    return new HttpResponseMessage(HttpStatusCode.BadRequest);
+
+            }
+            else
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+        }
     } 
 }

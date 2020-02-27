@@ -25,9 +25,9 @@ namespace business
             IEntity history = new History
             {
                 LeadId = lead.Id,
-                HistoryText = "Создан пользователь в " +
-                Convert.ToString(DateTime.UtcNow) + "c ID:" +
-                lead.Id + ". "
+                HistoryText = "Add User at " +
+                Convert.ToString(DateTime.UtcNow) + "with ID:" +
+                lead.Id + "Status: " + lead.Status.Name
             };
             return _storageHistory.Add(ref history);
                 
@@ -38,7 +38,7 @@ namespace business
             IEntity result = new History()
             {      
                 LeadId = lead.Id,
-                HistoryText = "Обновлен в " +
+                HistoryText = "Update user " +
                 Convert.ToString(DateTime.UtcNow) 
             };
             return _storageHistory.Add(ref result);
@@ -50,7 +50,7 @@ namespace business
             IEntity result = new History()
             {
                 LeadId = idLead,
-                HistoryText = "Добавлен скилл " +
+                HistoryText = "Add Skill " +
                 skill + " " + Convert.ToString(DateTime.UtcNow)
             };
             return _storageHistory.Add(ref result);
@@ -61,7 +61,7 @@ namespace business
             IEntity result = new History()
             {
                 LeadId = idLead,
-                HistoryText = "Изменен статус на " + status  + 
+                HistoryText = "Chenge status " + status  + 
                 Convert.ToString(DateTime.UtcNow)
             };
             return _storageHistory.Add(ref result);
@@ -84,7 +84,7 @@ namespace business
             IEntity result = new HistoryGroup()
             {
                 GroupId = id,
-                HistoryText = "Группа удалена " +
+                HistoryText = "Delete group " +
                  Convert.ToString(DateTime.UtcNow) 
             };
             return _storageHistoryGroup.Add(ref result);
@@ -95,7 +95,7 @@ namespace business
             IEntity history = new History
             {
                 LeadId = id,
-                HistoryText = "Удален пользователь " +
+                HistoryText = "Delete user " +
                Convert.ToString(DateTime.UtcNow) 
             };
             return _storageHistory.Add(ref history);
@@ -106,8 +106,8 @@ namespace business
             IEntity result = new HistoryGroup()
             {
                 GroupId = groupId,
-                HistoryText = "Добавлен преподаватель в группу " +
-                 Convert.ToString(DateTime.UtcNow) + " c ID:" +
+                HistoryText = "Teacher added to group " +
+                 Convert.ToString(DateTime.UtcNow) + " with ID:" +
                  teacherId
             };
             return _storageHistoryGroup.Add(ref result);
@@ -118,7 +118,7 @@ namespace business
             IEntity result = new HistoryGroup()
             {
                 GroupId = groupId,
-                HistoryText =  $"Удален преподаватель c ID: {teacherId} из группы " +
+                HistoryText =  $"Teacher with ID: {teacherId} removed " +
                  Convert.ToString(DateTime.UtcNow)                  
             };
             return _storageHistoryGroup.Add(ref result);

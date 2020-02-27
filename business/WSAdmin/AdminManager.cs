@@ -70,10 +70,10 @@ namespace business.WSAdmin
                 bool success = _storage.Add(ref hR);
                 if (success)
                 {
-                    //PublishingHouse publishingHouse = PublishingHouse.Create();
-                    //PublisherChangesInDB _publisher = publishingHouse.HR;
-                    //_publisher.Notify();
-                    //publishingHouse.CombineByExecuter.Add(_hr.Login, new PublisherChangesInTasks());
+                    PublishingHouse publishingHouse = PublishingHouse.Create();
+                    PublisherChangesInDB _publisher = publishingHouse.HR;
+                    _publisher.Notify();
+                    publishingHouse.CombineByExecuter.Add(_hr.Login, new PublisherChangesInTasks());
                     HR result = (HR)hR;
                     return result.Id;
                 }
