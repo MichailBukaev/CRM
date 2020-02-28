@@ -19,8 +19,6 @@ namespace data.StorageEntity.Mock
 
         public bool Delete(IEntity obj)
         {
-            var g = Groups.First(g => g.NameGroup == ((Group)obj).NameGroup);
-            Groups.Remove(g);
             return true;
         }
 
