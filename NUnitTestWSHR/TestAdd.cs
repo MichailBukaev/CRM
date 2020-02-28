@@ -37,10 +37,8 @@ namespace NUnitTestWSHR
         [Test]
         public void HeadHR_CreateGroup_Sucessful()
         {
-
+            //Init
             var headhr = new HeadHR(1);
-            
-
             var groupBusinessModel = new GroupBusinessModel()
             {
              Name = "GroupName",
@@ -48,15 +46,37 @@ namespace NUnitTestWSHR
            };
             groupBusinessModel.Teacher = new CutTeacherBusinessModel();
             groupBusinessModel.Course = new business.Models.CutModel.CutCourseBusinessModel();
-
-
-
+            
+            // Act
             headhr.CreateGroup(groupBusinessModel);
+
+            // Expect
             var group = StorageGroup.Groups.First();
             Assert.AreEqual(group.NameGroup ,"GroupName");
             Assert.AreEqual(group.StartDate, "12.09.2020");
         }
+        [Test]
+        public void HeadHR_DeleteGroup_Sucessful()
+        {
+            //Init
+            StorageGroup.Groups.Add(new Group() { Id = 2, NameGroup = "GroupName" });
+           var headhr = new HeadHR(1);
+            var groupBusinessModel = new GroupBusinessModel()
+            {
+                Id = 2,
+                Name = "GroupName",
+                StartDate = "12.09.2020",
+            };
+            groupBusinessModel.Teacher = new CutTeacherBusinessModel();
+            groupBusinessModel.Course = new business.Models.CutModel.CutCourseBusinessModel();
 
+            // Act
+            headhr.DeleteGroup(groupBusinessModel);
+
+            // Expect
+            var groupCount = StorageGroup.Groups.Count();
+            Assert.AreEqual(groupCount, 0);
+        }
 
 
     }
